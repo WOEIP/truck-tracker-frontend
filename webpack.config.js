@@ -1,6 +1,9 @@
 var webpack = require('webpack');
 var path = require('path');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+
+var ExtractTextPluginConfig = new ExtractTextPlugin({filename:'main.css'});
 
 var HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
   template: __dirname + '/src/index.html',
@@ -21,7 +24,8 @@ module.exports = {
     path: path.resolve(__dirname, './build'),
     filename: '[name].js'
   },
-  plugins: [HTMLWebpackPluginConfig],
+  plugins: [ExtractTextPluginConfig,
+            HTMLWebpackPluginConfig],
   module : {
     rules: [
       {
@@ -33,7 +37,10 @@ module.exports = {
       },
       {
         test:/\.(s*)css$/,
-        use:['style-loader','css-loader', 'sass-loader']
+        use: ExtractTextPlugin.extract({
+          fallback:'style-loader',
+          use:['css-loader','sass-loader']
+        })
       }
     ]
   }
