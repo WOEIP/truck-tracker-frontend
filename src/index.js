@@ -1,10 +1,21 @@
 import React from 'react';
-import {render} from 'react-dom';
+import ReactDOM from 'react-dom';
+import { AppContainer } from 'react-hot-loader';
 
-class App extends React.Component {
-  render () {
-    return <p> Hello React!</p>;
-  }
+import TrafficCounter from './containers/TrafficCounter.js';
+
+const render = Component => {
+  ReactDOM.render(
+    <AppContainer>
+      <Component />
+    </AppContainer>,
+    document.getElementById('root-container')
+  );
+};
+
+render(TrafficCounter);
+
+if (module.hot) {
+  module.hot.accept('./containers/TrafficCounter.js',
+                    () => { render(TrafficCounter); });
 }
-
-render(<App/>, document.getElementById('app'));
