@@ -1,4 +1,5 @@
 import './../sass/counter.scss';
+import truck from './../img/truck.jpg';
 
 import React from 'react';
 
@@ -8,6 +9,7 @@ class TrafficCounter extends React.Component {
       <div>
         <p >plain</p>
         <p className="colored">colored</p>
+        <img src = {truck}/>
       </div>
     );
   }

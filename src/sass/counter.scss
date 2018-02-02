@@ -1,3 +1,11 @@
 .colored {
   color: red;
 }
+
+body {
+  background: cornsilk;
+  // background-image: url("./../img/truck.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+}
