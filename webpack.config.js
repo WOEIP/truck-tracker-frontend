@@ -27,7 +27,14 @@ module.exports = {
       {
         test: /\.js$/,
         include: __dirname + '/src',
-        loader: 'babel-loader' }
+        use: [
+          'babel-loader'
+        ]
+      },
+      {
+        test:/\.(s*)css$/,
+        use:['style-loader','css-loader', 'sass-loader']
+      }
     ]
   }
 };

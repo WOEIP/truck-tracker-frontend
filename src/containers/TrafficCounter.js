@@ -1,8 +1,15 @@
+import './../sass/counter.scss';
+
 import React from 'react';
 
 class TrafficCounter extends React.Component {
   render (){
-    return <p>just mooop</p>;
+    return (
+      <div>
+        <p >plain</p>
+        <p className="colored">colored</p>
+      </div>
+    );
   }
 }
 
