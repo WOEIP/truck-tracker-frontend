@@ -10,6 +10,11 @@ const R = React.createElement;
 class TrafficCounter extends React.Component {
   constructor (props){
     super(props);
+
+    this.increment = this.increment.bind(this);
+    this.decrement = this.decrement.bind(this);
+    this.send = this.send.bind(this);
+
     this.state= {
       count: 1
     };
@@ -36,9 +41,9 @@ class TrafficCounter extends React.Component {
       R('div', null,
         R('p', {'className': 'colored'},
           'State: ' + this.state.count.toString()),
-        Button({'handleClick': this.increment.bind(this), 'label': 'Plus'}),
-        Button({'handleClick': this.decrement.bind(this), 'label': 'Minus'}),
-        Button({'handleClick': this.send.bind(this), 'label': 'Send'}),
+        Button({'handleClick': this.increment, 'label': 'Plus'}),
+        Button({'handleClick': this.decrement, 'label': 'Minus'}),
+        Button({'handleClick': this.send, 'label': 'Send'}),
        ));
   }
 }
