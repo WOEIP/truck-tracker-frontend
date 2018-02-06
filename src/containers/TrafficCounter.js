@@ -3,9 +3,8 @@ import React from 'react';
 import './../sass/counter.scss';
 import truck from './../img/truck.jpg';
 
+import {R} from '../utils/aliases.js';
 import Button from '../components/button.js';
-
-const R = React.createElement;
 
 class TrafficCounter extends React.Component {
   constructor (props){
@@ -16,7 +15,7 @@ class TrafficCounter extends React.Component {
     this.send = this.send.bind(this);
 
     this.state= {
-      count: 1
+      count: 0
     };
   };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const R = React.createElement;
+import {R} from '../utils/aliases.js';
 
 const Button = props => {
     return(
