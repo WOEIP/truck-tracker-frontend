@@ -5,6 +5,8 @@ import truck from './../img/truck.jpg';
 
 import Button from '../components/button.js';
 
+const R = React.createElement;
+
 class TrafficCounter extends React.Component {
   buttonHandler(){
     console.log('yay');
@@ -12,13 +14,9 @@ class TrafficCounter extends React.Component {
 
   render (){
     return (
-        <div>
-        <p>plain</p>
-        <p className="colored">colored</p>
-        <img src = {truck}/>
-        <Button handleClick={this.buttonHandler} label='Press meee'/>
-        </div>
-    );
+      R('div', null,
+       R('p', {'className': 'colored'}, 'hey'),
+        Button({'handleClick': this.increment, 'label': 'Plus'})));
   }
 }
 

@@ -1,12 +1,12 @@
 import React from 'react';
 
+const R = React.createElement;
+
 const Button = props => {
     return(
-      <button
-        className="btn btn-default"
-        // style={buttonStyle}
-        onClick={props.handleClick}>{props.label}</button>
-    );
+    R('button',{'classname:': 'btn btn-default',
+                'onClick': props.handleClick},
+                props.label));
 };
 
 export default Button;
