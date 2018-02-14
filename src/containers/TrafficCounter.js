@@ -4,6 +4,7 @@ import './../sass/counter.scss';
 import truck from './../img/truck.jpg';
 
 import {R} from '../utils/aliases.js';
+import {send_GET, send_POST} from '../utils/api.js';
 import Button from '../components/button.js';
 
 class TrafficCounter extends React.Component {
@@ -32,6 +33,8 @@ class TrafficCounter extends React.Component {
   };
 
   send(){
+    send_GET(this.state.count); //just to try it out
+    send_POST(this.state.count);//.bind(this);
     console.log('State: ' + this.state.count.toString() + ', sent');
   };
 
