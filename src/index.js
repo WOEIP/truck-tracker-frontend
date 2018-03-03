@@ -20,6 +20,7 @@ if (module.hot) {
   module.hot.accept('./containers/MapApp.js',
                     () => { render(MapApp); });
 }
+
 /*render(TrafficCounter);
 
 if (module.hot) {
