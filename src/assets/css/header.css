@@ -1,0 +1,9 @@
+div.logo {
+	display: flex;
+	justify-content: center;  /* horizontal align */
+	align-items: center;        /* verttical align */
+}
+
+img#logo {
+	height: 110%;
+}

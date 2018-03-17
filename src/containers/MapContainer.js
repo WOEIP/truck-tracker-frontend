@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import truck from './../img/truck.jpg';
+import truck from '../img/truck.png';
 
 export default class MapContainer extends Component {
 
@@ -8,16 +8,59 @@ export default class MapContainer extends Component {
         super(props);
 
         // This binding is necessary to make `this` work in the callback
+        this.recenterMap = this.recenterMap.bind(this);
+        this.centerMapOnUser = this.centerMapOnUser.bind(this);
         this.clearMarkers = this.clearMarkers.bind(this);
+        this.confirmDataSubmission = this.confirmDataSubmission.bind(this);
+        this.setTimeSinceTruckPassed = this.setTimeSinceTruckPassed.bind(this);
+        this.setTimeUnit = this.setTimeUnit.bind(this);
+
+        this.state = {
+            currentLocation: {
+                //Berkeley coordinates
+                lat: 37.8719,
+                lng: -122.2585
+            }
+        };
+        this.timeSinceTruckPassed = 0;
+        this.timeUnit = "minutes";
     }
 
     componentDidUpdate() {
-        this.loadMap(); // call loadMap function to load the google map
+        if (this.props.mapHasBeenShown && !this.props.mapHasBeenHidden) {
+            this.loadMap(); // call loadMap function to load the google map   
+        }
+        //this.centerMapOnUser();
+    }
+
+    centerMapOnUser() {
+        if (navigator && navigator.geolocation) { //center on user's location
+            navigator.geolocation.getCurrentPosition((pos) => {
+                const coords = pos.coords;
+                this.setState({
+                    currentLocation: {
+                        lat: coords.latitude,
+                        lng: coords.longitude
+                    }
+                });
+                this.recenterMap();
+            });
+        }
+    }
+
+    recenterMap() {
+        const curr = this.state.currentLocation;
+
+        const {google} = this.props;
+
+        if (this.map) {
+            let center = new google.maps.LatLng(curr.lat, curr.lng);
+            this.map.panTo(center);
+            this.map.setZoom(18);
+        }
     }
 
     recordVectorPt(lat, lng) {
-        const {google} = this.props; // should be valid because loadMap is always called before this function
-        
         if (this.numMarkersPlaced < 2) {
             this.placeMarker(lat, lng);
             this.numMarkersPlaced++;   
@@ -58,17 +101,6 @@ export default class MapContainer extends Component {
         });
     }
 
-    clearMarkers() {
-        for (var i = 0; i < this.markersArray.length; i++) {
-            this.markersArray[i].setMap(null);
-        }
-
-        this.markersArray.length = 0;
-        this.poly.setMap(null); //remove the route from map as well
-        this._mapOverlay.style.display = "none";
-        this.numMarkersPlaced = 0;
-    }
-
     placeMarker(lat, lng) {
         const {google} = this.props; // should be valid because loadMap is always called before this function
 
@@ -92,21 +124,54 @@ export default class MapContainer extends Component {
         }
     }
 
+    clearMarkers() {
+        for (var i = 0; i < this.markersArray.length; i++) {
+            this.markersArray[i].setMap(null);
+        }
+
+        this.markersArray.length = 0;
+        this.poly.setMap(null); //remove the route from map as well
+        this._mapOverlay.style.display = "none";
+        this.numMarkersPlaced = 0;
+    }
+
+    setTimeSinceTruckPassed(event) {
+        this.timeSinceTruckPassed = event.target.value;
+    }
+
+    setTimeUnit(event) {
+        this.timeUnit = event.target.value;
+    }
+
+    confirmDataSubmission(e) {
+        /*console.log("(" + this.markersArray[0].getPosition().lat() + "," + this.markersArray[0].getPosition().lng() 
+            + ") ->" + "(" + this.markersArray[1].getPosition().lat() + "," + this.markersArray[1].getPosition().lng() + ")");*/
+        let fromPos = this.markersArray[0].getPosition();
+        let toPos = this.markersArray[0].getPosition();
+
+        let time = this.timeSinceTruckPassed;
+        if (this.timeUnit === "hours") {
+            time *= 60;
+        }
+        this.props.sendDataToServer(e, time, fromPos, toPos);
+    }
+
     loadMap() {
         if (this.props && this.props.google) { // checks to make sure that props have been passed
             const {google} = this.props; // sets props equal to google
             const maps = google.maps; // sets maps to google maps props
 
-            const mapRef = this.refs.map; // looks for HTML div ref 'map'. Returned in render below.
+            const mapRef = this._map; // looks for HTML div ref 'map'. Returned in render below.
             const node = ReactDOM.findDOMNode(mapRef); // finds the 'map' div in the React DOM, names it node
 
             const mapConfig = Object.assign({}, {
                 center: {
-                    lat: 37.8719,
-                    lng: -122.2585
+                    lat: this.state.currentLocation.lat,
+                    lng: this.state.currentLocation.lng 
                 }, // sets center of google map to NYC.
                 zoom: 16, // sets zoom. Lower numbers are zoomed further out.
-                mapTypeId: 'roadmap' // optional main map layer. Terrain, satellite, hybrid or roadmap--if unspecified, defaults to roadmap.
+                mapTypeId: 'roadmap', // optional main map layer. Terrain, satellite, hybrid or roadmap--if unspecified, defaults to roadmap.
+                clickableIcons: false, // don't display clickable landmarks (so annoying when scrolling)
             })
 
             this.map = new maps.Map(node, mapConfig); // creates a new Google map on the specified node (ref='map') with the specified configuration set above.
@@ -125,42 +190,30 @@ export default class MapContainer extends Component {
     }
 
     render() {
-        const style = { // MUST specify dimensions of the Google map or it will not work. Also works best when style is specified inside the render function and created as an object
-            width: '98vw', // 90vw basically means take up 90% of the width screen. px also works.
-            height: '75vh' // 75vh similarly will take up roughly 75% of the height of the screen. px also works.
-        }
-
-        const wrapperStyle = {
-            position: "relative"
-        }
-
-        const divOverlayStyle = {
-            backgroundColor: "white",
-            display: "none",
-            zIndex: 99,
-
-            position: "absolute",
-            top: 10, 
-            right: 10, 
-
-            padding: 50
-            /*height: 20,
-            width: 20,*/
+        const linkStyle = {
+            color: "black", 
+            boxShadow: "inset 0 0 0 1px black",
         }
 
         return ( // in our return function you must return a div with ref='map' and style.
-            <div id="wrapper" style={wrapperStyle}>
-                <div ref="map" style={style}>
+            <div id="map_wrapper">
+                <div id="inner_map_container" ref={(el) => this._map = el}>
                     loading map...
                 </div>
 
-                <div id="over_map" style={divOverlayStyle} ref={ (el) => this._mapOverlay = el }>
+                <div ref={(el) => this._mapOverlay = el} id="over_map">
                     <p>
-                        Is this correct?
+                        A {this.props.truckType} truck passed by 
+                        <input type="number" min="0" max="60" defaultValue="0" onChange={this.setTimeSinceTruckPassed}/> 
+                        <select className="time_unit" onChange={this.setTimeUnit}>
+                            <option value="minutes">minutes ago</option>
+                            <option value="hours">hours ago</option>
+                        </select> 
                     </p>
-                    <button onClick={this.clearMarkers}>
-                        CONFIRM
-                    </button>
+                    <ul className="actions">
+                        <li><a style={linkStyle} onMouseDown={this.confirmDataSubmission} className="button icon fa-truck">Confirm</a></li>
+                        <li><a style={linkStyle} onMouseDown={this.clearMarkers} className="button icon fa-close">Cancel</a></li>
+                    </ul>
                 </div>
             </div>
         )
