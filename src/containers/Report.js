@@ -35,13 +35,20 @@ class Report extends Component {
         let toPosLat = toPos.lat();
         let toPosLng = toPos.lng();
 
+        /*Debugging only*/
         let fromVector = "(" + fromPosLat + "," + fromPosLng + ")";
         let toVector = "(" + toPosLat + "," + toPosLng + ")";
         console.log(this.state.truckKey, timeSinceSeen, fromVector + "->" + toVector);
 
-        axios.post('/user', {
-            firstName: 'Fred',
-            lastName: 'Flintstone'
+        let timeSinceSeenInMS = timeSinceSeen * 60 * 1000; //timeSinceSeen given in minutes -> ms 
+        let time = (new Date).getTime() - timeSinceSeenInMS; //time that truck actually passed
+        axios.post('/Incident', {
+            truckType: this.state.truckKey,
+            startLat: fromPosLat,
+            startLon: fromPosLng,
+            endLat: toPosLat,
+            endLng: toPosLng,
+            reportedAt: time
         }).then(function (response) {
             console.log(response);
         }).catch(function (error) {
