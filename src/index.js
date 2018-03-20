@@ -19,10 +19,3 @@ if (module.hot) {
   module.hot.accept('./containers/App.js',
                     () => { render(App); });
 }
-
-/*render(TrafficCounter);
-
-if (module.hot) {
-  module.hot.accept('./containers/TrafficCounter.js',
-                    () => { render(TrafficCounter); });
-}*/
