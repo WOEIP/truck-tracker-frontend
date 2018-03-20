@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
-import '../assets/css/header.css';
+import '../css/header.css';
+import '../css/pure-release-1.0.0/pure-min.css';
 import logo from '../img/logo.png';
 
 class Header extends Component {
   render() {
     return (
       <header id="header">
+
+        <div className="banner">
+        <div className="banner-head">
         <div className="logo">
           <img src={logo} id="logo" alt="logo" />
+          </div>
         </div>
         <div className="content">
           <div className="inner">
@@ -21,6 +26,7 @@ class Header extends Component {
             <li><a href="#contact">Contact</a></li>
           </ul>
         </nav>
+        </div>
       </header>
     );
   }
