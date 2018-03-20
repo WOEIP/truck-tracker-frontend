@@ -16,7 +16,6 @@ class Header extends Component {
         </div>
         <nav>
           <ul>
-            <li><a href="#info">Info</a></li>
             <li><a href="#report">Report</a></li>
             <li><a href="#mission">Mission</a></li>
             <li><a href="#contact">Contact</a></li>

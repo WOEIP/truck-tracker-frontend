@@ -1,7 +1,6 @@
  import React, { Component } from 'react';
 import '../assets/css/main.css';
 import Header from './Header';
-import Info from './Info';
 import Report from './Report';
 import Mission from './Mission';
 import Contact from './Contact';
@@ -17,8 +16,6 @@ class App extends Component {
                 <Header/>
 
                 <div id="main">
-
-                    <Info/>
 
                     <Report/>
 
