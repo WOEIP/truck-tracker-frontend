@@ -18,15 +18,9 @@ class Header extends Component {
           </div>
           <div className="vert-line short"></div>
           <nav className="pure-g">
-            <div className="pure-u-1 pure-u-sm-1-3">
-              <a className="main-button" href="#report">REPORT</a>
-            </div>
-            <div className="pure-u-1 pure-u-sm-1-3">
-              <a className="main-button" href="#mission">MISSION</a>
-            </div>
-            <div className="pure-u-1 pure-u-sm-1-3">
-              <a className="main-button" href="#contact">CONTACT</a>
-            </div>
+            <a className="pure-u-1 pure-u-sm-1-3" href="#report">REPORT</a>
+            <a className="pure-u-1 pure-u-sm-1-3" href= "#mission">MISSION</a>
+            <a className="pure-u-1 pure-u-sm-1-3" href="#contact">CONTACT</a>
           </nav>
         </div>
       </div>

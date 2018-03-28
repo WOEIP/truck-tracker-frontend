@@ -1,6 +1,6 @@
 .bground {
     display: flex;
-    background-image: url('../img/bg-darkma.jpg');
+    background-image: url('../img/bg-dark.jpg');
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -24,7 +24,6 @@
 
 .logo-container > img {
     width: 60%;
-    /* height: auto; */
 }
 
 .vert-line {
@@ -57,7 +56,6 @@
 }
 
 .inner-title {
-    /* background-color: rgba(255, 255, 255, 0.2); */
     width: 100%;
     border-style: solid;
     border-color: #fff;
@@ -74,22 +72,19 @@ nav{
     border-radius: 10px;
 }
 
-nav > div:first-child{
+nav > a:first-child{
     border: 0;
 }
 
-nav > div:hover {
+nav > a:hover {
     background-color: rgba(255, 255, 255, 0.5);
 }
 
-nav > div {
+nav > a {
     background-color: rgba(255, 255, 255, 0.2);
     padding: 1rem;
     box-sizing: border-box;
     border-top: solid 1px #fff;
-}
-
-nav > div > a {
     font-weight: 500;
     letter-spacing: .2rem;
     text-decoration: none;
@@ -108,7 +103,7 @@ nav > div > a {
         width: 10%;
     }
 
-    nav > div {
+    nav > a {
         border-top:0;
         border-left: solid 1px #fff;
     }
