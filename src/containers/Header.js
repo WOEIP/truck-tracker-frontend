@@ -1,33 +1,35 @@
 import React, { Component } from 'react';
 import '../css/header.css';
 import '../css/pure-release-1.0.0/pure-min.css';
+import '../css/pure-release-1.0.0/grids-responsive.css';
 import logo from '../img/logo.png';
 
 class Header extends Component {
   render() {
     return (
-      <header id="header">
-
-        <div className="banner">
-        <div className="banner-head">
-        <div className="logo">
-          <img src={logo} id="logo" alt="logo" />
+      <div className="bground">
+        <div className="app-container">
+          <div className="logo-container">
+            <img src={logo} alt="logo"/>
           </div>
-        </div>
-        <div className="content">
-          <div className="inner">
-            <h1>WOEIP Truck Report System</h1>
+          <div className="vert-line long"></div>
+          <div className="inner-title">
+            <h1>WOEIP TRUCK REPORT SYSTEM</h1>
           </div>
+          <div className="vert-line short"></div>
+          <nav className="pure-g">
+            <div className="pure-u-1 pure-u-sm-1-3">
+              <a className="main-button" href="#report">REPORT</a>
+            </div>
+            <div className="pure-u-1 pure-u-sm-1-3">
+              <a className="main-button" href="#mission">MISSION</a>
+            </div>
+            <div className="pure-u-1 pure-u-sm-1-3">
+              <a className="main-button" href="#contact">CONTACT</a>
+            </div>
+          </nav>
         </div>
-        <nav>
-          <ul>
-            <li><a href="#report">Report</a></li>
-            <li><a href="#mission">Mission</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </nav>
-        </div>
-      </header>
+      </div>
     );
   }
 }

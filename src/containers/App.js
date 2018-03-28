@@ -7,11 +7,6 @@ import Footer from './Footer';
 
 class App extends Component {
 
-  constructor(props){
-    super(props);
-    this.getActiveContent = this.getActiveContent.bind(this); //do I need this
-  }
-
   componentDidMount() {
     var self = this;
     window.addEventListener('hashchange', (e) => {self.forceUpdate();});

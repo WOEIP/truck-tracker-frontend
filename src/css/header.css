@@ -1,53 +1,123 @@
-div.logo {
+.bground {
     display: flex;
-    justify-content: center;  /* horizontal align */
-    align-items: center;        /* verttical align */
-}
-
-img#logo {
-    height: 70%;
-}
-
-.banner {
-    background: transparent url('../img/bg.jpg') 0 0 no-repeat fixed;
-    text-align: center;
+    background-image: url('../img/bg-darkma.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
     background-size: cover;
-    height: 200px;
+    background-attachment: fixed;
+    text-align: center;
     width: 100%;
-    margin-bottom: 3em;
+    height: 100vh;
     display: table;
 }
 
-.banner-head {
-    display: table-cell;
-    vertical-align: middle;
-    margin-bottom: 0;
-    font-size: 2em;
-    color: white;
+.app-container {
+    height: 100%;
+    background-color: transparent;
+    overflow: scroll;
+}
+
+.logo-container {
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-container > img {
+    width: 60%;
+    /* height: auto; */
+}
+
+.vert-line {
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+}
+
+.long {
+    height: 10%;
+}
+
+.short {
+    height: 5%;
+}
+
+.vert-line:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-left: 1px solid #fff;
+}
+
+.inner-title > h1 {
+    font-family: Rajdhani;
+    font-size: 2.5rem;
+    color: #fff;
+    letter-spacing: .5rem;
+}
+
+.inner-title {
+    /* background-color: rgba(255, 255, 255, 0.2); */
+    width: 100%;
+    border-style: solid;
+    border-color: #fff;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+}
+
+nav{
+    width: 50%;
+    margin: 0 auto;
+    border: solid 1px #fff;
+    border-radius: 10px;
+}
+
+nav > div:first-child{
+    border: 0;
+}
+
+nav > div:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+nav > div {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 1rem;
+    box-sizing: border-box;
+    border-top: solid 1px #fff;
+}
+
+nav > div > a {
     font-weight: 500;
-    text-shadow: 0 1px 1px black;
+    letter-spacing: .2rem;
+    text-decoration: none;
+    font-family: Rajdhani;
+    font-size: 1.5rem;
+    color: #fff;
 }
 
-@media(min-width: 767px) {
-
-    .banner-head {
-        font-size: 4em;
-    }
-    .pricing-table {
-        margin-bottom: 0;
+@media screen and (min-width: 35.5em) {
+    .inner-title {
+        margin: 0 auto;
+        width: 60%;
     }
 
+    .logo-container > img{
+        width: 10%;
+    }
+
+    nav > div {
+        border-top:0;
+        border-left: solid 1px #fff;
+    }
 }
 
-/*
- * -- PHONE MEDIA QUERIES --
- * On phones, we want to reduce the height and font-size of the banner further
- */
-@media (min-width: 480px) {
-    .banner {
-        height: 400px;
-    }
-    .banner-head {
-        font-size: 3em;
-    }
+@font-face {
+  font-family: Rajdhani;
+  font-style: normal;
+  font-weight: 400;
+  src: local("Rajdhani Regular"), local("Rajdhani-Regular"), url("https://fonts.gstatic.com/s/rajdhani/v7/LDIxapCSOBg7S-QT7p4HM-Y.woff2") format("woff2");
+  unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
