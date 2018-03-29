@@ -95,11 +95,3 @@ nav > a {
         border-left: solid 1px #fff;
     }
 }
-
-@font-face {
-    font-family: Rajdhani;
-    font-style: normal;
-    font-weight: 400;
-    src: local("Rajdhani Regular"), local("Rajdhani-Regular"), url("https://fonts.gstatic.com/s/rajdhani/v7/LDIxapCSOBg7S-QT7p4HM-Y.woff2") format("woff2");
-    unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
