@@ -4,7 +4,7 @@ import '../css/pure-release-1.0.0/pure-min.css';
 import '../css/pure-release-1.0.0/grids-responsive.css';
 import logo from '../img/logo.png';
 
-class Header extends Component {
+class MainPage extends Component {
   render() {
     return (
       <div className="bground">
@@ -28,4 +28,4 @@ class Header extends Component {
   }
 }
 
-export default Header;
+export default MainPage;
