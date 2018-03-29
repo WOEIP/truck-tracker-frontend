@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Header from './Header';
+import MainPage from './../components/MainPage';
 import Report from './Report';
 import Mission from './Mission';
 import Contact from './Contact';
@@ -24,10 +24,8 @@ class App extends Component {
       return Mission;
     case '#contact':
       return Contact;
-    case '':
-      return Header;
     default:
-      return Header;
+      return MainPage;
     }
   };
 
