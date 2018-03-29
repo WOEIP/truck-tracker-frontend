@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MainPage from './../components/MainPage';
 import Report from './Report';
-import Mission from './Mission';
+import Mission from './../components/Mission';
 import Contact from './Contact';
 import Footer from './Footer';
 
