@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Menu from './../components/Menu.js';
-import '../css/common.css';
-import '../css/mission.css';
+import '../styles/common.scss';
+import '../styles/mission.scss';
 import chicken from '../img/mission_chicken.jpg';
 import truck from '../img/info_truck.jpg';
 

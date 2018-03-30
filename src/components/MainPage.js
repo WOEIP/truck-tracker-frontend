@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import '../css/main-page.css';
-import '../css/pure-release-1.0.0/pure-min.css';
-import '../css/pure-release-1.0.0/grids-responsive.css';
+import '../styles/main-page.scss';
+import '../styles/pure-release-1.0.0/pure-min.css';
+import '../styles/pure-release-1.0.0/grids-responsive.css';
 import logo from '../img/logo.png';
 
 class MainPage extends Component {

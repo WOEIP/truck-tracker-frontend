@@ -40,6 +40,7 @@
     font-size: 2.5rem;
     color: #fff;
     letter-spacing: .5rem;
+    text-transform: uppercase;
 }
 
 .inner-title {
@@ -52,22 +53,22 @@
     border-bottom-width: 1px;
 }
 
-nav{
+.main-menu{
     width: 50%;
     margin: 0 auto;
     border: solid 1px #fff;
     border-radius: 10px;
 }
 
-nav > a:first-child{
+.main-menu > a:first-child{
     border: 0;
 }
 
-nav > a:hover {
+.main-menu > a:hover {
     background-color: rgba(255, 255, 255, 0.5);
 }
 
-nav > a {
+.main-menu > a {
     background-color: rgba(255, 255, 255, 0.2);
     padding: 1rem;
     box-sizing: border-box;
@@ -78,6 +79,7 @@ nav > a {
     font-family: Rajdhani;
     font-size: 1.5rem;
     color: #fff;
+    text-transform: uppercase;
 }
 
 @media screen and (min-width: 35.5em) {
@@ -90,7 +92,7 @@ nav > a {
         width: 10%;
     }
 
-    nav > a {
+    .main-menu > a {
         border-top:0;
         border-left: solid 1px #fff;
     }

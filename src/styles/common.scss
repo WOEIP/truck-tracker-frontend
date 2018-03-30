@@ -1,3 +1,5 @@
+@import "colors";
+
 .bground {
     display: flex;
     background-image: url('../img/bg-dark.jpg');
@@ -14,7 +16,7 @@
 article {
     width: 90%;
     margin: 1rem auto;
-    background-color: rgba(40, 80, 150, 0.9);
+    background-color: $overlay-bg-color;
     padding: 3rem;
     color: #fff;
     text-align: justify;
