@@ -20,7 +20,7 @@ class MainPage extends Component {
           <nav className="pure-g main-menu">
             <a className="pure-u-1 pure-u-sm-1-3" href="#report">Report</a>
             <a className="pure-u-1 pure-u-sm-1-3" href= "#mission">Mission</a>
-            <a className="pure-u-1 pure-u-sm-1-3" href="#contact">Conctact</a>
+            <a className="pure-u-1 pure-u-sm-1-3" href="#contact">Contact</a>
           </nav>
         </div>
       </div>
