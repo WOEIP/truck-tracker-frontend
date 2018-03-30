@@ -14,13 +14,13 @@ class MainPage extends Component {
           </div>
           <div className="vert-line long"></div>
           <div className="inner-title">
-            <h1>WOEIP TRUCK REPORT SYSTEM</h1>
+            <h1>WOEIP Truck Report System</h1>
           </div>
           <div className="vert-line short"></div>
-          <nav className="pure-g">
-            <a className="pure-u-1 pure-u-sm-1-3" href="#report">REPORT</a>
-            <a className="pure-u-1 pure-u-sm-1-3" href= "#mission">MISSION</a>
-            <a className="pure-u-1 pure-u-sm-1-3" href="#contact">CONTACT</a>
+          <nav className="pure-g main-menu">
+            <a className="pure-u-1 pure-u-sm-1-3" href="#report">Report</a>
+            <a className="pure-u-1 pure-u-sm-1-3" href= "#mission">Mission</a>
+            <a className="pure-u-1 pure-u-sm-1-3" href="#contact">Conctact</a>
           </nav>
         </div>
       </div>
