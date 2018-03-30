@@ -10,8 +10,8 @@ class Mission extends Component {
     return (
       <div className="bground">
         <article id="mission">
-          <Menu/>
-          <h2 className="title">Mission</h2>
+          <Menu current="mission"/>
+          <h1 className="title">Mission</h1>
           <img id="chicken" src={chicken} alt="" ></img>
           <p>West Oakland is situated adjacent to the Port of Oakland,
             bounded by three major freeways (I-580, I-880, and I-980),

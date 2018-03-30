@@ -4,24 +4,40 @@ import '../styles/pure-release-1.0.0/menus.css';
 import '../styles/pure-release-1.0.0/pure-min.css';
 import '../styles/pure-release-1.0.0/grids-responsive.css';
 
-//current selection from prop
-
 class Menu extends Component {
   render() {
+
+    const menuItems = [
+      {id: "report", text: "Report"},
+      {id: "mission", text: "Mission"},
+      {id: "contact", text: "Contact"},
+    ];
+
+    var itemsToRender = [];
+    var classToAdd="";
+
+    for (let i = 0; i < menuItems.length; i++) {
+      if (this.props.current == menuItems[i]["id"]){
+        classToAdd = "current ";
+      } else {
+        classToAdd = "";
+      }
+
+      itemsToRender.push(
+        <li>
+          <a href={"#" + menuItems[i]["id"]}
+             className={classToAdd + "top-menu-item"}>{menuItems[i]["text"]}
+          </a>
+        </li>
+      );
+    }
+
     return (
       <div id="top-menu-container">
       <nav id="top-menu">
         <a href="#" id="top-menu-icon"></a>
         <ul>
-          <li>
-            <a href="#report" className="top-menu-item">Report</a>
-          </li>
-          <li>
-            <a href="#mission" className="current top-menu-item">Mission</a>
-          </li>
-          <li>
-            <a href="#contact" className="top-menu-item">Contact</a>
-          </li>
+        {itemsToRender}
         </ul>
       </nav>
       <br/>
