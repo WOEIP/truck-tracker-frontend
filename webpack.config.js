@@ -3,6 +3,8 @@ var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
+var NamedModulesPlugin = new webpack.NamedModulesPlugin();
+
 var ExtractTextPluginConfig = new ExtractTextPlugin({filename:'main.css'});
 
 var HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
@@ -24,7 +26,8 @@ module.exports = {
     path: path.resolve(__dirname, './build'),
     filename: '[name].js'
   },
-  plugins: [ExtractTextPluginConfig,
+  plugins: [NamedModulesPlugin,
+            ExtractTextPluginConfig,
             HTMLWebpackPluginConfig],
   module : {
     rules: [
