@@ -1,5 +1,9 @@
+@import "colors";
+
 ul {
     list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .form-element {
@@ -12,8 +16,16 @@ h1 {
 }
 
 input, textarea {
+    color: #222;
     width: 100%;
 
+}
+
+form > button {
+    color: $current-menu-item-color;
+    letter-spacing: .2rem;
+    padding: .5rem;
+    width: 8rem;
 }
 
 @media screen and (min-width: 35.5em) {

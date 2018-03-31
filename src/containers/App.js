@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import MainPage from './../components/MainPage';
 import Report from './Report';
 import Mission from './../components/Mission';
-import Contact from './Contact';
+import Contact from './../components/Contact';
 import Footer from './Footer';
 
 class App extends Component {
