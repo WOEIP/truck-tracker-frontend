@@ -14,10 +14,11 @@
 }
 
 article {
-    width: 90%;
+    box-sizing: border-box;
+    width: 100%;
     margin: 1rem auto;
+    padding: .5rem;
     background-color: $overlay-bg-color;
-    padding: 3rem;
     color: #fff;
     text-align: justify;
     font-family: Fjord One;
@@ -27,11 +28,12 @@ article {
 
 article > .title {
     font-family: Fjord One;
-    text-decoration: underline;
+    //text-decoration: underline;
 }
 
 @media screen and (min-width: 35.5em) {
     article {
+        padding: 3rem;
         width: 60%;
     }
 }
