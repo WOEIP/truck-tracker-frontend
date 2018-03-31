@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Button from './../components/Button.js';
 import Menu from './../components/Menu.js';
 import '../styles/common.scss';
 import '../styles/contact.scss';
