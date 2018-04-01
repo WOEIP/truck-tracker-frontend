@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Button from './../components/Button.js';
 import Menu from './../components/Menu.js';
 import '../styles/common.scss';
 import '../styles/contact.scss';
@@ -58,7 +57,8 @@ class Contact extends Component {
                         value={this.state.message}
                         onChange={this.handleTextChange}  />
             </div>
-            <Button handler={this.sendMessage} text="Send"/>
+            <button type="button"
+                    onClick={this.sendMessage}>Send</button>
           </form>
           {/*<ul className="icons">
             <li>
