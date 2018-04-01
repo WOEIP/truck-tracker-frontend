@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import TWO_AXLE from './../img/Trucks/2ax.png';
 import THREE_AXLE from '../img/Trucks/3ax.png';
 import BOBTAIL from '../img/Trucks/3axbob.png';
@@ -8,8 +9,13 @@ import SIX_AXLE from '../img/Trucks/6ax.png';
 import PORT_CHASSIS from './../img/Trucks/port_chassis.png';
 import PORT_CONTAINER from './../img/Trucks/port_container.png';
 
+import '../styles/truck-selection.scss';
+
+import '../styles/pure-release-1.0.0/pure-min.css';
+import '../styles/pure-release-1.0.0/grids-responsive.css';
+
 //The "key" is the value sent to the database, "type" is for human display
-var truckTypes = [
+const truckTypes = [
   {key: '2_AXLE', type:"2-axle", img: TWO_AXLE},
   {key: '3_AXLE', type:"3-axle", img: THREE_AXLE},
   {key: 'BOBTAIL', type:"3-axle Bobtail", img: BOBTAIL},
@@ -20,36 +26,30 @@ var truckTypes = [
   {key: 'PORT_CONTAINER', type:"port container", img: PORT_CONTAINER}
 ];
 
-/*
-  const TRUCK_TYPES = new Enum([
-  '2_AXLE',
-  'BOBTAIL',
-  '3_AXLE',
-  '4_AXLE',
-  '5_AXLE',
-  '6_PLUS_AXLE',
-  'PORT_CHASSIS',
-  'PORT_CONTAINER',
-  ]);
-
-  time: UNIX_TIMESTAMP
-*/
 
 class TruckSelection extends Component {
+
+  //TODO check if this optimization actually works (named callback)
+  truckSelectHandler(truck){
+    return () => this.props.truckSelectHandler(truck);
+  }
+
   render() {
     return (
-      <ul key="truckTypes" className="actions">
-        {truckTypes.map((item) =>
-                        <li key={item.key}>
-                            <button type="submit" className="truck_select_btn"
-                                      onMouseDown={(e) => this.props.truckSelectHandler(e, item.type, item.key)}>
-
-                                <img className="truck_select_img" src={item.img} alt={item.type} />
-
-                              </button>
-                          </li>
-                       )}
+      <div>
+        <h2>Select truck type</h2>
+        <ul className="pure-g">
+          {truckTypes.map((item) =>
+            <li key={item.key}
+                className="pure-u-1 pure-u-sm-1-2 button-container">
+          {/*TODO pure-u-sm-* dynamic based on no. of trucks?*/}
+             <input  onClick={this.truckSelectHandler(item)}
+                     type="image"
+                     src={item.img}/>
+            </li>
+          )}
       </ul>
+    </div>
     );
   }
 }

@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import Menu from './../components/Menu.js';
+
 import axios from 'axios';
 
-import '../assets/css/report.css';
+import '../styles/common.scss';
+import '../styles/report.scss';
 
 import MapApp from './MapApp';
 import TruckSelection from './TruckSelection';
@@ -64,11 +67,11 @@ class Report extends Component {
     });
   }
 
-  truckSelectHandler(e, truckType, truckKey) {
-    //console.log(truckType);
+  truckSelectHandler(truck) {
+    console.log('type: ' + truck.type);
     this.setState({
-      truckType: truckType,
-      truckKey: truckKey
+      truckType: truck.type,
+      truckKey: truck.key
     });
 
     this.openMap();
@@ -90,10 +93,8 @@ class Report extends Component {
   }
 
   showMapHideTruckSelect() {
-    this._truckSelectionMenu.style.display = "none";
-
-    this._mapSelectionView.style.display = "block";
-
+    //this._truckSelectionMenu.style.display = "none";
+    //this._mapSelectionView.style.display = "block";
     this.setState({
       mapHasBeenShown: true
     });
@@ -101,15 +102,14 @@ class Report extends Component {
 
   showTruckSelectHideMap() {
     this._truckSelectionMenu.style.display = "block";
-
     this._mapSelectionView.style.display = "none";
   }
 
   render() {
     return (
+      <div className="bground">
       <article id="report">
-        <h2 className="major">
-          {this.state.title}</h2>
+        <Menu current="report"/>
         <div ref={ (el) => this._truckSelectionMenu = el }>
           <TruckSelection truckSelectHandler={this.truckSelectHandler}/>
         </div>
@@ -122,6 +122,7 @@ class Report extends Component {
                   />
         </div>
       </article>
+      </div>
     );
   }
 }
