@@ -15,29 +15,28 @@ h1 {
     text-align: left;
 }
 
-input, textarea {
-    color: #222;
-    width: 100%;
-
-}
-
-form > button {
-    color: $current-menu-item-color;
-    letter-spacing: .2rem;
-    padding: .5rem;
-    width: 8rem;
+form {
+    & input, textarea {
+        color: #222;
+        width: 100%;
+    }
+    & button {
+        color: $current-menu-item-color;
+        letter-spacing: .2rem;
+        padding: .5rem;
+        width: 8rem;
+    }
 }
 
 @media screen and (min-width: 35.5em) {
     form {
         width: 70%;
+        input, textarea {
+            float: right;
+        }
     }
 
     label {
         float: left;
-    }
-
-    input, textarea {
-        float: right;
     }
 }

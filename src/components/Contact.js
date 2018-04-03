@@ -61,16 +61,16 @@ class Contact extends Component {
                     onClick={this.sendMessage}>Send</button>
           </form>
           {/*<ul className="icons">
-            <li>
-              <a href="" className="icon fa-twitter">
-                <span className="label">Twitttter</span>
-              </a>
-            </li>
-            <li>
-              <a href="" className="icon fa-facebook">
-                <span className="label">Facebook</span>
-              </a>
-            </li>
+              <li>
+                  <a href="" className="icon fa-twitter">
+                      <span className="label">Twitttter</span>
+                      </a>
+                      </li>
+                      <li>
+                          <a href="" className="icon fa-facebook">
+                              <span className="label">Facebook</span>
+                              </a>
+                              </li>
           </ul>*/}
         </article>
       </div>
