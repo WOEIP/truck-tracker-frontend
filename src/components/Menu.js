@@ -26,7 +26,8 @@ class Menu extends Component {
       itemsToRender.push(
         <li key={menuItems[i]["id"]}>
           <a href={"#" + menuItems[i]["id"]}
-             className={classToAdd + "top-menu-item"}>{menuItems[i]["text"]}
+             className={classToAdd + "top-menu-item"}>
+               {menuItems[i]["text"]}
           </a>
         </li>
       );
@@ -40,7 +41,6 @@ class Menu extends Component {
         {itemsToRender}
         </ul>
       </nav>
-      <br/>
       </div>
     );
   }

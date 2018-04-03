@@ -1,64 +1,63 @@
+@import "colors";
+
 div#map_container { /*Report.js, div that wraps MapApp component*/
     display: none;
 }
 
-// /* ---------------------MapContainer.js--------------------- */
-// div#map_wrapper {
-//     position: relative;
-//     color: black
-// }
+/* ---------------------MapContainer.js--------------------- */
+div#map-wrapper {
+    position: relative;
+    color: black
+}
 
-// div#inner_map_container {
-//     /*
-//         MapContainer.js, receives actual google maps
-//         MUST specify dimensions of the Google map or it will not display.
-//     */
-//     width: 100%; /* 90vw basically means take up 90% of the width screen. px also works.*/
-//     height: 75vh; /* 75vh similarly will take up roughly 75% of the height of the screen. px also works.*/
-// }
+div#inner-map-container {
+    //MUST specify dimensions of the Google map or it will not display.
+    width: 100%;
+    height: 75vh;
+}
 
-// div#over_map {
-//     /*
-//         MapContainer.js, displays final truck data for user confirmation
-//     */
-//     background-color: rgba(255, 255, 255, 0.9);
-//     display: none;
-//     z-index: 99;
+div#over_map {
+    /*
+        MapApp.js, displays final truck data for user confirmation
+    */
+    background-color: rgba(255, 255, 255, 0.9);
+    display: none;
+    z-index: 99;
 
-//     position: absolute;
-//     top: 10px;
-//     right: 10px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
 
-//     padding: 30px;
-//     width: 50%;
+    padding: 30px;
+    width: 50%;
 
-//     border-radius: 3px;
-// }
+    border-radius: 3px;
+}
 
-// ul.actions {
-//     margin-bottom: 0;
-// }
+ul.actions {
+    margin-bottom: 0;
+}
 
-// a.data_action {
-//     /*for some reason this doesn't apply (probably some conflict in main.css)
-//     inline styling done in MapContainer.js render()
-//     */
-//     color: black;
-//     box-shadow: inset 0 0 0 1px black;
-// }
+a.data_action {
+    /*for some reason this doesn't apply (probably some conflict in main.css)
+    inline styling done in MapContainer.js render()
+    */
+    color: black;
+    box-shadow: inset 0 0 0 1px black;
+}
 
-// input[type=number] {
-//     color: black;
-//     margin: 2px;
-//     padding-left: 10px;
-// }
+input[type=number] {
+    color: black;
+    margin: 2px;
+    padding-left: 10px;
+}
 
-// select.time_unit {
-//     background-color: #F6F6F6;
-//     display: inline;
-// }
+select.time_unit {
+    background-color: #F6F6F6;
+    display: inline;
+}
 
-// /* ---------------------MapApp.js--------------------- */
-// p.map_instructions {
-//     padding-top: 2rem;
-// }
+/* ---------------------MapApp.js--------------------- */
+p.map-instructions {
+     padding-top: 2rem;
+}

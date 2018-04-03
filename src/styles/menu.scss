@@ -1,27 +1,29 @@
 @import "colors";
 
 #top-menu-icon {
+    border-radius: 3px;
     float: right;
     display: inline-block;
     width: 2.5em;
     height: 2.5em;
     background-image:url(../img/menu-icon.png);
-    background-color: $menu-bg-color ;
+    background-color: $item-bg-color ;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     &:hover{
-        background-color: $hover-item-color;
+        background-color: $generic-blue;
         border-radius: 4px 4px 0 0;
     }
 }
 
 #top-menu {
+    box-sizing: border-box;
     ul {
         display: none;
         position: absolute;
         padding: 20px;
-        background-color: $white;
+        background-color: $item-bg-color;
         right: 1em;
         top: 3em;
         border-radius: 4px 0 4px 4px;
@@ -39,12 +41,12 @@
     font-weight: 700;
     padding: 10px 0;
     text-decoration: none;
-    color: $menu-item-color;
+    color: $generic-blue;
     &.current {
-        color: $current-menu-item-color;
+        color: $light-gray;
     }
     &:hover {
-        color: $hover-item-color;
+        color: $white;
     }
 }
 
@@ -55,14 +57,17 @@
     }
 
     #top-menu-container {
+        overflow: hidden;
         width: 100%;
-        background: $menu-bg-color;
+        background: $item-bg-color;
         border-radius: 3px;
     }
 
     #top-menu {
         float: right;
+        padding: .2rem 0;
         ul {
+            white-space:nowrap;
             list-style: none;
             display: inline-block;
             position: relative;
@@ -76,6 +81,7 @@
             }
         }
         .top-menu-item {
+            line-height: 1.5rem;
             padding: 0 .5em;
         }
     }
