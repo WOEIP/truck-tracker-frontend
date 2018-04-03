@@ -11,17 +11,16 @@ class MapContainer extends Component {
       // Pass the Google Maps props down to the
       // MapContainer component as 'google'
       <div>
-        <MapApp {...this.props}/>
-        <p className="map_instructions">
-          Set 1st marker where truck was sighted,
-          place 2nd marker where truck was last seen
+        <p className="map-instructions">
+          Set first marker where truck was sighted,
+          place second marker where truck was last seen
         </p>
+        <MapApp {...this.props}/>
         <ul className="actions">
           <li>
-            <a onMouseDown={this.props.returnToTruckSelection}
-                 className="button icon fa-chevron-left">
-            Back
-            </a>
+            <button onClick={this.props.returnToTruckSelection}>
+            Back to truck selection
+            </button>
           </li>
         </ul>
       </div>

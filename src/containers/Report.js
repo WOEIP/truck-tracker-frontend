@@ -14,6 +14,8 @@ class Report extends Component {
     super(props);
 
     this.truckSelectHandler = this.truckSelectHandler.bind(this);
+    this.returnToTruckSelection = this.returnToTruckSelection.bind(this);
+    this.sendData = this.sendData.bind(this);
 
     this.state = {
       truckType: null,
@@ -21,7 +23,7 @@ class Report extends Component {
     };
   }
 
-  sendDataToServer(e, timeSinceSeen, fromPos, toPos) {
+  sendData(e, timeSinceSeen, fromPos, toPos) {
 
     // relative time from data submission that truck passed by
     // (e.g. 2 = 2 minutes ago)
@@ -58,59 +60,40 @@ class Report extends Component {
   }
 
   truckSelectHandler(truck) {
-    console.log('type: ' + truck.type);
     this.setState({
       truckType: truck.type,
-      truckKey: truck.key
+      currentPage: "giveLocation"
     });
-
-    this.openMap();
   }
 
   returnToTruckSelection() {
     this.setState({
-      title: this.titles.truckSelectionTitle,
-      mapHasBeenHidden: true
-    });
-    this.showTruckSelectHideMap();
-  }
-
-  openMap() {
-    this.setState({
-      title: this.titles.mapHeadingSelectionTitle
-    });
-    this.showMapHideTruckSelect();
-  }
-
-  showMapHideTruckSelect() {
-    //this._truckSelectionMenu.style.display = "none";
-    //this._mapSelectionView.style.display = "block";
-    this.setState({
-      mapHasBeenShown: true
+        currentPage: "truckSelection"
     });
   }
 
-  showTruckSelectHideMap() {
-    this._truckSelectionMenu.style.display = "block";
-    this._mapSelectionView.style.display = "none";
-  }
+  getActiveContent(){
+    //TODO that is ugly
+    var that = this;
+    switch(this.state.currentPage){
+      case "giveLocation":
+          return {component: MapContainer,
+                  props: {returnToTruckSelection: that.returnToTruckSelection,
+                         sendData: that.sendData,
+                         truckType: that.state.truckType}};
+      default:
+          return {component: TruckSelection,
+                  props: {truckSelectHandler: that.truckSelectHandler}};
+    }
+  };
 
   render() {
+    const ActiveContent = this.getActiveContent();
     return (
       <div className="bground">
       <article id="report">
         <Menu current="report"/>
-        <div ref={ (el) => this._truckSelectionMenu = el }>
-          <TruckSelection truckSelectHandler={this.truckSelectHandler}/>
-        </div>
-        <div id="map_container" ref={ (el) => this._mapSelectionView = el }>
-          <MapApp returnToTruckSelection={this.returnToTruckSelection}
-                  mapHasBeenShown={this.state.mapHasBeenShown}
-                  mapHasBeenHidden={this.state.mapHasBeenHidden}
-                  truckType={this.state.truckType}
-                  sendDataToServer={this.sendDataToServer}
-                  />
-        </div>
+        <ActiveContent.component {...ActiveContent.props}/>
       </article>
       </div>
     );

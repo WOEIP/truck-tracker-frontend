@@ -27,14 +27,11 @@ export default class MapApp extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.mapHasBeenShown && !this.props.mapHasBeenHidden) {
-      this.loadMap(); // call loadMap function to load the google map
-    }
-    //this.centerMapOnUser();
+      this.loadMap();
   }
 
   centerMapOnUser() {
-    if (navigator && navigator.geolocation) { //center on user's location
+    if (navigator && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((pos) => {
         const coords = pos.coords;
         this.setState({
@@ -73,7 +70,7 @@ export default class MapApp extends Component {
   }
 
   createRoute() {
-    const {google} = this.props; // should be valid because loadMap is always called before this function
+    const {google} = this.props;
     var path = new google.maps.MVCArray();
     var service = new google.maps.DirectionsService();
     this.poly = new google.maps.Polyline({
@@ -145,8 +142,6 @@ export default class MapApp extends Component {
   }
 
   confirmDataSubmission(e) {
-    /*console.log("(" + this.markersArray[0].getPosition().lat() + "," + this.markersArray[0].getPosition().lng()
-      + ") ->" + "(" + this.markersArray[1].getPosition().lat() + "," + this.markersArray[1].getPosition().lng() + ")");*/
     let fromPos = this.markersArray[0].getPosition();
     let toPos = this.markersArray[0].getPosition();
 
@@ -154,7 +149,7 @@ export default class MapApp extends Component {
     if (this.timeUnit === "hours") {
       time *= 60;
     }
-    this.props.sendDataToServer(e, time, fromPos, toPos);
+    this.props.sendData(e, time, fromPos, toPos);
   }
 
   loadMap() {
@@ -208,8 +203,8 @@ export default class MapApp extends Component {
 
     // in our return function you must return a div with ref='map' and style.
     return (
-      <div id="map_wrapper">
-        <div id="inner_map_container" ref={(el) => this._map = el}>
+      <div id="map-wrapper">
+        <div id="inner-map-container" ref={(el) => this._map = el}>
           loading map...
         </div>
         <div ref={(el) => this._mapOverlay = el} id="over_map">
@@ -226,12 +221,12 @@ export default class MapApp extends Component {
             </select>
           </p>
           <ul className="actions">
-            <li><a style={linkStyle}
-                   onMouseDown={this.confirmDataSubmission}
-                   className="button icon fa-truck">Confirm</a></li>
-            <li><a style={linkStyle}
-                   onMouseDown={this.clearMarkers}
-                   className="button icon fa-close">Cancel</a></li>
+            <li><button
+                   onClick={this.confirmDataSubmission}
+                   className="button icon fa-truck">Confirm</button></li>
+            <li><button style={linkStyle}
+                   onClick={this.clearMarkers}
+                   className="button icon fa-close">Cancel</button></li>
            </ul>
          </div>
        </div>
