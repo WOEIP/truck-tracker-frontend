@@ -6,28 +6,18 @@ import axios from 'axios';
 import '../styles/common.scss';
 import '../styles/report.scss';
 
-import MapApp from './MapApp';
-import TruckSelection from './TruckSelection';
+import MapContainer from './MapContainer';
+import TruckSelection from './../components/TruckSelection';
 
 class Report extends Component {
   constructor(props) {
     super(props);
 
     this.truckSelectHandler = this.truckSelectHandler.bind(this);
-    this.sendDataToServer = this.sendDataToServer.bind(this);
-    this.returnToTruckSelection = this.returnToTruckSelection.bind(this);
-    this.showMapHideTruckSelect = this.showMapHideTruckSelect.bind(this);
-
-    this.titles = {
-      truckSelectionTitle: "Select truck type",
-      mapHeadingSelectionTitle: "Set truck heading"
-    };
 
     this.state = {
       truckType: null,
-      title: this.titles.truckSelectionTitle,
-      mapHasBeenShown: false,
-      mapHasBeenHidden: false
+      currentPage: "selectTruck"
     };
   }
 
