@@ -24,7 +24,7 @@ class Menu extends Component {
       }
 
       itemsToRender.push(
-        <li>
+        <li key={menuItems[i]["id"]}>
           <a href={"#" + menuItems[i]["id"]}
              className={classToAdd + "top-menu-item"}>{menuItems[i]["text"]}
           </a>
