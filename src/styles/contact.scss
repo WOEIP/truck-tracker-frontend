@@ -17,7 +17,7 @@ h1 {
 
 form {
     & input, textarea {
-        color: $dark-gray;
+        color: $dark-grey;
         width: 100%;
     }
     & button {
@@ -25,14 +25,14 @@ form {
         border: 0 none;
         border-radius: 3px;
         background-color: $item-bg-color;
-        color: $light-gray;
+        color: $light-grey;
         letter-spacing: .2rem;
         padding: .5rem;
         width: 8rem;
     }
     & button:hover {
         background-color: $generic-blue;
-        color: $white;
+        color: white;
     }
 }
 

@@ -43,10 +43,10 @@
     text-decoration: none;
     color: $generic-blue;
     &.current {
-        color: $light-gray;
+        color: $light-grey;
     }
     &:hover {
-        color: $white;
+        color: white;
     }
 }
 
@@ -80,6 +80,7 @@
                 display: inline-block;
             }
         }
+        //TODO text is still not vertically centered?
         .top-menu-item {
             line-height: 1.5rem;
             padding: 0 .5em;
