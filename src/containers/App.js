@@ -32,7 +32,7 @@ class App extends Component {
   render() {
     const ActiveContent = this.getActiveContent();
     return (
-      <div>
+      <div id="bground">
         <ActiveContent/>
       </div>
     );

@@ -16,13 +16,11 @@ class MapContainer extends Component {
           place second marker where truck was last seen
         </p>
         <MapApp {...this.props}/>
-        <ul className="actions">
-          <li>
-            <button onClick={this.props.returnToTruckSelection}>
-            Back to truck selection
-            </button>
-          </li>
-        </ul>
+        <div className="actions">
+          <button onClick={this.props.returnToTruckSelection}>
+            Back
+          </button>
+        </div>
       </div>
     );
   }

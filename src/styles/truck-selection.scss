@@ -1,7 +1,16 @@
-.button-container {
-    input {
-        max-width:90%;
-        margin: 0 auto;
+.button-grid {
+    width: 70%;
+    margin: 0 auto;
+    & > .button-container {
+        input {
+            width:90%;
+            margin: 0 auto;
+        }
+        box-size: border-box;
     }
-    box-size: border-box;
+}
+
+@media screen and (min-width : 35.5em) {
+
+
 }

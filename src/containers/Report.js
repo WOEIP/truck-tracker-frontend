@@ -68,7 +68,7 @@ class Report extends Component {
 
   returnToTruckSelection() {
     this.setState({
-        currentPage: "truckSelection"
+      currentPage: "truckSelection"
     });
   }
 
@@ -76,26 +76,24 @@ class Report extends Component {
     //TODO that is ugly
     var that = this;
     switch(this.state.currentPage){
-      case "giveLocation":
-          return {component: MapContainer,
-                  props: {returnToTruckSelection: that.returnToTruckSelection,
-                         sendData: that.sendData,
-                         truckType: that.state.truckType}};
-      default:
-          return {component: TruckSelection,
-                  props: {truckSelectHandler: that.truckSelectHandler}};
+    case "giveLocation":
+      return {component: MapContainer,
+              props: {returnToTruckSelection: that.returnToTruckSelection,
+                      sendData: that.sendData,
+                      truckType: that.state.truckType}};
+    default:
+      return {component: TruckSelection,
+              props: {truckSelectHandler: that.truckSelectHandler}};
     }
   };
 
   render() {
     const ActiveContent = this.getActiveContent();
     return (
-      <div className="bground">
       <article id="report">
         <Menu current="report"/>
         <ActiveContent.component {...ActiveContent.props}/>
       </article>
-      </div>
     );
   }
 }

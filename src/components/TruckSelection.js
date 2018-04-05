@@ -38,7 +38,7 @@ class TruckSelection extends Component {
     return (
       <div>
         <h2>Select truck type</h2>
-        <ul className="pure-g">
+        <ul className="pure-g button-grid">
           {truckTypes.map((item) =>
             <li key={item.key}
                 className="pure-u-1 pure-u-sm-1-2 button-container">

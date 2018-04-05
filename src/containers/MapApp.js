@@ -7,13 +7,11 @@ export default class MapApp extends Component {
   constructor(props) {
     super(props);
 
-    // This binding is necessary to make `this` work in the callback
     this.recenterMap = this.recenterMap.bind(this);
     this.centerMapOnUser = this.centerMapOnUser.bind(this);
     this.clearMarkers = this.clearMarkers.bind(this);
     this.confirmDataSubmission = this.confirmDataSubmission.bind(this);
     this.setTimeSinceTruckPassed = this.setTimeSinceTruckPassed.bind(this);
-    this.setTimeUnit = this.setTimeUnit.bind(this);
 
     this.state = {
       currentLocation: {
@@ -137,10 +135,6 @@ export default class MapApp extends Component {
     this.timeSinceTruckPassed = event.target.value;
   }
 
-  setTimeUnit(event) {
-    this.timeUnit = event.target.value;
-  }
-
   confirmDataSubmission(e) {
     let fromPos = this.markersArray[0].getPosition();
     let toPos = this.markersArray[0].getPosition();
@@ -196,38 +190,29 @@ export default class MapApp extends Component {
   }
 
   render() {
-    const linkStyle = {
-      color: "black",
-      boxShadow: "inset 0 0 0 1px black"
-    };
-
     // in our return function you must return a div with ref='map' and style.
     return (
       <div id="map-wrapper">
         <div id="inner-map-container" ref={(el) => this._map = el}>
           loading map...
         </div>
-        <div ref={(el) => this._mapOverlay = el} id="over_map">
-          <p>
-            A {this.props.truckType} truck passed by
+        <div ref={(el) => this._mapOverlay = el} id="over-map">
+          <p>A {this.props.truckType} truck passed by</p>
             <input type="number"
                    min="0"
-                   max="60"
                    defaultValue="0"
                    onChange={this.setTimeSinceTruckPassed}/>
-            <select className="time_unit" onChange={this.setTimeUnit}>
-              <option value="minutes">minutes ago</option>
-              <option value="hours">hours ago</option>
-            </select>
-          </p>
-          <ul className="actions">
-            <li><button
-                   onClick={this.confirmDataSubmission}
-                   className="button icon fa-truck">Confirm</button></li>
-            <li><button style={linkStyle}
-                   onClick={this.clearMarkers}
-                   className="button icon fa-close">Cancel</button></li>
-           </ul>
+            <p>minutes ago</p>
+          <div className="actions">
+            <button onClick={this.confirmDataSubmission}
+                    className="confirm-button">
+                      Confirm
+            </button>
+            <button onClick={this.clearMarkers}
+                    className="cancel-button">
+                      Cancel
+            </button>
+           </div>
          </div>
        </div>
     );
