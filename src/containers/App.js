@@ -3,7 +3,6 @@ import MainPage from './../components/MainPage';
 import Report from './../containers/Report';
 import Mission from './../components/Mission';
 import Contact from './../components/Contact';
-import Footer from './Footer';
 
 class App extends Component {
 
