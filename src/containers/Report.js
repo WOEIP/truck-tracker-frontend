@@ -23,36 +23,22 @@ class Report extends Component {
       currentPage: "selectTruck"
     };
   }
-
   sendData(e, timeSinceSeen, fromPos, toPos) {
 
-    // relative time from data submission that truck passed by
-    // (e.g. 2 = 2 minutes ago)
-    let fromPosLat = fromPos.lat();
-    let fromPosLng = fromPos.lng();
-    let toPosLat = toPos.lat();
-    let toPosLng = toPos.lng();
 
-    /*Debugging only*/
-    let fromVector = "(" + fromPosLat + "," + fromPosLng + ")";
-    let toVector = "(" + toPosLat + "," + toPosLng + ")";
-    console.log(this.state.truckKey,
-                timeSinceSeen,
-                fromVector + "->" + toVector);
-
-    //timeSinceSeen given in minutes -> ms
-    let timeSinceSeenInMS = timeSinceSeen * 60 * 1000;
-
-    //time that truck actually passed
-    let time = (new Date).getTime() - timeSinceSeenInMS;
-
+    console.log(Date.now() - timeSinceSeen * 60 * 1000);
+    console.log("hey " + this.state.truckKey + ", " +
+                fromPos.lat() + "," +
+                fromPos.lng() + "," +
+                toPos.lat() + "" +
+                toPos.lng() + ",");
     axios.post('/Incident', {
       truckType: this.state.truckKey,
-      startLat: fromPosLat,
-      startLon: fromPosLng,
-      endLat: toPosLat,
-      endLng: toPosLng,
-      reportedAt: time
+      startLat: fromPos.lat(),
+      startLon: fromPos.lng(),
+      endLat: toPos.lat(),
+      endLng: toPos.lng(),
+      reportedAt: Date.now() - timeSinceSeen * 60 * 1000
     }).then(function (response) {
       console.log(response);
     }).catch(function (error) {
