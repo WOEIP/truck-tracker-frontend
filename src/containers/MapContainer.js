@@ -145,11 +145,12 @@ class MapContainer extends Component {
 
   render() {
     return (
-      <div id="map-wrapper">
+      <div id="jsx-needs-this">
         <p className="map-instructions">
           Set first marker where truck was sighted,
           place second marker where truck was last seen
         </p>
+      <div id="map-wrapper">
         <div id="inner-map-container" ref={(el) => this.mapTarget = el}>
           loading map...
         </div>
@@ -172,12 +173,14 @@ class MapContainer extends Component {
             </button>
            </div>
          </div>
+
          <div className="actions">
            <button onClick={this.props.returnToTruckSelection}>
              Back
            </button>
          </div>
        </div>
+     </div>
     );
   }
 }
