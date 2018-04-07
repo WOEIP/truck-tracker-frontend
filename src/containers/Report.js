@@ -24,14 +24,7 @@ class Report extends Component {
     };
   }
   sendData(e, timeSinceSeen, fromPos, toPos) {
-
-
-    console.log(Date.now() - timeSinceSeen * 60 * 1000);
-    console.log("hey " + this.state.truckKey + ", " +
-                fromPos.lat() + "," +
-                fromPos.lng() + "," +
-                toPos.lat() + "" +
-                toPos.lng() + ",");
+    //TODO create some API module
     axios.post('/Incident', {
       truckType: this.state.truckKey,
       startLat: fromPos.lat(),
