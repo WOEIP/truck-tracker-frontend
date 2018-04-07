@@ -14,18 +14,16 @@ import '../styles/truck-selection.scss';
 import '../styles/pure-release-1.0.0/pure-min.css';
 import '../styles/pure-release-1.0.0/grids-responsive.css';
 
-//The "key" is the value sent to the database, "type" is for human display
 const truckTypes = [
-  {key: '2_AXLE', type:"2-axle", img: TWO_AXLE},
-  {key: '3_AXLE', type:"3-axle", img: THREE_AXLE},
-  {key: 'BOBTAIL', type:"3-axle Bobtail", img: BOBTAIL},
-  {key: '4_AXLE', type:"4-axle", img: FOUR_AXLE},
-  {key: '5_AXLE', type:"5-axle", img: FIVE_AXLE},
-  {key: '6_PLUS_AXLE', type:"6+ axle", img: SIX_AXLE},
-  {key: 'PORT_CHASSIS', type:"port chassis", img: PORT_CHASSIS},
-  {key: 'PORT_CONTAINER', type:"port container", img: PORT_CONTAINER}
+  {key: '2_AXLE', text:"2-axle", img: TWO_AXLE},
+  {key: '3_AXLE', text:"3-axle", img: THREE_AXLE},
+  {key: 'BOBTAIL', text:"3-axle Bobtail", img: BOBTAIL},
+  {key: '4_AXLE', text:"4-axle", img: FOUR_AXLE},
+  {key: '5_AXLE', text:"5-axle", img: FIVE_AXLE},
+  {key: '6_PLUS_AXLE', text:"6+ axle", img: SIX_AXLE},
+  {key: 'PORT_CHASSIS', text:"port chassis", img: PORT_CHASSIS},
+  {key: 'PORT_CONTAINER', text:"port container", img: PORT_CONTAINER}
 ];
-
 
 class TruckSelection extends Component {
 

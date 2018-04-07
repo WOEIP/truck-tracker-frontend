@@ -18,7 +18,8 @@ class Report extends Component {
     this.sendData = this.sendData.bind(this);
 
     this.state = {
-      truckType: null,
+      truckKey: null,
+      truckText: "",
       currentPage: "selectTruck"
     };
   }
@@ -61,7 +62,8 @@ class Report extends Component {
 
   truckSelectHandler(truck) {
     this.setState({
-      truckType: truck.type,
+      truckKey: truck.key,
+      truckText: truck.text,
       currentPage: "giveLocation"
     });
   }
@@ -80,7 +82,7 @@ class Report extends Component {
       return {component: MapContainer,
               props: {returnToTruckSelection: that.returnToTruckSelection,
                       sendData: that.sendData,
-                      truckType: that.state.truckType}};
+                      truckText: that.state.truckText}};
     default:
       return {component: TruckSelection,
               props: {truckSelectHandler: that.truckSelectHandler}};
