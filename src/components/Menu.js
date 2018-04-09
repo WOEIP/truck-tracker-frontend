@@ -36,7 +36,7 @@ class Menu extends Component {
     return (
       <div id="top-menu-container">
         <nav id="top-menu">
-          <a href="#" id="top-menu-icon"></a>
+          <div id="top-menu-icon"></div>
           <ul>
             {itemsToRender}
           </ul>
