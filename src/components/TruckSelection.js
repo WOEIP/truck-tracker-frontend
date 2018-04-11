@@ -25,6 +25,18 @@ const truckTypes = [
   {key: 'PORT_CONTAINER', text:"port container", img: PORT_CONTAINER}
 ];
 
+export function getImgOfTruck(truckKey) {
+    var i;
+    var truck;
+    for (i = 0; i < truckTypes.length; i++) {
+        truck = truckTypes[i];
+        if (truck.key === truckKey) {
+            return truck.img;
+        }
+    }
+    return truckTypes[0].img;
+}
+
 class TruckSelection extends Component {
 
   //TODO check if this optimization actually works (named callback)

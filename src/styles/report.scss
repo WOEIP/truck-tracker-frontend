@@ -18,8 +18,7 @@
     display: none;
     position: absolute;
     top: 10px;
-    left: 0;
-    right: 0;
+    right: 10px;
     margin: auto;
     padding: 30px;
     width: 18rem;
@@ -32,6 +31,61 @@
     & > p {
         text-align: left;
     }
+}
+
+img.selected_truck_confirm {
+    padding: 0;
+    max-width: 50%;
+    max-height: 50%;
+    vertical-align: middle;
+    display: inline;
+    background-color: #7C92A6;
+    border-radius: 0.2em;
+}
+
+input#pac-input { /*the autocomplete places search box on the map*/
+    margin: 10px;
+    padding: 0.3em 0.5em;
+    width: 50%;
+    
+    color: black;
+    text-overflow: ellipsis;
+
+    border: 1px solid transparent;
+    border-radius: 2px 0 0 2px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-input-placeholder {
+    color: rgba(0, 0, 0, 0.5) !important;
+    opacity: 1.0;
+}
+
+:-moz-placeholder {
+    color: rgba(0, 0, 0, 0.5) !important;
+    opacity: 1.0;
+}
+
+::-moz-placeholder {
+    color: rgba(0, 0, 0, 0.5) !important;
+    opacity: 1.0;
+}
+
+:-ms-input-placeholder {
+    color: rgba(0, 0, 0, 0.5) !important;
+    opacity: 1.0;
+}
+
+.formerize-placeholder {
+    color: rgba(0, 0, 0, 0.5) !important;
+    opacity: 1.0;
+}
+
+input[type=number] {
+    width: 3em;
 }
 
 .actions {

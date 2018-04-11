@@ -18,15 +18,21 @@ class Report extends Component {
     this.sendData = this.sendData.bind(this);
 
     this.state = {
-      truckKey: null,
-      truckText: "",
       currentPage: "selectTruck"
     };
+
+    this.truckKey = null;
   }
-  sendData(e, timeSinceSeen, fromPos, toPos) {
+  sendData(e, timeSinceSeen, fromPos, toPos, wasIdling, timeIdling) {
+    /*Debugging only*/
+    let fromVector = "(" + fromPos.lat() + "," + fromPos.lng() + ")";
+    let toVector = "(" + toPos.lat() + "," + toPos.lng() + ")";
+    console.log("A " + this.truckKey + " was seen at " + timeSinceSeen + " going heading " + fromVector + "->" + toVector
+            + ". It was idling: " + wasIdling + " for " + timeIdling + "ms");
+
     //TODO create some API module
     axios.post('/Incident', {
-      truckType: this.state.truckKey,
+      truckType: this.truckKey,
       startLat: fromPos.lat(),
       startLon: fromPos.lng(),
       endLat: toPos.lat(),
@@ -41,10 +47,9 @@ class Report extends Component {
 
   truckSelectHandler(truck) {
     this.setState({
-      truckKey: truck.key,
-      truckText: truck.text,
       currentPage: "giveLocation"
     });
+    this.truckKey = truck.key;
   }
 
   returnToTruckSelection() {
@@ -61,7 +66,7 @@ class Report extends Component {
       return {component: MapContainer,
               props: {returnToTruckSelection: that.returnToTruckSelection,
                       sendData: that.sendData,
-                      truckText: that.state.truckText}};
+                      truckKey: that.truckKey}};
     default:
       return {component: TruckSelection,
               props: {truckSelectHandler: that.truckSelectHandler}};
