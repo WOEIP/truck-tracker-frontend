@@ -30,14 +30,19 @@ class Report extends Component {
     console.log("A " + this.truckKey + " was seen at " + timeSinceSeen + " going heading " + fromVector + "->" + toVector
             + ". It was idling: " + wasIdling + " for " + timeIdling + "ms");
 
+    if (!wasIdling) {
+      timeIdling = null;
+    }
+
     //TODO create some API module
     axios.post('/Incident', {
       truckType: this.truckKey,
       startLat: fromPos.lat(),
       startLon: fromPos.lng(),
       endLat: toPos.lat(),
-      endLng: toPos.lng(),
-      reportedAt: Date.now() - timeSinceSeen * 60 * 1000
+      endLon: toPos.lng(),
+      reportedAt: Date.now() - timeSinceSeen * 60 * 1000,
+      idlingDuration: timeIdling,
     }).then(function (response) {
       console.log(response);
     }).catch(function (error) {

@@ -248,6 +248,7 @@ class MapContainer extends Component {
     let input = this._pacInput;
     this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
     var searchBox = new google.maps.places.SearchBox((input));
+    this._pacInput.style.display = "block";
 
     // Bias the SearchBox results towards current map's viewport.
     let self = this;
@@ -291,7 +292,7 @@ class MapContainer extends Component {
       <div id="map-wrapper">
         <div id="inner-map-container" ref={(el) => this.mapTarget = el}>
           loading map...
-          <input id="pac-input" ref={ (el) => this._pacInput = el } placeholder="Enter a location"></input>
+          <input id="pac-input" ref={ (el) => this._pacInput = el } placeholder="Enter a location" style={{display: "none"}}></input>
         </div>
 
         <div ref={(el) => this.mapOverlay = el} id="over-map">

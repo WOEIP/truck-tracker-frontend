@@ -14,7 +14,7 @@ import '../styles/truck-selection.scss';
 import '../styles/pure-release-1.0.0/pure-min.css';
 import '../styles/pure-release-1.0.0/grids-responsive.css';
 
-const truckTypes = [
+export const truckTypes = [
   {key: '2_AXLE', text:"2-axle", img: TWO_AXLE},
   {key: '3_AXLE', text:"3-axle", img: THREE_AXLE},
   {key: 'BOBTAIL', text:"3-axle Bobtail", img: BOBTAIL},
