@@ -102,27 +102,6 @@ class MapContainer extends Component {
         directionsRenderer.setMap(self.map); 
         directionsRenderer.setDirections(result); 
       }); 
-      /*var path = new maps.MVCArray();
-      var service = new maps.DirectionsService();
-      route.poly = new maps.Polyline({
-        map: this.map,
-        strokeColor: '#8aa4d0',
-        strokeOpacity: route.opacity,
-        strokeWeight: 8
-      });
-
-      service.route({
-        origin: {lat: route.data.startLat, lng: route.data.startLon},
-        destination: {lat: route.data.endLat, lng: route.data.endLon},
-        travelMode: maps.DirectionsTravelMode.WALKING
-      }, function(result, status) {
-        //TODO error handling in general
-        if (status === maps.DirectionsStatus.OK) {
-          result.routes[0].overview_path.map(pos => path.push(pos));
-        }
-      });
-
-      route.poly.setPath(path);*/
     }
   }
 

@@ -1,3 +1,6 @@
+//TODO: time arrays, function clean up
+//  also change checkbox triggerEvent
+
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
@@ -11,6 +14,10 @@ let HRS = 1;
 
 let ABS_TIME = 2;
 let REL_TIME = 3;
+
+const TIME_LAST_SEEN = 0, 
+      TIME_IDLING = 1, 
+      TIME_PARKED = 2;
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyB-D3Z23ZfyOZnCh2RVv5QLaWj214DsO-Q';
 
@@ -28,18 +35,17 @@ class MapContainer extends Component {
     this.updateAbsTimeTruckSeen = this.updateAbsTimeTruckSeen.bind(this);
     this.updateRelTimeTruckSeen = this.updateRelTimeTruckSeen.bind(this);
     this.setTimeUnit = this.setTimeUnit.bind(this);
-    //timeTruckIdling functions
-    this.setTimeTruckIdling = this.setTimeTruckIdling.bind(this);
-    this.setIdlingTimeUnit = this.setIdlingTimeUnit.bind(this);
-    this.toggleTruckIdling = this.toggleTruckIdling.bind(this);
 
-    //timeTruckSeen variables
-    this.timeTruckSeen = 0;
-    this.timeUnit = MIN;
-    this.timeType = ABS_TIME;
-    //idling variables
-    this.timeIdling = 0;
-    this.timeIdlingUnit = MIN;
+    //TIME_LAST_SEEN = 0, TIME_IDLING = 1, TIME_PARKED = 2
+    this.timeUnits = [MIN, MIN, MIN];
+    this.timeDur = [0, 0, 0];
+    this.timeTypes = [ABS_TIME, REL_TIME, REL_TIME];
+
+    //drawing on the map
+    this.markersArray = [];
+    this.map = null;
+    this.mapTarget = null;
+    this.poly = null;
 
     //default to West Oakland coordinates
     var userLocation = {
@@ -58,14 +64,50 @@ class MapContainer extends Component {
       err => {console.log(`ERROR(${err.code}): ${err.message}`);};
     };
 
-    this.state = {
-      currentLocation: userLocation
-    };
+    this.secondMarkerJSX = <div key="second_marker_prompt" id="second_marker_prompt"
+                              ref={ (el) => this._secondMarkerPrompt = el }>
+                            Place second marker if you wish to indicate where it was going
+                          </div>
+    this.timeJSX = <div key="time" ref={ (el) => this._timeOverlay = el }>
+                      <input type="radio" name="time_type" value={ABS_TIME} id={ABS_TIME} 
+                      checked onChange={this.setTimeType} onMouseDown={this.setTimeType}/>
+                        at <input type="time" name="time_truck_seen" ref={ (el) => this._timeTruckSeen = el }
+                          onChange={(e) => this.updateAbsTimeTruckSeen(false)}/><br/>
 
-    this.markersArray = [];
-    this.map = null;
-    this.mapTarget = null;
-    this.poly = null;
+                      <input type="radio" name="time_type" value={REL_TIME} id={REL_TIME} onMouseDown={this.setTimeType}/>
+                        about <input type="number" min="0" defaultValue="0" ref={ (el) => this._timeSinceTruckSeen = el }
+                          onChange={(e) => this.updateRelTimeTruckSeen()}/>
+                        <select className="time_unit" id={TIME_LAST_SEEN} onChange={this.setTimeUnit}>
+                          <option value={MIN}>mins</option>
+                          <option value={HRS}>hrs</option>
+                        </select> ago
+                  </div>
+    this.parkedJSX = <div key="parked">
+                      <input type="checkbox" id="truck_was_parked" ref={ (el) => this._truckWasParked = el }/>
+                        <label htmlFor="truck_was_parked">parked for </label>
+                      <input type="number" id={TIME_PARKED} min="0" max="60" 
+                        defaultValue="0" ref={ (el) => this._timeTruckParked = el }
+                        onChange={(e) => this.setTimeDuration(e)}/>
+                      <select className="time_unit" id={TIME_PARKED} onChange={this.setTimeUnit}>
+                        <option value={MIN}>mins</option>
+                        <option value={HRS}>hrs</option>
+                      </select>
+                  </div>
+    this.idlingJSX = <div key="idling" id="was_idling"> 
+                      <input type="checkbox" id="truck_was_idling" ref={ (el) => this._truckWasIdling = el }/>
+                        <label htmlFor="truck_was_idling">idling for </label>
+                      <input type="number" id={TIME_IDLING} min="0" max="60" 
+                        defaultValue="0" ref={ (el) => this._timeTruckIdling = el }
+                        onChange={(e) => this.setTimeDuration(e)}/>
+                      <select className="time_unit" id={TIME_IDLING} onChange={this.setTimeUnit}>
+                        <option value={MIN}>mins</option>
+                        <option value={HRS}>hrs</option>
+                      </select>
+                    </div>
+    this.state = {
+      currentLocation: userLocation,
+      overlayJSX: [this.idlingJSX, this.parkedJSX, this.timeJSX, this.secondMarkerJSX]
+    };
   }
 
   componentDidMount() {
@@ -117,9 +159,13 @@ class MapContainer extends Component {
 
       this.markersArray.push(marker);
     }
-    if (this.markersArray.length === 2) {
-      this.createRoute();
+    if (this.markersArray.length === 1) {
       this.mapOverlay.style.display = "block";
+      this._secondMarkerPrompt.style.display = "block";
+    }
+    else if (this.markersArray.length === 2) {
+      this._secondMarkerPrompt.style.display = "none";
+      this.createRoute();
     }
   }
 
@@ -131,12 +177,51 @@ class MapContainer extends Component {
   }
 
   setTimeType(event) { //callback for time <input radio> elements in confirm overlay
-    this.timeType = event.target.value; //either ABS_TIME or REL_TIME
-    //update this.timeTruckSeen
-    if (this.timeType == ABS_TIME) {
+    this.timeTypes[TIME_LAST_SEEN] = event.target.value; //either ABS_TIME or REL_TIME
+    //update this.timeDur[TIME_LAST_SEEN]
+    if (this.timeTypes[TIME_LAST_SEEN] == ABS_TIME) {
       this.updateAbsTimeTruckSeen(false);
     } else { //timeType === REL_TIME
       this.updateRelTimeTruckSeen();
+    }
+  }
+  setTimeUnit(event) {
+    //TIME_LAST_SEEN: for relative time of time since truck passed (minutes or hours)
+    if (event.target.id == TIME_LAST_SEEN) {
+      this.timeUnits[TIME_LAST_SEEN] = event.target.value;
+      this.updateRelTimeTruckSeen(); //since time unit changed, must update timeTruckSeen 
+    } else if (event.target.id == TIME_IDLING) {
+      //TIME_IDLING: time unit of truck idling (MIN or HRS)
+      this.timeUnits[TIME_IDLING] = event.target.value;
+      this.setTimeDuration(event); //since time unit changed, must update timeIdling     
+    } else if (event.target.id == TIME_PARKED) {
+      //TIME_PARKED: time unit of truck idling (MIN or HRS)
+      this.timeUnits[TIME_PARKED] = event.target.value;
+      this.setTimeDuration(event); //since time unit changed, must update timeIdling
+    }
+  }
+
+  setTimeDuration(event) {
+    //TIME_LAST_SEEN
+    if (event.target.id == TIME_LAST_SEEN) {
+      //updateAbsTimeTruckSeen
+      //updateRel...
+    } else if (event.target.id == TIME_IDLING) {
+      //sets time that truck has been idling
+      let time = this._timeTruckIdling.value * 60 * 1000; //time in ms
+      if (this.timeUnits[TIME_IDLING] == HRS) {
+        time *= 60;
+      }
+
+      this.timeDur[TIME_IDLING] = time;
+    } else if (event.target.id == TIME_PARKED) {
+      //sets time that truck has been parked
+      let time = this._timeTruckParked.value * 60 * 1000; //time in ms
+      if (this.timeUnits[TIME_PARKED] == HRS) {
+        time *= 60;
+      }
+
+      this.timeDur[TIME_PARKED] = time;
     }
   }
 
@@ -163,59 +248,48 @@ class MapContainer extends Component {
       currDate.setMinutes(min);
     }
 
-    if (this.timeType == ABS_TIME) { //update timeTruckSeen 
-      this.timeTruckSeen = currDate;
+    if (this.timeTypes[TIME_LAST_SEEN] == ABS_TIME) { //update timeTruckSeen 
+      this.timeDur[TIME_LAST_SEEN] = currDate;
     }
   }
 
+  //func(timeType, time)
+  //array timeTypes[], timeUnits[], times[] (for idling time, parked time, timeSeen)
   updateRelTimeTruckSeen() { //for relative time since truck passed
-    if (this.timeType == REL_TIME) {
+    if (this.timeTypes[TIME_LAST_SEEN] == REL_TIME) {
       let timeSinceSeenInMS = this._timeSinceTruckSeen.value * 60 * 1000; //time should be in min, thus we convert -> ms
-      if (this.timeUnit == HRS) {
+      if (this.timeUnits[TIME_LAST_SEEN] == HRS) {
         timeSinceSeenInMS *= 60;
       }
 
       let time = (new Date()).getTime() - timeSinceSeenInMS; //time that truck actually passed
-      this.timeTruckSeen = new Date(time);
+      this.timeDur[TIME_LAST_SEEN] = new Date(time);
     }
-  }
-
-  setTimeUnit(event) { //for relative time of time since truck passed (minutes or hours)
-    this.timeUnit = event.target.value;
-    this.updateRelTimeTruckSeen(); //since time unit changed, must update timeTruckSeen
-  }
-
-  setTimeTruckIdling() { //sets time that truck has been idling
-    let time = this._timeTruckIdling.value * 60 * 1000; //time in ms
-    if (this.timeIdlingUnit == HRS) {
-      time *= 60;
-    }
-
-    this.timeIdling = time;
-  }
-
-  setIdlingTimeUnit(event) { //time unit of truck idling (MIN or HRS)
-    this.timeIdlingUnit = event.target.value;
-    this.setTimeTruckIdling(); //since time unit changed, must update timeIdling
-  }
-
-  toggleTruckIdling(event) {
-    let prevWasChecked = this._truckWasIdling.checked;
-    let self = this;
-
-    //since we're setting this click event on <p id="idling_toggle">, we wait 125ms to make sure we don't conflict with the actual checkbox event
-    setTimeout(function(){ 
-      if (self._truckWasIdling.checked == prevWasChecked) { //if no conflict
-        triggerEvent(self._truckWasIdling, "click");
-      }
-    }, 150);
   }
 
   confirmDataSubmission(e) {
     let fromPos = this.markersArray[0].getPosition();
-    let toPos = this.markersArray[1].getPosition();
 
-    this.props.sendData(e, this.timeTruckSeen, fromPos, toPos, this._truckWasIdling.checked, this.timeIdling);
+    let wasIdling = this._truckWasIdling.checked;
+    let wasParked = this._truckWasParked.checked;
+    let timeIdling = this.timeDur[TIME_IDLING];
+    let timeLastSeen = this.timeDur[TIME_LAST_SEEN];
+    let timeParked = this.timeDur[TIME_PARKED];
+    /*Debugging only*/
+    let fromVector = "(" + fromPos.lat() + "," + fromPos.lng() + ")";
+
+    if (this.markersArray.length == 1) { //just send idling/parking information of truck
+      this.props.sendData(e, timeLastSeen, fromPos, fromPos, wasIdling, timeIdling);
+      console.log("A " + this.truckKey + " was seen at " + timeLastSeen + " at " 
+        + fromVector + ". Idling: " + wasIdling + " for " + timeIdling + "ms" 
+        + ". Parked: " + wasParked + " for " + timeParked + "ms");
+    } else { //user gave a truck heading as well
+      let toPos = this.markersArray[1].getPosition();
+      let toVector = "(" + toPos.lat() + "," + toPos.lng() + ")";
+      console.log("A " + this.truckKey + " was seen at " + timeLastSeen + " heading " + fromVector + "->" + toVector
+              + ". It was idling: " + wasIdling + " for " + timeIdling + "ms");
+      this.props.sendData(e, timeLastSeen, fromPos, toPos, wasIdling, timeIdling);
+    }
   }
 
   loadMap() {
@@ -286,8 +360,8 @@ class MapContainer extends Component {
     return (
       <div id="jsx-needs-this">
         <p className="map-instructions">
-          Set first marker where truck was sighted,
-          place second marker where truck was last seen
+          Click on map to set 1st marker where truck was sighted,
+          place a 2nd marker where truck was last seen
         </p>
       <div id="map-wrapper">
         <div id="inner-map-container" ref={(el) => this.mapTarget = el}>
@@ -296,33 +370,10 @@ class MapContainer extends Component {
         </div>
 
         <div ref={(el) => this.mapOverlay = el} id="over-map">
-          <h3>When did it pass by?</h3>
-          <p>
-              A <img className="selected_truck_confirm" src={getImgOfTruck(this.props.truckKey)} alt={this.props.truckKey + "truck"}/> passed by <br/><br/>
-              <input type="radio" name="time_type" value={ABS_TIME} id={ABS_TIME} checked onChange={this.setTimeType} onMouseDown={this.setTimeType}/>
-                  at <input type="time" name="time_truck_seen" ref={ (el) => this._timeTruckSeen = el }
-                      onChange={(e) => this.updateAbsTimeTruckSeen(false)}/><br/>
-              <input type="radio" name="time_type" value={REL_TIME} id={REL_TIME} onMouseDown={this.setTimeType}/>
-                  about <input type="number" min="0" defaultValue="0" ref={ (el) => this._timeSinceTruckSeen = el }
-                      onChange={(e) => this.updateRelTimeTruckSeen()}/>
-                  <select className="time_unit" onChange={this.setTimeUnit}>
-                      <option value={MIN}>mins</option>
-                      <option value={HRS}>hrs</option>
-                  </select> ago
-          </p>
-
-          <div id="was_idling"> 
-              <p id="idling_toggle" onMouseDown={this.toggleTruckIdling}>
-                  <input type="checkbox" id="truck_was_idling" ref={ (el) => this._truckWasIdling = el }/>
-                  <label htmlFor="truck_was_idling">Truck was idling for </label>
-              </p>
-              <input type="number" min="0" max="60" defaultValue="0" ref={ (el) => this._timeTruckIdling = el }
-                  onChange={(e) => this.setTimeTruckIdling()}/>
-              <select className="time_unit" onChange={this.setIdlingTimeUnit}>
-                  <option value={MIN}>mins</option>
-                  <option value={HRS}>hrs</option>
-              </select>
-          </div>
+          A <img className="selected_truck_confirm" 
+            src={getImgOfTruck(this.props.truckKey)} 
+            alt={this.props.truckKey + "truck"}/> truck was 
+          {this.state.overlayJSX}
 
           <div className="actions">
             <button onClick={this.confirmDataSubmission}

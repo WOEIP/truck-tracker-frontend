@@ -24,23 +24,18 @@ class Report extends Component {
     this.truckKey = null;
   }
   sendData(e, timeSinceSeen, fromPos, toPos, wasIdling, timeIdling) {
-    /*Debugging only*/
-    let fromVector = "(" + fromPos.lat() + "," + fromPos.lng() + ")";
-    let toVector = "(" + toPos.lat() + "," + toPos.lng() + ")";
-    console.log("A " + this.truckKey + " was seen at " + timeSinceSeen + " going heading " + fromVector + "->" + toVector
-            + ". It was idling: " + wasIdling + " for " + timeIdling + "ms");
-
     if (!wasIdling) {
-      timeIdling = null;
+      timeIdling = 0;
     }
 
+    let start = {lat: fromPos.lat(), lon: fromPos.lng()},
+        end = {lat: toPos.lat(), lon: toPos.lng()};
+
     //TODO create some API module
-    axios.post('/Incident', {
+    axios.post('http://localhost:4000/Incident', {
       truckType: this.truckKey,
-      startLat: fromPos.lat(),
-      startLon: fromPos.lng(),
-      endLat: toPos.lat(),
-      endLon: toPos.lng(),
+      start: start,
+      end: end, 
       reportedAt: Date.now() - timeSinceSeen * 60 * 1000,
       idlingDuration: timeIdling,
     }).then(function (response) {

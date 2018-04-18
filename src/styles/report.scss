@@ -11,6 +11,15 @@
     position: relative;
 }
 
+div#second_marker_prompt {
+    margin-top: 1em;
+    display: none;
+}
+
+p#idling_toggle {
+    display: inline-block;
+}
+
 #over-map {
     background-color: rgba(white, 0.9);
     box-sizing: border-box;
@@ -21,7 +30,7 @@
     right: 10px;
     margin: auto;
     padding: 30px;
-    width: 18rem;
+    width: 20rem;
     border-radius: 3px;
     & input {
         color: $dark-grey;
