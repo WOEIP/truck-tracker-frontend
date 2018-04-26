@@ -1,0 +1,13 @@
+# System generated files
+*.log
+*.lnk
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Packages
+node_modules
+
+# Build process
+build
