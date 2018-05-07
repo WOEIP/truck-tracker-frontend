@@ -15,8 +15,8 @@ let HRS = 1;
 let ABS_TIME = 7;
 let REL_TIME = 8;
 
-const TIME_LAST_SEEN = 0, 
-      TIME_IDLING = 1, 
+const TIME_LAST_SEEN = 0,
+      TIME_IDLING = 1,
       TIME_PARKED = 2;
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyB-D3Z23ZfyOZnCh2RVv5QLaWj214DsO-Q';
@@ -76,7 +76,7 @@ class MapContainer extends Component {
                             Place second marker if you wish to indicate where it was going
                           </div>
     this.timeJSX = <div key="time" ref={ (el) => this._timeOverlay = el }>
-                      <input type="radio" name="time_type" value={ABS_TIME} id={ABS_TIME} 
+                      <input type="radio" name="time_type" value={ABS_TIME} id={ABS_TIME}
                       checked onChange={this.setTimeType} onMouseDown={this.setTimeType}/>
                         <label htmlFor={ABS_TIME}> at </label><input type="time" name="time_truck_seen" ref={ (el) => this._timeTruckSeen = el }
                           onChange={(e) => this.updateAbsTimeTruckSeen(false)}/><br/>
@@ -92,7 +92,7 @@ class MapContainer extends Component {
     this.parkedJSX = <div key="parked">
                       <input type="checkbox" id="truck_was_parked" ref={ (el) => this._truckWasParked = el }/>
                         <label htmlFor="truck_was_parked">parked for </label>
-                      <input type="number" id={TIME_PARKED} min="0" max="60" 
+                      <input type="number" id={TIME_PARKED} min="0" max="60"
                         defaultValue="0" ref={ (el) => this._timeTruckParked = el }
                         onChange={(e) => this.setTimeDuration(e)}/>
                       <select className="time_unit" id={TIME_PARKED} onChange={this.setTimeUnit}>
@@ -100,10 +100,10 @@ class MapContainer extends Component {
                         <option value={HRS}>hrs</option>
                       </select>
                   </div>
-    this.idlingJSX = <div key="idling" id="was_idling"> 
+    this.idlingJSX = <div key="idling" id="was_idling">
                       <input type="checkbox" id="truck_was_idling" ref={ (el) => this._truckWasIdling = el }/>
                         <label htmlFor="truck_was_idling">idling for </label>
-                      <input type="number" id={TIME_IDLING} min="0" max="60" 
+                      <input type="number" id={TIME_IDLING} min="0" max="60"
                         defaultValue="0" ref={ (el) => this._timeTruckIdling = el }
                         onChange={(e) => this.setTimeDuration(e)}/>
                       <select className="time_unit" id={TIME_IDLING} onChange={this.setTimeUnit}>
@@ -130,11 +130,11 @@ class MapContainer extends Component {
 
     let self = this;
     let directionsService = new maps.DirectionsService();
-      directionsService.route({ 
-        origin: this.markersArray[0].getPosition(), 
-        destination: this.markersArray[1].getPosition(), 
-        travelMode: maps.DirectionsTravelMode.WALKING 
-      }, function(result) { 
+      directionsService.route({
+        origin: this.markersArray[0].getPosition(),
+        destination: this.markersArray[1].getPosition(),
+        travelMode: maps.DirectionsTravelMode.WALKING
+      }, function(result) {
         self.directionsRenderer = new maps.DirectionsRenderer({
           polylineOptions: {
               strokeColor: '#8aa4d0',
@@ -143,10 +143,10 @@ class MapContainer extends Component {
           },
           suppressMarkers: true, //don't show default directions markers
           preserveViewport: true, //don't move the map window to center on the route
-        }); 
-        self.directionsRenderer.setMap(self.map); 
-        self.directionsRenderer.setDirections(result); 
-      }); 
+        });
+        self.directionsRenderer.setMap(self.map);
+        self.directionsRenderer.setDirections(result);
+      });
   }
 
   placeMarker(pos) {
@@ -186,7 +186,7 @@ class MapContainer extends Component {
     this.audio.play();
 
     if (this.markersArray.length == 2) { //a route was drawn, remove it
-      this.directionsRenderer.setMap(null); 
+      this.directionsRenderer.setMap(null);
     }
     this.markersArray.map(marker => marker.setMap(null));
     this.markersArray.length = 0;
@@ -207,11 +207,11 @@ class MapContainer extends Component {
     //TIME_LAST_SEEN: for relative time of time since truck passed (minutes or hours)
     if (event.target.id == TIME_LAST_SEEN) {
       this.timeUnits[TIME_LAST_SEEN] = event.target.value;
-      this.updateRelTimeTruckSeen(); //since time unit changed, must update timeTruckSeen 
+      this.updateRelTimeTruckSeen(); //since time unit changed, must update timeTruckSeen
     } else if (event.target.id == TIME_IDLING) {
       //TIME_IDLING: time unit of truck idling (MIN or HRS)
       this.timeUnits[TIME_IDLING] = event.target.value;
-      this.setTimeDuration(event); //since time unit changed, must update timeIdling     
+      this.setTimeDuration(event); //since time unit changed, must update timeIdling
     } else if (event.target.id == TIME_PARKED) {
       //TIME_PARKED: time unit of truck idling (MIN or HRS)
       this.timeUnits[TIME_PARKED] = event.target.value;
@@ -250,10 +250,10 @@ class MapContainer extends Component {
       var h = currDate.getHours(),
         m = currDate.getMinutes();
       if (h < 10) {
-        h = '0' + h; 
+        h = '0' + h;
       }
       if (m < 10) {
-        m = '0' + m; 
+        m = '0' + m;
       }
       this._timeTruckSeen.value = h + ':' + m;
     } else { //get time from user input
@@ -266,7 +266,7 @@ class MapContainer extends Component {
       currDate.setMinutes(min);
     }
 
-    if (this.timeTypes[TIME_LAST_SEEN] == ABS_TIME) { //update timeTruckSeen 
+    if (this.timeTypes[TIME_LAST_SEEN] == ABS_TIME) { //update timeTruckSeen
       this.timeDur[TIME_LAST_SEEN] = currDate;
     }
   }
@@ -298,8 +298,8 @@ class MapContainer extends Component {
 
     if (this.markersArray.length == 1) { //just send idling/parking information of truck
       this.props.sendData(e, timeLastSeen, fromPos, fromPos, wasIdling, timeIdling);
-      console.log("A " + this.props.truckKey + " was seen at " + timeLastSeen + " at " 
-        + fromVector + ". Idling: " + wasIdling + " for " + timeIdling + "ms" 
+      console.log("A " + this.props.truckKey + " was seen at " + timeLastSeen + " at "
+        + fromVector + ". Idling: " + wasIdling + " for " + timeIdling + "ms"
         + ". Parked: " + wasParked + " for " + timeParked + "ms");
     } else { //user gave a truck heading as well
       let toPos = this.markersArray[1].getPosition();
@@ -394,9 +394,9 @@ class MapContainer extends Component {
         </div>
 
         <div ref={(el) => this.mapOverlay = el} id="over-map">
-          A <img className="selected_truck_confirm" 
-            src={getImgOfTruck(this.props.truckKey)} 
-            alt={this.props.truckKey + "truck"}/> truck was 
+          A <img className="selected_truck_confirm"
+            src={getImgOfTruck(this.props.truckKey)}
+            alt={this.props.truckKey + "truck"}/> truck was
           {this.state.overlayJSX}
 
           <div className="actions">
