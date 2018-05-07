@@ -12,8 +12,8 @@ import truck from '../img/truck.png';
 let MIN = 0;
 let HRS = 1;
 
-let ABS_TIME = 2;
-let REL_TIME = 3;
+let ABS_TIME = 7;
+let REL_TIME = 8;
 
 const TIME_LAST_SEEN = 0, 
       TIME_IDLING = 1, 
@@ -45,13 +45,20 @@ class MapContainer extends Component {
     this.markersArray = [];
     this.map = null;
     this.mapTarget = null;
-    this.poly = null;
+    this.directionsRenderer = null;
+
+    this.audio = null;
 
     //default to West Oakland coordinates
-    var userLocation = {
-        lat: 37.806440,
-        lng: -122.298261
+    let westOaklandCoordinates = {
+      lat: 37.806440,
+      lng: -122.298261
     };
+    let berkeleyCoordinates = {
+      lat: 37.8719,
+      lng: -122.2585
+    };
+    var userLocation = berkeleyCoordinates;
 
     //TODO: HTTPS is needed I guess
     if (navigator && navigator.geolocation) {
@@ -71,11 +78,11 @@ class MapContainer extends Component {
     this.timeJSX = <div key="time" ref={ (el) => this._timeOverlay = el }>
                       <input type="radio" name="time_type" value={ABS_TIME} id={ABS_TIME} 
                       checked onChange={this.setTimeType} onMouseDown={this.setTimeType}/>
-                        at <input type="time" name="time_truck_seen" ref={ (el) => this._timeTruckSeen = el }
+                        <label htmlFor={ABS_TIME}> at </label><input type="time" name="time_truck_seen" ref={ (el) => this._timeTruckSeen = el }
                           onChange={(e) => this.updateAbsTimeTruckSeen(false)}/><br/>
 
                       <input type="radio" name="time_type" value={REL_TIME} id={REL_TIME} onMouseDown={this.setTimeType}/>
-                        about <input type="number" min="0" defaultValue="0" ref={ (el) => this._timeSinceTruckSeen = el }
+                        <label htmlFor={REL_TIME}> about </label><input type="number" min="0" defaultValue="0" ref={ (el) => this._timeSinceTruckSeen = el }
                           onChange={(e) => this.updateRelTimeTruckSeen()}/>
                         <select className="time_unit" id={TIME_LAST_SEEN} onChange={this.setTimeUnit}>
                           <option value={MIN}>mins</option>
@@ -120,27 +127,26 @@ class MapContainer extends Component {
 
   createRoute() {
     var maps = this.props.google.maps;
-    var path = new maps.MVCArray();
-    var service = new maps.DirectionsService();
-    this.poly = new maps.Polyline({
-      map: this.map,
-      strokeColor: '#8aa4d0',
-      strokeOpacity: 1.0,
-      strokeWeight: 8
-    });
 
-    service.route({
-      origin: this.markersArray[0].getPosition(),
-      destination: this.markersArray[1].getPosition(),
-      travelMode: maps.DirectionsTravelMode.WALKING
-    }, function(result, status) {
-      //TODO error handling in general
-      if (status === maps.DirectionsStatus.OK) {
-        result.routes[0].overview_path.map(pos => path.push(pos));
-      }
-    });
-
-    this.poly.setPath(path);
+    let self = this;
+    let directionsService = new maps.DirectionsService();
+      directionsService.route({ 
+        origin: this.markersArray[0].getPosition(), 
+        destination: this.markersArray[1].getPosition(), 
+        travelMode: maps.DirectionsTravelMode.WALKING 
+      }, function(result) { 
+        self.directionsRenderer = new maps.DirectionsRenderer({
+          polylineOptions: {
+              strokeColor: '#8aa4d0',
+              strokeOpacity: 1.0,
+              strokeWeight: 8
+          },
+          suppressMarkers: true, //don't show default directions markers
+          preserveViewport: true, //don't move the map window to center on the route
+        }); 
+        self.directionsRenderer.setMap(self.map); 
+        self.directionsRenderer.setDirections(result); 
+      }); 
   }
 
   placeMarker(pos) {
@@ -160,19 +166,30 @@ class MapContainer extends Component {
       this.markersArray.push(marker);
     }
     if (this.markersArray.length === 1) {
+      this.audio = new Audio('./sounds/engine_idle.mp3');
+      this.audio.play();
       this.mapOverlay.style.display = "block";
       this._secondMarkerPrompt.style.display = "block";
     }
     else if (this.markersArray.length === 2) {
+      this.audio.pause();
+      this.audio = new Audio('./sounds/truck_passby.mp3');
+      this.audio.play();
       this._secondMarkerPrompt.style.display = "none";
       this.createRoute();
     }
   }
 
   cancel() {
+    this.audio.pause();
+    this.audio = new Audio('./sounds/short_honk.mp3');
+    this.audio.play();
+
+    if (this.markersArray.length == 2) { //a route was drawn, remove it
+      this.directionsRenderer.setMap(null); 
+    }
     this.markersArray.map(marker => marker.setMap(null));
     this.markersArray.length = 0;
-    this.poly.setMap(null);
     this.mapOverlay.style.display = "none";
   }
 
@@ -185,6 +202,7 @@ class MapContainer extends Component {
       this.updateRelTimeTruckSeen();
     }
   }
+
   setTimeUnit(event) {
     //TIME_LAST_SEEN: for relative time of time since truck passed (minutes or hours)
     if (event.target.id == TIME_LAST_SEEN) {
@@ -273,23 +291,28 @@ class MapContainer extends Component {
     let wasIdling = this._truckWasIdling.checked;
     let wasParked = this._truckWasParked.checked;
     let timeIdling = this.timeDur[TIME_IDLING];
-    let timeLastSeen = this.timeDur[TIME_LAST_SEEN];
+    let timeLastSeen = Math.floor(this.timeDur[TIME_LAST_SEEN].getTime() / 1000); //seconds since UNIX EPOCH
     let timeParked = this.timeDur[TIME_PARKED];
     /*Debugging only*/
     let fromVector = "(" + fromPos.lat() + "," + fromPos.lng() + ")";
 
     if (this.markersArray.length == 1) { //just send idling/parking information of truck
       this.props.sendData(e, timeLastSeen, fromPos, fromPos, wasIdling, timeIdling);
-      console.log("A " + this.truckKey + " was seen at " + timeLastSeen + " at " 
+      console.log("A " + this.props.truckKey + " was seen at " + timeLastSeen + " at " 
         + fromVector + ". Idling: " + wasIdling + " for " + timeIdling + "ms" 
         + ". Parked: " + wasParked + " for " + timeParked + "ms");
     } else { //user gave a truck heading as well
       let toPos = this.markersArray[1].getPosition();
       let toVector = "(" + toPos.lat() + "," + toPos.lng() + ")";
-      console.log("A " + this.truckKey + " was seen at " + timeLastSeen + " heading " + fromVector + "->" + toVector
+      console.log("A " + this.props.truckKey + " was seen at " + timeLastSeen + " heading " + fromVector + "->" + toVector
               + ". It was idling: " + wasIdling + " for " + timeIdling + "ms");
       this.props.sendData(e, timeLastSeen, fromPos, toPos, wasIdling, timeIdling);
     }
+
+    this.audio.pause();
+    this.audio = new Audio('./sounds/honk.mp3');
+    this.audio.play();
+    this.props.returnToTruckSelection();
   }
 
   loadMap() {
@@ -314,6 +337,7 @@ class MapContainer extends Component {
     if (this.map) {
       let center = new this.props.google.maps.LatLng(curr.lat, curr.lng);
       this.map.panTo(center);
+      this.map.setZoom(16);
     }
 
     // =====================
@@ -352,7 +376,7 @@ class MapContainer extends Component {
         }
       });
       self.map.fitBounds(bounds);
-      self.map.setZoom(17);
+      self.map.setZoom(15);
     });
   }
 

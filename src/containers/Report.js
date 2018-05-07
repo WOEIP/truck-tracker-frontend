@@ -23,7 +23,7 @@ class Report extends Component {
 
     this.truckKey = null;
   }
-  sendData(e, timeSinceSeen, fromPos, toPos, wasIdling, timeIdling) {
+  sendData(e, timeSeen, fromPos, toPos, wasIdling, timeIdling) {
     if (!wasIdling) {
       timeIdling = 0;
     }
@@ -32,11 +32,11 @@ class Report extends Component {
         end = {lat: toPos.lat(), lon: toPos.lng()};
 
     //TODO create some API module
-    axios.post('http://localhost:4000/Incident', {
+    axios.post('http://localhost:4000/incident', {
       truckType: this.truckKey,
       start: start,
       end: end, 
-      reportedAt: Date.now() - timeSinceSeen * 60 * 1000,
+      reportedAt: timeSeen,
       idlingDuration: timeIdling,
     }).then(function (response) {
       console.log(response);

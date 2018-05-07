@@ -1,24 +1,55 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import axios from 'axios';
 
 import { GoogleApiWrapper } from 'google-maps-react';
-const GOOGLE_MAPS_API_KEY = 'AIzaSyB-D3Z23ZfyOZnCh2RVv5QLaWj214DsO-Q';
+const GOOGLE_MAPS_API_KEY = 'AIzaSyAe3HlSvyEpC_je3t1UZJVB4tIrhkZwdwo';
 
 import { truckTypes } from './TruckSelection';
 
-//dummy data
-let data = [
-  {truckType: truckTypes[0]['key'], startLat: 37.868731, startLon: -122.259224, endLat: 37.861615, endLon: -122.267035, reportedAt: Date.now(), idlingDuration: null},
-  {truckType: truckTypes[0]['key'], startLat: 37.868731, startLon: -122.259224, endLat: 37.861615, endLon: -122.267035, reportedAt: Date.now(), idlingDuration: null},
-];
-
 class Route {
-  constructor(data, opacity=0.1) {
+  constructor(data, opacity=0.3) {
     this.data = data;
 
     this.poly = null;
     this.opacity = opacity;
     this.color = "blue";
+    this.directionsService = null;
+    this.directionsRenderer = null;
+    this.rendered = false;
+  }
+
+  renderRoute(googleMaps, map) {
+    let start = {lat: this.data.start.lat, lng: this.data.start.lon},
+        end = {lat: this.data.end.lat, lng: this.data.end.lon};
+
+    var self = this;
+    console.log(this.rendered);
+    if (!this.rendered) {
+      self.directionsService = new googleMaps.DirectionsService();
+      let request = {
+        origin: start, 
+        destination: end, 
+        travelMode: googleMaps.DirectionsTravelMode.WALKING 
+      };
+      self.directionsService.route(request, function(result, status) { 
+        if (status == 'OK'){
+          if (self.directionsRenderer == null) {
+            self.directionsRenderer = new googleMaps.DirectionsRenderer({
+              polylineOptions: {
+                  strokeColor: self.color,
+                  strokeOpacity: self.opacity
+              },
+              suppressMarkers: true, //don't show default directions markers
+              preserveViewport: true, //don't move the map window to center on the route
+            }); 
+            self.directionsRenderer.setMap(map); 
+            self.directionsRenderer.setDirections(result); 
+          }
+          self.rendered = true;
+        }
+      }); 
+    }
   }
 }
 
@@ -32,10 +63,15 @@ class MapContainer extends Component {
     this.renderRoutes = this.renderRoutes.bind(this);
 
     //default to West Oakland coordinates
-    var userLocation = {
-        lat: 37.806440,
-        lng: -122.298261
+    let westOaklandCoordinates = {
+      lat: 37.806440,
+      lng: -122.298261
     };
+    let berkeleyCoordinates = {
+      lat: 37.8719,
+      lng: -122.2585
+    };
+    var userLocation = berkeleyCoordinates;
 
     //TODO: HTTPS is needed I guess
     if (navigator && navigator.geolocation) {
@@ -63,45 +99,51 @@ class MapContainer extends Component {
 
   componentDidUpdate() {
     this.loadMap();
-    this.renderRoutes();
   }
 
   getDataPoints() {
     //initialize this.routes to dummy data points
-    var i;
-    for (i = 0; i < data.length; i++) { 
-      let d = data[i];
-      this.routes.push(new Route(d))
+    let data = [];
+    let self = this;
+    axios.get('http://localhost:4000/incident')
+      .then(res => {
+        data = res.data;
+        var i;
+        for (i = 0; i < data.length; i++) { 
+          let d = data[i];
+
+          if (self.isNewDataPoint(d.id)) {
+            this.routes.push(new Route(d)); 
+          }
+        }
+
+        if (self.map != null) {
+          this.renderRoutes();
+        }
+      }).catch(function (error) {
+        console.log(error);
+      });
+    setTimeout(function() {
+      self.getDataPoints();
+    }, 3000);
+  }
+
+  isNewDataPoint(id) {
+    for (var i = 0; i < this.routes.length; i++) {
+      if (this.routes[i].data.id == id) {
+        return false;
+      }
     }
+    return true;
   }
 
   renderRoutes() {
     let maps = this.props.google.maps;
 
     var i;
-    var self = this;
     for (i = 0; i < this.routes.length; i++) {
       let route = this.routes[i];
-
-      console.log(route);
-      let start = {lat: route.data.startLat, lng: route.data.startLon},
-          end = {lat: route.data.endLat, lng: route.data.endLon};
-      let directionsService = new maps.DirectionsService();
-      directionsService.route({ 
-        origin: start, 
-        destination: end, 
-        travelMode: maps.DirectionsTravelMode.WALKING 
-      }, function(result) { 
-        let directionsRenderer = new maps.DirectionsRenderer({
-          polylineOptions: {
-              strokeColor: route.color,
-              strokeOpacity: route.opacity
-          },
-          suppressMarkers: true,
-        }); 
-        directionsRenderer.setMap(self.map); 
-        directionsRenderer.setDirections(result); 
-      }); 
+      route.renderRoute(maps, this.map);
     }
   }
 
@@ -111,7 +153,7 @@ class MapContainer extends Component {
         lat: this.state.currentLocation.lat,
         lng: this.state.currentLocation.lng
       },
-      zoom: 14,
+      zoom: 16,
       clickableIcons: false,
       streetViewControl: false,
       mapTypeControl: false
@@ -161,8 +203,10 @@ class MapContainer extends Component {
         }
       });
       self.map.fitBounds(bounds);
-      self.map.setZoom(17);
+      self.map.setZoom(16);
     });
+
+    this.renderRoutes();
   }
 
   render() {

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
-import TWO_AXLE from './../img/Trucks/2ax.png';
+import TWO_AXLE from '../img/Trucks/2ax.png';
 import THREE_AXLE from '../img/Trucks/3ax.png';
 import BOBTAIL from '../img/Trucks/3axbob.png';
 import FOUR_AXLE from '../img/Trucks/4ax.png';
 import FIVE_AXLE from '../img/Trucks/5ax.png';
 import SIX_AXLE from '../img/Trucks/6ax.png';
-import PORT_CHASSIS from './../img/Trucks/port_chassis.png';
-import PORT_CONTAINER from './../img/Trucks/port_container.png';
+import PORT_CHASSIS from '../img/Trucks/port_chassis.png';
+import PORT_CONTAINER from '../img/Trucks/port_container.png';
 
 import '../styles/truck-selection.scss';
 
@@ -41,7 +41,9 @@ class TruckSelection extends Component {
 
   //TODO check if this optimization actually works (named callback)
   truckSelectHandler(truck){
-    return () => this.props.truckSelectHandler(truck);
+    let audio = new Audio('./sounds/engine_rev.mp3');
+    audio.play();
+    return this.props.truckSelectHandler(truck);
   }
 
   render() {
@@ -53,7 +55,7 @@ class TruckSelection extends Component {
             <li key={item.key}
                 className="pure-u-1 pure-u-sm-1-2 button-container">
           {/*TODO pure-u-sm-* dynamic based on no. of trucks?*/}
-             <input  onClick={this.truckSelectHandler(item)}
+             <input  onClick={(e) => this.truckSelectHandler(item)}
                      type="image"
                      src={item.img}/>
             </li>
