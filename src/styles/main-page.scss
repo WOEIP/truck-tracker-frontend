@@ -11,10 +11,13 @@
     }
 }
 
-.vert-line {
+.vert-space {
     margin: 0 auto;
     position: relative;
     text-align: center;
+}
+
+.line {
     &:after {
     content: "";
     position: absolute;
@@ -33,7 +36,8 @@
 }
 
 #inner-title {
-    width: 100%;
+    width: 90%;
+    margin: 0 auto;
     background-color: rgba($light-grey, 0.1);
     border-style: solid;
     border-color: white;
@@ -74,7 +78,7 @@
         box-sizing: border-box;
         border-top: solid 1px white;
         font-weight: 600;
-        letter-spacing: .2rem;
+        letter-spacing: .1rem;
         text-decoration: none;
         font-size: 4vw;
         color: white;
@@ -101,7 +105,8 @@
             &:last-child {
                 border-radius: 0 10px 10px 0
             }
-            font-size: 2.5vw;
+            letter-spacing: .1rem;
+            font-size: 1.6vw;
             border-top:0;
             border-left: solid 1px white;
         }
