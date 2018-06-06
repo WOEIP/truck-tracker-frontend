@@ -36,6 +36,7 @@
     "webpack-dev-server": "^2.11.1"
   },
   "devDependencies": {
+    "copy-webpack-plugin": "^4.5.1",
     "google-maps": "^3.2.1"
   }
 }

@@ -1,60 +1,62 @@
-var webpack = require('webpack');
-var path = require('path');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+'use strict';
 
-var NamedModulesPlugin = new webpack.NamedModulesPlugin();
+const path = require('path');
+const webpack = require('webpack');
 
-var ExtractTextPluginConfig = new ExtractTextPlugin({filename:'main.css'});
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-var HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
+const CopyWebpackPluginConfig = new CopyWebpackPlugin([{from: 'sounds/**'}]);
+const ExtractTextPluginConfig = new ExtractTextPlugin({filename: 'main.css'});
+const HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
   template: __dirname + '/src/index.html',
   filename: 'index.html',
-  inject: 'body'
+  inject: 'body',
 });
+const NamedModulesPlugin = new webpack.NamedModulesPlugin();
 
 module.exports = {
   devtool: 'source-map',
   entry: {
-    'main': [
-      'babel-polyfill',
-      'react-hot-loader/patch',
-      './src/index'
-    ]
+    main: ['babel-polyfill', 'react-hot-loader/patch', './src/index'],
   },
   output: {
     path: path.resolve(__dirname, './build'),
-    filename: '[name].js'
+    filename: '[name].js',
   },
-  plugins: [NamedModulesPlugin,
-            ExtractTextPluginConfig,
-            HTMLWebpackPluginConfig],
-  module : {
+  plugins: [
+    NamedModulesPlugin,
+    ExtractTextPluginConfig,
+    HTMLWebpackPluginConfig,
+    CopyWebpackPluginConfig,
+  ],
+  module: {
     rules: [
       {
         test: /\.js$/,
         include: __dirname + '/src',
-        use: [
-          'babel-loader'
-        ]
+        use: ['babel-loader'],
       },
       {
-        test:/\.(s*)css$/,
+        test: /\.(s*)css$/,
         use: ExtractTextPlugin.extract({
-          fallback:'style-loader',
-          use:['css-loader','postcss-loader', 'sass-loader']
-        })
+          fallback: 'style-loader',
+          use: ['css-loader', 'postcss-loader', 'sass-loader'],
+        }),
       },
       {
         test: /.(png|jpg|jpeg|gif|svg|woff|woff2|eot|ttf)(\?v=\d+\.\d+\.\d+)?$/,
-        use: [{
-          loader: 'url-loader',
-          options: {
-            limit: 8000,
-            name: 'img/[hash]-[name].[ext]'
-          }
-        }]
-      }
-    ]
-  }
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8000,
+              name: 'img/[hash]-[name].[ext]',
+            },
+          },
+        ],
+      },
+    ],
+  },
 };
