@@ -35,9 +35,9 @@ class Report extends Component {
     axios.post('http://localhost:4000/incident', {
       truckType: this.truckKey,
       start: start,
-      end: end, 
+      end: end,
       reportedAt: timeSeen,
-      idlingDuration: timeIdling,
+      idlingDuration: timeIdling
     }).then(function (response) {
       console.log(response);
     }).catch(function (error) {

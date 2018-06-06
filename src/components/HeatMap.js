@@ -28,11 +28,11 @@ class Route {
     if (!this.rendered) {
       self.directionsService = new googleMaps.DirectionsService();
       let request = {
-        origin: start, 
-        destination: end, 
-        travelMode: googleMaps.DirectionsTravelMode.WALKING 
+        origin: start,
+        destination: end,
+        travelMode: googleMaps.DirectionsTravelMode.WALKING
       };
-      self.directionsService.route(request, function(result, status) { 
+      self.directionsService.route(request, function(result, status) {
         if (status == 'OK'){
           if (self.directionsRenderer == null) {
             self.directionsRenderer = new googleMaps.DirectionsRenderer({
@@ -40,15 +40,15 @@ class Route {
                   strokeColor: self.color,
                   strokeOpacity: self.opacity
               },
-              suppressMarkers: true, //don't show default directions markers
-              preserveViewport: true, //don't move the map window to center on the route
-            }); 
-            self.directionsRenderer.setMap(map); 
-            self.directionsRenderer.setDirections(result); 
+              suppressMarkers: true,
+              preserveViewport: true
+            });
+            self.directionsRenderer.setMap(map);
+            self.directionsRenderer.setDirections(result);
           }
           self.rendered = true;
         }
-      }); 
+      });
     }
   }
 }
@@ -109,11 +109,11 @@ class MapContainer extends Component {
       .then(res => {
         data = res.data;
         var i;
-        for (i = 0; i < data.length; i++) { 
+        for (i = 0; i < data.length; i++) {
           let d = data[i];
 
           if (self.isNewDataPoint(d.id)) {
-            this.routes.push(new Route(d)); 
+            this.routes.push(new Route(d));
           }
         }
 
@@ -181,7 +181,8 @@ class MapContainer extends Component {
       searchBox.setBounds(self.map.getBounds());
     });
 
-    // Listen for the event fired when the user selects a prediction (loc) and center map on that loc
+    // Listen for the event fired when the user selects a prediction
+    // (loc) and center map on that loc
     searchBox.addListener('places_changed', function() {
       var places = searchBox.getPlaces();
 
@@ -215,7 +216,10 @@ class MapContainer extends Component {
         <div id="map-wrapper">
           <div id="inner-map-container" ref={(el) => this.mapTarget = el}>
             loading map...
-            <input id="pac-input" ref={ (el) => this._pacInput = el } placeholder="Enter a location" style={{display: "none"}}></input>
+            <input id="pac-input" ref={ (el) => this._pacInput = el }
+                   placeholder="Enter a location"
+                   style={{display: "none"}}>
+            </input>
           </div>
         </div>
      </div>
