@@ -1,0 +1,28 @@
+language:
+  - node_js
+
+node_js:
+  - 8
+
+cache:
+  directories:
+    - $HOME/.npm
+    - node_modules
+
+before_install: dpkg --compare-versions `npm -v` ge 6.0 || npm i -g npm@latest
+install:
+  - npm ci
+
+jobs:
+  include:
+    - stage: publish
+      script:
+        # TODO use webpack config to manage this
+        - find src -name '*.js' | xargs grep 'localhost' --files-with-matches | xargs sed --in-place 's|http://localhost:[0-9]*|http://api.trucktracker.net|'
+        - npm run build
+        - mkdir -p ~/.ssh
+        - echo $SSH_PRIVATE_KEY | base64 --decode | openssl aes-256-cbc -K $encrypted_95a489142b18_key -iv $encrypted_95a489142b18_iv -out ~/.ssh/id_rsa -d
+        - chmod 600 ~/.ssh/id_rsa
+        - cat .known_hosts > ~/.ssh/known_hosts
+        - rsync -azP --delete build/ deploy@trucktracker.net:~/sites/frontend
+
