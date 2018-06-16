@@ -412,7 +412,7 @@ class MapContainer extends Component {
          </div>
 
          <div className="actions">
-           <button onClick={this.props.returnToTruckSelection}>
+           <button onClick={this.props.goBack}>
              Back
            </button>
          </div>

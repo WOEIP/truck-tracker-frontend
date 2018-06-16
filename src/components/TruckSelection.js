@@ -40,10 +40,10 @@ export function getImgOfTruck(truckKey) {
 class TruckSelection extends Component {
 
   //TODO check if this optimization actually works (named callback)
-  truckSelectHandler(truck){
+  selectTruck(truck){
     let audio = new Audio('./sounds/engine_rev.mp3');
     audio.play();
-    return this.props.truckSelectHandler(truck);
+    return this.props.selectTruck(truck);
   }
 
   render() {
@@ -55,7 +55,7 @@ class TruckSelection extends Component {
             <li key={item.key}
                 className="pure-u-1 pure-u-sm-1-2 button-container">
           {/*TODO pure-u-sm-* dynamic based on no. of trucks?*/}
-             <input  onClick={(e) => this.truckSelectHandler(item)}
+             <input  onClick={(e) => this.selectTruck(item)}
                      type="image"
                      src={item.img}/>
             </li>

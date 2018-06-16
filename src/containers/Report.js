@@ -6,6 +6,7 @@ import axios from 'axios';
 import '../styles/common.scss';
 import '../styles/report.scss';
 
+import IdlingOrMoving from './../components/IdlingOrMoving';
 import MapContainer from './MapContainer';
 import TruckSelection from './../components/TruckSelection';
 
@@ -13,16 +14,24 @@ class Report extends Component {
   constructor(props) {
     super(props);
 
-    this.truckSelectHandler = this.truckSelectHandler.bind(this);
-    this.returnToTruckSelection = this.returnToTruckSelection.bind(this);
+    this.selectTruck = this.selectTruck.bind(this);
+    this.setMotion = this.setMotion.bind(this);
+    this.goBack = this.goBack.bind(this);
     this.sendData = this.sendData.bind(this);
 
     this.state = {
-      currentPage: "selectTruck"
+      pageIndex: 0,
+      truckKey: null,
+      truckWasMoving: false
     };
 
-    this.truckKey = null;
+    this.subPages = ["selectTruck",
+                     "idlingOrMoving",
+                     "giveLocation"];
+
+    //this.truckKey = null;
   }
+
   sendData(e, timeSeen, fromPos, toPos, wasIdling, timeIdling) {
     if (!wasIdling) {
       timeIdling = 0;
@@ -45,11 +54,24 @@ class Report extends Component {
     });
   }
 
-  truckSelectHandler(truck) {
+  selectTruck(truck) {
     this.setState({
-      currentPage: "giveLocation"
+      pageIndex: this.state.pageIndex + 1,
+      truckKey: truck.key
     });
-    this.truckKey = truck.key;
+  }
+
+  setMotion(movingP) {
+    this.setState({
+      pageIndex: this.state.pageIndex + 1,
+      truckWasMoving: movingP
+    });
+  }
+
+  goBack() {
+    this.setState({
+      pageIndex: this.state.pageIndex - 1
+    });
   }
 
   returnToTruckSelection() {
@@ -61,15 +83,19 @@ class Report extends Component {
   getActiveContent(){
     //TODO that is ugly
     var that = this;
-    switch(this.state.currentPage){
+    switch(this.subPages[this.state.pageIndex]){
     case "giveLocation":
       return {component: MapContainer,
-              props: {returnToTruckSelection: that.returnToTruckSelection,
+              props: {goBack: that.goBack,
                       sendData: that.sendData,
                       truckKey: that.truckKey}};
+    case "idlingOrMoving":
+      return {component: IdlingOrMoving,
+              props: {setMotion: that.setMotion,
+                      goBack: that.goBack}};
     default:
       return {component: TruckSelection,
-              props: {truckSelectHandler: that.truckSelectHandler}};
+              props: {selectTruck: that.selectTruck}};
     }
   };
 
