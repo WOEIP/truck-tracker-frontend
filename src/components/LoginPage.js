@@ -13,12 +13,6 @@ class LoginPage extends Component {
 
     this.handlePassChange = this.handlePassChange.bind(this);
     this.handleUserChange = this.handleUserChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.dismissError = this.dismissError.bind(this);
-  }
-
-  dismissError() {
-    this.setState({ error: '' });
   }
 
   handleSubmit(evt) {
@@ -52,6 +46,9 @@ class LoginPage extends Component {
   render() {
     return (
       <div id="login-page">
+        <p>
+          Please log in to report an incident!
+        </p>
         <form>
           <label>Username</label>
           <input type="text" data-test="username"
@@ -65,7 +62,7 @@ class LoginPage extends Component {
             <button onClick={this.props.goForward}>
               Login
             </button>
-            <button onClick={this.props.registerUser}>
+            <button onClick={this.props.goBack}>
               Register
             </button>
           </div>

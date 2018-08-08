@@ -6,6 +6,8 @@ import axios from 'axios';
 import '../styles/common.scss';
 import '../styles/report.scss';
 
+import RegistrationPage from './../components/RegistrationPage';
+import RegistrationSent from './../components/RegistrationSent';
 import LoginPage from './../components/LoginPage';
 import TruckSelection from './../components/TruckSelection';
 import IdlingOrMoving from './../components/IdlingOrMoving';
@@ -22,15 +24,18 @@ class Report extends Component {
     this.sendData = this.sendData.bind(this);
 
     this.state = {
-      pageIndex: 0,
+      pageIndex: 2, //login page...awkward hack?
       truckKey: null,
       truckWasMoving: false
     };
 
-    this.subPages = ["login",
+    this.subPages = ["registrationSent",
+                     "registration",
+                     "login",
                      "selectTruck",
                      "idlingOrMoving",
-                     "giveLocation"];
+                     "giveLocation"
+                    ];
 
     //this.truckKey = null;
   }
@@ -97,10 +102,17 @@ class Report extends Component {
     //TODO that is ugly
     var that = this;
     switch(this.subPages[this.state.pageIndex]){
+    case "registrationSent":
+       return {component: RegistrationSent,
+               props: {}};
+    case "registration":
+      return {component: RegistrationPage,
+              props :{goBack: that.goBack,
+                      registerUser: that.registerUser}};
     case "login":
       return {component: LoginPage,
-              props :{goForward: that.goForward,
-                      registerUser: that.registerUser}};
+              props: {goForward: that.goForward,
+                      goBack: that.goBack}};
     case "giveLocation":
       return {component: MapContainer,
               props: {goBack: that.goBack,
