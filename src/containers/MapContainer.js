@@ -166,32 +166,32 @@ class MapContainer extends Component {
 
       this.markersArray.push(marker);
     }
-    if (this.markersArray.length === 1) {
-      this.audio = new Audio('./sounds/engine_idle.mp3');
-      this.audio.play();
-      this.mapOverlay.style.display = "block";
-      this._secondMarkerPrompt.style.display = "block";
-    }
-    else if (this.markersArray.length === 2) {
-      this.audio.pause();
-      this.audio = new Audio('./sounds/truck_passby.mp3');
-      this.audio.play();
-      this._secondMarkerPrompt.style.display = "none";
-      this.createRoute();
-    }
+    // if (this.markersArray.length === 1) {
+    //   this.audio = new Audio('./sounds/engine_idle.mp3');
+    //   this.audio.play();
+    //   this.mapOverlay.style.display = "block";
+    //   this._secondMarkerPrompt.style.display = "block";
+    // }
+    // else if (this.markersArray.length === 2) {
+    //   this.audio.pause();
+    //   this.audio = new Audio('./sounds/truck_passby.mp3');
+    //   this.audio.play();
+    //   this._secondMarkerPrompt.style.display = "none";
+    //   this.createRoute();
+    // }
   }
 
   cancel() {
-    this.audio.pause();
-    this.audio = new Audio('./sounds/short_honk.mp3');
-    this.audio.play();
+    // this.audio.pause();
+    // this.audio = new Audio('./sounds/short_honk.mp3');
+    // this.audio.play();
 
-    if (this.markersArray.length == 2) { //a route was drawn, remove it
-      this.directionsRenderer.setMap(null);
-    }
-    this.markersArray.map(marker => marker.setMap(null));
-    this.markersArray.length = 0;
-    this.mapOverlay.style.display = "none";
+    // if (this.markersArray.length == 2) { //a route was drawn, remove it
+    //   this.directionsRenderer.setMap(null);
+    // }
+    // this.markersArray.map(marker => marker.setMap(null));
+    // this.markersArray.length = 0;
+    // this.mapOverlay.style.display = "none";
   }
 
   setTimeType(event) { //callback for time <input radio> elements in confirm overlay
