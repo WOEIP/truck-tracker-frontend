@@ -47,8 +47,6 @@ class MapContainer extends Component {
     this.mapTarget = null;
     this.directionsRenderer = null;
 
-    this.audio = null;
-
     //default to West Oakland coordinates
     let westOaklandCoordinates = {
       lat: 37.806440,
@@ -122,7 +120,6 @@ class MapContainer extends Component {
   }
 
   componentDidUpdate() {
-    console.log("====================updated====================");
     this.loadMap();
   }
 
@@ -166,32 +163,23 @@ class MapContainer extends Component {
 
       this.markersArray.push(marker);
     }
-    // if (this.markersArray.length === 1) {
-    //   this.audio = new Audio('./sounds/engine_idle.mp3');
-    //   this.audio.play();
-    //   this.mapOverlay.style.display = "block";
-    //   this._secondMarkerPrompt.style.display = "block";
-    // }
-    // else if (this.markersArray.length === 2) {
-    //   this.audio.pause();
-    //   this.audio = new Audio('./sounds/truck_passby.mp3');
-    //   this.audio.play();
-    //   this._secondMarkerPrompt.style.display = "none";
-    //   this.createRoute();
-    // }
+    if (this.markersArray.length === 1) {
+      this.mapOverlay.style.display = "block";
+      this._secondMarkerPrompt.style.display = "block";
+    }
+    else if (this.markersArray.length === 2) {
+      this._secondMarkerPrompt.style.display = "none";
+      this.createRoute();
+    }
   }
 
   cancel() {
-    // this.audio.pause();
-    // this.audio = new Audio('./sounds/short_honk.mp3');
-    // this.audio.play();
-
-    // if (this.markersArray.length == 2) { //a route was drawn, remove it
-    //   this.directionsRenderer.setMap(null);
-    // }
-    // this.markersArray.map(marker => marker.setMap(null));
-    // this.markersArray.length = 0;
-    // this.mapOverlay.style.display = "none";
+    if (this.markersArray.length == 2) { //a route was drawn, remove it
+      this.directionsRenderer.setMap(null);
+    }
+    this.markersArray.map(marker => marker.setMap(null));
+    this.markersArray.length = 0;
+    this.mapOverlay.style.display = "none";
   }
 
   setTimeType(event) { //callback for time <input radio> elements in confirm overlay
@@ -310,9 +298,6 @@ class MapContainer extends Component {
       this.props.sendData(e, timeLastSeen, fromPos, toPos, wasIdling, timeIdling);
     }
 
-    this.audio.pause();
-    this.audio = new Audio('./sounds/honk.mp3');
-    this.audio.play();
     this.props.returnToTruckSelection();
   }
 

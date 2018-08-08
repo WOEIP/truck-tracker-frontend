@@ -41,8 +41,6 @@ class TruckSelection extends Component {
 
   //TODO check if this optimization actually works (named callback)
   selectTruck(truck){
-    // let audio = new Audio('./sounds/engine_rev.mp3');
-    // audio.play();
     return this.props.selectTruck(truck);
   }
 
