@@ -6,9 +6,10 @@ import axios from 'axios';
 import '../styles/common.scss';
 import '../styles/report.scss';
 
+import LoginPage from './../components/LoginPage';
+import TruckSelection from './../components/TruckSelection';
 import IdlingOrMoving from './../components/IdlingOrMoving';
 import MapContainer from './MapContainer';
-import TruckSelection from './../components/TruckSelection';
 
 class Report extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class Report extends Component {
     this.selectTruck = this.selectTruck.bind(this);
     this.setMotion = this.setMotion.bind(this);
     this.goBack = this.goBack.bind(this);
+    this.goForward = this.goForward.bind(this);
     this.sendData = this.sendData.bind(this);
 
     this.state = {
@@ -25,7 +27,8 @@ class Report extends Component {
       truckWasMoving: false
     };
 
-    this.subPages = ["selectTruck",
+    this.subPages = ["login",
+                     "selectTruck",
                      "idlingOrMoving",
                      "giveLocation"];
 
@@ -74,16 +77,30 @@ class Report extends Component {
     });
   }
 
+  goForward() {
+    this.setState({
+      pageIndex: this.state.pageIndex + 1
+    });
+  }
+
   returnToTruckSelection() {
     this.setState({
       currentPage: "truckSelection"
     });
   }
 
+  registerUser(){
+    console.log("registering!");
+  }
+
   getActiveContent(){
     //TODO that is ugly
     var that = this;
     switch(this.subPages[this.state.pageIndex]){
+    case "login":
+      return {component: LoginPage,
+              props :{goForward: that.goForward,
+                      registerUser: that.registerUser}};
     case "giveLocation":
       return {component: MapContainer,
               props: {goBack: that.goBack,
