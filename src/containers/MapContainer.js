@@ -74,7 +74,7 @@ class MapContainer extends Component {
     this.secondMarkerJSX = <div key="second_marker_prompt" id="second_marker_prompt"
                               ref={ (el) => this._secondMarkerPrompt = el }>
                             Place second marker if you wish to indicate where it was going
-                          </div>
+                          </div>;
     this.timeJSX = <div key="time" ref={ (el) => this._timeOverlay = el }>
                       <input type="radio" name="time_type" value={ABS_TIME} id={ABS_TIME}
                       checked onChange={this.setTimeType} onMouseDown={this.setTimeType}/>
@@ -88,7 +88,7 @@ class MapContainer extends Component {
                           <option value={MIN}>mins</option>
                           <option value={HRS}>hrs</option>
                         </select> ago
-                  </div>
+                  </div>;
     this.parkedJSX = <div key="parked">
                       <input type="checkbox" id="truck_was_parked" ref={ (el) => this._truckWasParked = el }/>
                         <label htmlFor="truck_was_parked">parked for </label>
@@ -99,7 +99,7 @@ class MapContainer extends Component {
                         <option value={MIN}>mins</option>
                         <option value={HRS}>hrs</option>
                       </select>
-                  </div>
+                  </div>;
     this.idlingJSX = <div key="idling" id="was_idling">
                       <input type="checkbox" id="truck_was_idling" ref={ (el) => this._truckWasIdling = el }/>
                         <label htmlFor="truck_was_idling">idling for </label>
@@ -110,7 +110,7 @@ class MapContainer extends Component {
                         <option value={MIN}>mins</option>
                         <option value={HRS}>hrs</option>
                       </select>
-                    </div>
+                    </div>;
     this.state = {
       currentLocation: userLocation,
       overlayJSX: [this.idlingJSX, this.parkedJSX, this.timeJSX, this.secondMarkerJSX]
@@ -122,6 +122,7 @@ class MapContainer extends Component {
   }
 
   componentDidUpdate() {
+    console.log("====================updated====================");
     this.loadMap();
   }
 
@@ -142,7 +143,7 @@ class MapContainer extends Component {
               strokeWeight: 8
           },
           suppressMarkers: true, //don't show default directions markers
-          preserveViewport: true, //don't move the map window to center on the route
+          preserveViewport: true //don't move the map window to center on the route
         });
         self.directionsRenderer.setMap(self.map);
         self.directionsRenderer.setDirections(result);
@@ -340,9 +341,6 @@ class MapContainer extends Component {
       this.map.setZoom(16);
     }
 
-    // =====================
-    // Create the search box
-    // =====================
     let input = this._pacInput;
     this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
     var searchBox = new google.maps.places.SearchBox((input));

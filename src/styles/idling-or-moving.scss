@@ -1,0 +1,16 @@
+@import "colors";
+
+#movement-button-container {
+    width: 60%;
+    margin: 0 auto;
+    & button {
+        border: 0 none;
+        border-radius: 3px;
+        background-color: $light-grey;
+        color: $dark-blue;
+        letter-spacing: .2rem;
+        padding: .5rem;
+        width: 45%;
+        max-width: 8rem;
+    }
+}

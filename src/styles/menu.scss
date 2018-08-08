@@ -6,7 +6,7 @@
     width: 2.5em;
     height: 2.5em;
     background-image:url(../img/menu-icon.png);
-    background-color: $item-bg-color ;
+    background-color: $dark-blue ;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -23,7 +23,7 @@
 #top-menu {
     box-sizing: border-box;
     ul {
-        background-color: $item-bg-color;
+        background-color: $dark-blue;
         display: none;
         list-style: none;
         position: absolute;
@@ -55,7 +55,7 @@
 
 #top-menu-container {
     overflow: hidden;
-    background-color: $item-bg-color;
+    background-color: $dark-blue;
     width: 100%;
     border-radius: 3px;
 }
