@@ -16,15 +16,15 @@ import '../styles/pure-release-1.0.0/pure-min.css';
 import '../styles/pure-release-1.0.0/grids-responsive.css';
 
 export const truckTypes = [
-  {key: 'AC_BUS', text:"ac bus", img: AC_BUS},
-  {key: '2_AXLE', text:"2-axle", img: TWO_AXLE},
-  {key: '3_AXLE', text:"3-axle", img: THREE_AXLE},
-  {key: 'BOBTAIL', text:"3-axle Bobtail", img: BOBTAIL},
-  {key: '4_AXLE', text:"4-axle", img: FOUR_AXLE},
-  {key: '5_AXLE', text:"5-axle", img: FIVE_AXLE},
-  {key: '6_PLUS_AXLE', text:"6+ axle", img: SIX_AXLE},
-  {key: 'PORT_CHASSIS', text:"port chassis", img: PORT_CHASSIS},
-  {key: 'PORT_CONTAINER', text:"port container", img: PORT_CONTAINER}
+  {key: 'AC_BUS', tooltip:"AC bus", img: AC_BUS},
+  {key: '2_AXLE', tooltip:"2-axle", img: TWO_AXLE},
+  {key: '3_AXLE', tooltip:"3-axle", img: THREE_AXLE},
+  {key: 'BOBTAIL', tooltip:"3-axle Bobtail", img: BOBTAIL},
+  {key: '4_AXLE', tooltip:"4-axle", img: FOUR_AXLE},
+  {key: '5_AXLE', tooltip:"5-axle", img: FIVE_AXLE},
+  {key: '6_PLUS_AXLE', tooltip:"6+ axle", img: SIX_AXLE},
+  {key: 'PORT_CHASSIS', tooltip:"Port chassis", img: PORT_CHASSIS},
+  {key: 'PORT_CONTAINER', tooltip:"Port container", img: PORT_CONTAINER}
 ];
 
 export function getImgOfTruck(truckKey) {
@@ -50,9 +50,10 @@ class TruckSelection extends Component {
     return (
       <div>
         <h2>Select truck type</h2>
-        <ul className="pure-g button-grid">
+        <ul className="pure-g truck-grid">
           {truckTypes.map((item) =>
             <li key={item.key}
+                title={item.tooltip} //HTML tooltip with :hover?
                 className="pure-u-1 pure-u-sm-1-2 button-container">
           {/*TODO pure-u-sm-* dynamic based on no. of trucks?*/}
              <input  onClick={(e) => this.selectTruck(item)}
