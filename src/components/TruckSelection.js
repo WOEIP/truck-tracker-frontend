@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import AC_BUS from '../img/Trucks/ac_bus.png';
 import TWO_AXLE from '../img/Trucks/2ax.png';
 import THREE_AXLE from '../img/Trucks/3ax.png';
 import BOBTAIL from '../img/Trucks/3axbob.png';
@@ -15,6 +16,7 @@ import '../styles/pure-release-1.0.0/pure-min.css';
 import '../styles/pure-release-1.0.0/grids-responsive.css';
 
 export const truckTypes = [
+  {key: 'AC_BUS', text:"ac bus", img: AC_BUS},
   {key: '2_AXLE', text:"2-axle", img: TWO_AXLE},
   {key: '3_AXLE', text:"3-axle", img: THREE_AXLE},
   {key: 'BOBTAIL', text:"3-axle Bobtail", img: BOBTAIL},
