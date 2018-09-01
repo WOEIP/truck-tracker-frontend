@@ -37,7 +37,6 @@ class Report extends Component {
                      "giveLocation"
                     ];
 
-    //this.truckKey = null;
   }
 
   sendData(e, timeSeen, fromPos, toPos, wasIdling, timeIdling) {
@@ -110,14 +109,15 @@ class Report extends Component {
               props :{goBack: that.goBack,
                       registerUser: that.registerUser}};
     case "login":
-      return {component: LoginPage,
-              props: {goForward: that.goForward,
-                      goBack: that.goBack}};
+       return {component: LoginPage,
+               props: {goForward: that.goForward,
+                       goBack: that.goBack}};
     case "giveLocation":
       return {component: MapContainer,
               props: {goBack: that.goBack,
                       sendData: that.sendData,
-                      truckKey: that.truckKey}};
+                      truckKey: that.truckKey,
+                      truckWasMoving: this.state.truckWasMoving}};
     case "idlingOrMoving":
       return {component: IdlingOrMoving,
               props: {setMotion: that.setMotion,
@@ -130,6 +130,7 @@ class Report extends Component {
 
   render() {
     const ActiveContent = this.getActiveContent();
+
     return (
       <article id="report">
         <Menu current="report"/>
