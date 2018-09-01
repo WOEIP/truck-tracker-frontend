@@ -11,10 +11,13 @@ class IdlingOrMoving extends Component {
     return (
       <div id="jsx-needs-this">
         <div id="movement-button-container">
-          <button onClick={() => this.props.setMotion(false)}>
-            Idling or parking
+          <button onClick={() => this.props.setMotion(false, false)}>
+            Parking
           </button>
-          <button onClick={() => this.props.setMotion(true)}>
+          <button onClick={() => this.props.setMotion(false, true)}>
+            Idling
+          </button>
+          <button onClick={() => this.props.setMotion(true, true)}>
             Moving
           </button>
         </div>
