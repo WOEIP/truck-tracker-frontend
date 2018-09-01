@@ -61,40 +61,6 @@ class MapContainer extends Component {
     //   err => {console.log(`ERROR(${err.code}): ${err.message}`);};
     // };
 
-
-    this.secondMarkerJSX = <div key="second_marker_prompt" id="second_marker_prompt"
-                              ref={ (el) => this._secondMarkerPrompt = el }>
-                            Place second marker if you wish to indicate where it was going
-                          </div>;
-    this.parkedJSX = <div key="parked">
-                      <input type="checkbox" id="truck_was_parked" ref={ (el) => this._truckWasParked = el }/>
-                        <label htmlFor="truck_was_parked">parked for </label>
-                      <input type="number" id={TIME_PARKED} min="0" max="60"
-                        defaultValue="0" ref={ (el) => this._timeTruckParked = el }
-                        onChange={(e) => this.setTimeDuration(e)}/>
-                      <select className="time_unit" id={TIME_PARKED} onChange={this.setTimeUnit}>
-                        <option value={MIN}>mins</option>
-                        <option value={HRS}>hrs</option>
-                      </select>
-                  </div>;
-    this.idlingJSX = <div key="idling" id="was_idling">
-                      <input type="checkbox" id="truck_was_idling" ref={ (el) => this._truckWasIdling = el }/>
-                        <label htmlFor="truck_was_idling">idling for </label>
-                      <input type="number" id={TIME_IDLING} min="0" max="60"
-                        defaultValue="0" ref={ (el) => this._timeTruckIdling = el }
-                        onChange={(e) => this.setTimeDuration(e)}/>
-                      <select className="time_unit" id={TIME_IDLING} onChange={this.setTimeUnit}>
-                        <option value={MIN}>mins</option>
-                        <option value={HRS}>hrs</option>
-                      </select>
-                    </div>;
-
-  }
-
-  componentDidMount() {
-    this.setState({
-       truckSeenTime: new Date()
-    });
   }
 
   componentDidUpdate() {
@@ -247,40 +213,42 @@ class MapContainer extends Component {
   }
 
   render() {
-    console.log(this.state.truckSeenTime.getHours());
-    console.log(this.state.truckSeenTime.getMinutes());
+    var mapHeaderText =  `Click on map to set marker where truck was stopped`;
+    if(this.props.truckWasMoving){
+      mapHeaderText =  `Click on map to set first marker
+                          where you saw the truck, place a second
+                          marker where truck was last seen`;
+    }
     return (
       <div id="jsx-needs-this">
         <p className="map-instructions">
-          Click on map to set 1st marker where truck was sighted,
-          place a 2nd marker where truck was last seen
+          {mapHeaderText}
         </p>
         <div id="map-wrapper">
           <div id="inner-map-container" ref={(el) => this.mapTarget = el}>
             loading map...
-            <input id="pac-input" ref={ (el) => this._pacInput = el } placeholder="Enter a location" style={{display: "none"}}></input>
+            <input id="pac-input" ref={ (el) => this._pacInput = el }/>
           </div>
 
           <div ref={(el) => this.mapOverlay = el} id="over-map">
             The vehicle was sighted at
-          <Flatpickr
-            options={{
-              enableTime: true,
-              noCalendar: true,
+            <Flatpickr
+              options={{
+                enableTime: true,
+                noCalendar: true,
               dateFormat: "H:i"}}
-            onChange = {time => { this.updateTimeTruckSeen({time}); }}
-          />
+              onChange = {time => { this.updateTimeTruckSeen({time}); }}/>
 
-            <div className="actions">
-              <button onClick={this.confirmDataSubmission}
-                      className="confirm-button">
-                Confirm
-              </button>
-              <button onClick={this.cancel}
-                      className="cancel-button">
-                Cancel
-              </button>
-            </div>
+              <div className="actions">
+                <button onClick={this.confirmDataSubmission}
+                        className="confirm-button">
+                  Confirm
+                </button>
+                <button onClick={this.cancel}
+                        className="cancel-button">
+                  Cancel
+                </button>
+              </div>
           </div>
 
           <div className="actions">
