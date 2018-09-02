@@ -11,16 +11,6 @@ import { GoogleApiWrapper } from 'google-maps-react';
 import {getImgOfTruck} from '../components/TruckSelection';
 import truck from '../img/truck.png';
 
-let MIN = 0;
-let HRS = 1;
-
-let ABS_TIME = 7;
-let REL_TIME = 8;
-
-const TIME_LAST_SEEN = 0,
-      TIME_IDLING = 1,
-      TIME_PARKED = 2;
-
 const GOOGLE_MAPS_API_KEY = 'AIzaSyB-D3Z23ZfyOZnCh2RVv5QLaWj214DsO-Q';
 
 class MapContainer extends Component {
@@ -35,7 +25,7 @@ class MapContainer extends Component {
 
     this.state = {
       truckSeenTime: new Date(),
-      engineWasRunning: false,
+      markersArray: [],
       location: {
         lat: 37.8719,
         lng: -122.2585
@@ -44,7 +34,6 @@ class MapContainer extends Component {
 
 
     //drawing on the map
-    this.markersArray = [];
     this.map = null;
     this.mapTarget = null;
     this.directionsRenderer = null;
@@ -65,6 +54,10 @@ class MapContainer extends Component {
 
   componentDidUpdate() {
     this.loadMap();
+    if ((this.state.markersArray.length == 2)){
+      this.mapOverlay.style.display = "block";
+      this.createRoute();
+    }
   }
 
   createRoute() {
@@ -73,8 +66,8 @@ class MapContainer extends Component {
     let self = this;
     let directionsService = new maps.DirectionsService();
       directionsService.route({
-        origin: this.markersArray[0].getPosition(),
-        destination: this.markersArray[1].getPosition(),
+        origin: this.state.markersArray[0].getPosition(),
+        destination: this.state.markersArray[1].getPosition(),
         travelMode: maps.DirectionsTravelMode.WALKING
       }, function(result) {
         self.directionsRenderer = new maps.DirectionsRenderer({
@@ -92,7 +85,7 @@ class MapContainer extends Component {
   }
 
   placeMarker(pos) {
-    if (this.markersArray.length < 2) {
+     if ((this.state.markersArray.length < 2)){
       const marker = new this.props.google.maps.Marker({
         position: {
           lat: pos.lat(),
@@ -104,48 +97,43 @@ class MapContainer extends Component {
           scaledSize: new this.props.google.maps.Size(32, 32)
         }
       });
-
-      this.markersArray.push(marker);
-    }
-    if (this.markersArray.length === 1) {
+      var newMarkersArray = this.state.markersArray.concat(marker);
+      if (!this.props.truckWasMoving) {
+        newMarkersArray = newMarkersArray.concat(marker);
+      }
+      this.setState({markersArray: newMarkersArray});
+    } else {
       this.mapOverlay.style.display = "block";
-    }
-    else if (this.markersArray.length === 2) {
       this.createRoute();
     }
   }
 
   cancel() {
-    if (this.markersArray.length == 2) { //a route was drawn, remove it
+    if (this.state.markersArray.length == 2) {
       this.directionsRenderer.setMap(null);
     }
-    this.markersArray.map(marker => marker.setMap(null));
-    this.markersArray.length = 0;
     this.mapOverlay.style.display = "none";
+    this.setState({markersArray: []});
   }
 
+  //TODO this rerenders the whole map, not good
   updateTimeTruckSeen(time) {
     var unpackedTime = time.time[0]; //from flatpickr format
     this.setState({truckSeenTime: unpackedTime});
   }
 
   confirmDataSubmission(e) {
+    //TODO let vs var?
+    let timeLastSeen = this.state.truckSeenTime;
+    let fromPos = this.state.markersArray[0].getPosition();
+    let toPos = this.state.markersArray[1].getPosition();
+    let wasIdling = !this.props.truckWasMoving && this.propsEngineWasRunning;
+    let timeIdling = 0;
 
-    let fromPos = this.markersArray[0].getPosition();
+    //let wasParked = !this.props.truckWasMoving && this.propsEngineWasRunning;
+    //TODO: review DB schema
 
-    let wasIdling = this._truckWasIdling.checked;
-    let wasParked = this._truckWasParked.checked;
-    let timeIdling = this.timeDur[TIME_IDLING];
-    let timeLastSeen = Math.floor(this.timeDur[TIME_LAST_SEEN].getTime() / 1000);
-    let timeParked = this.timeDur[TIME_PARKED];
-
-    if (this.markersArray.length == 1) { //just send idling/parking information of truck
-      this.props.sendData(e, timeLastSeen, fromPos, fromPos, wasIdling, timeIdling);
-    } else { //user gave a truck heading as well
-      let toPos = this.markersArray[1].getPosition();
-      let toVector = "(" + toPos.lat() + "," + toPos.lng() + ")";
-      this.props.sendData(e, timeLastSeen, fromPos, toPos, wasIdling, timeIdling);
-    }
+    this.props.sendData(e, timeLastSeen, fromPos, toPos, wasIdling, timeIdling);
 
     this.props.returnToTruckSelection();
   }
