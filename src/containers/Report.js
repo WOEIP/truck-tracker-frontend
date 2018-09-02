@@ -26,7 +26,8 @@ class Report extends Component {
     this.state = {
       pageIndex: 2, //login page...awkward hack?
       truckKey: null,
-      truckWasMoving: false
+      truckWasMoving: false,
+      engineWasRunning: false
     };
 
     this.subPages = ["registrationSent",
@@ -68,10 +69,11 @@ class Report extends Component {
     });
   }
 
-  setMotion(movingP) {
+  setMotion(movingP, engineRunningP) {
     this.setState({
       pageIndex: this.state.pageIndex + 1,
-      truckWasMoving: movingP
+      truckWasMoving: movingP,
+      engineWasRunning: engineRunningP
     });
   }
 
