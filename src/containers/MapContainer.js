@@ -24,6 +24,7 @@ class MapContainer extends Component {
     this.confirmDataSubmission = this.confirmDataSubmission.bind(this);
 
     this.state = {
+      mapLoaded: false,
       truckSeenTime: new Date(),
       markersArray: [],
       location: {
@@ -37,7 +38,6 @@ class MapContainer extends Component {
     this.map = null;
     this.mapTarget = null;
     this.directionsRenderer = null;
-
 
     //TODO: HTTPS is needed I guess
     // if (navigator && navigator.geolocation) {
@@ -53,7 +53,11 @@ class MapContainer extends Component {
   }
 
   componentDidUpdate() {
-    this.loadMap();
+    if (!this.state.mapLoaded) {
+      this.loadMap();
+      this.setState({mapLoaded: true});
+    }
+
     if ((this.state.markersArray.length == 2)){
       this.mapOverlay.style.display = "block";
       this.createRoute();
@@ -102,9 +106,6 @@ class MapContainer extends Component {
         newMarkersArray = newMarkersArray.concat(marker);
       }
       this.setState({markersArray: newMarkersArray});
-    } else {
-      this.mapOverlay.style.display = "block";
-      this.createRoute();
     }
   }
 
@@ -156,6 +157,7 @@ class MapContainer extends Component {
       this.placeMarker(e.latLng);
     });
 
+
     const curr = this.state.location;
     if (this.map) {
       let center = new this.props.google.maps.LatLng(curr.lat, curr.lng);
@@ -167,6 +169,7 @@ class MapContainer extends Component {
     this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
     var searchBox = new google.maps.places.SearchBox((input));
     this._pacInput.style.display = "block";
+
 
     // Bias the SearchBox results towards current map's viewport.
     let self = this;
@@ -207,6 +210,7 @@ class MapContainer extends Component {
                           where you saw the truck, place a second
                           marker where truck was last seen`;
     }
+
     return (
       <div id="jsx-needs-this">
         <p className="map-instructions">
