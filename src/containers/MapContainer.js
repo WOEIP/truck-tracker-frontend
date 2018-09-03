@@ -110,9 +110,9 @@ class MapContainer extends Component {
   }
 
   cancel() {
-    if (this.state.markersArray.length == 2) {
-      this.directionsRenderer.setMap(null);
-    }
+    this.state.markersArray[0].setMap(null);
+    this.state.markersArray[1].setMap(null);
+    this.directionsRenderer.setMap(null);
     this.mapOverlay.style.display = "none";
     this.setState({markersArray: []});
   }
