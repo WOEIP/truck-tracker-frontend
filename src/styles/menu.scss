@@ -33,6 +33,7 @@
         border-radius: 4px 0 4px 4px;
     }
     &:hover ul {
+        z-index: 999;
         display: block;
     }
 }
