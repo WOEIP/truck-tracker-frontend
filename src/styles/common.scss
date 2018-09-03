@@ -5,8 +5,13 @@
         font-family: Rajdhani;
 }
 
-p, h1.title {
+p, p *, h1.title {
     font-family: Fjord One;
+    font-weight: bold;
+}
+
+label, button {
+    font-weight: bold;
 }
 
 #bground {
@@ -32,7 +37,6 @@ article {
     color: white;
     text-align: justify;
     font-size: 1.2rem;
-    font-weight: 900;
 }
 
 @media screen and (min-width: 35.5em) {

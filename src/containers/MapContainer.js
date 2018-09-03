@@ -117,7 +117,6 @@ class MapContainer extends Component {
     this.setState({markersArray: []});
   }
 
-  //TODO this rerenders the whole map, not good
   updateTimeTruckSeen(time) {
     var unpackedTime = time.time[0]; //from flatpickr format
     this.setState({truckSeenTime: unpackedTime});
