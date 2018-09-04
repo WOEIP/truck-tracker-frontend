@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MainPage from './../components/MainPage';
 import Report from './../containers/Report';
-import Data from './../containers/Data';
+import ViewData from './../containers/ViewData';
 import Mission from './../components/Mission';
 import Contact from './../components/Contact';
 
@@ -24,8 +24,8 @@ class App extends Component {
       return Mission;
     case '#contact':
       return Contact;
-    case '#data':
-      return Data;
+    case '#view-data':
+      return ViewData;
     default:
       return MainPage;
     }

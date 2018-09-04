@@ -9,7 +9,7 @@ class Menu extends Component {
 
     const menuItems = [
       {id: "report", text: "Report"},
-      {id: "data", text: "View data"},
+      {id: "view-data", text: "View data"},
       {id: "mission", text: "Mission"},
       {id: "contact", text: "Contact"},
     ];
