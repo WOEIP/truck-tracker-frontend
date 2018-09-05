@@ -95,6 +95,7 @@ class MapContainer extends Component {
 
   componentDidMount() {
     //don't do it for now (dev)
+    this.loadMap();
     //this.getDataPoints();
   }
 

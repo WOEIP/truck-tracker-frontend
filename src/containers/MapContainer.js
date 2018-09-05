@@ -24,7 +24,6 @@ class MapContainer extends Component {
     this.confirmDataSubmission = this.confirmDataSubmission.bind(this);
 
     this.state = {
-      mapLoaded: false,
       truckSeenTime: new Date(),
       markersArray: [],
       location: {
@@ -52,12 +51,11 @@ class MapContainer extends Component {
 
   }
 
-  componentDidUpdate() {
-    if (!this.state.mapLoaded) {
-      this.loadMap();
-      this.setState({mapLoaded: true});
-    }
+  componentDidMount(){
+    this.loadMap();
+  }
 
+  componentDidUpdate() {
     if ((this.state.markersArray.length == 2)){
       this.mapOverlay.style.display = "block";
       this.createRoute();
@@ -69,27 +67,27 @@ class MapContainer extends Component {
 
     let self = this;
     let directionsService = new maps.DirectionsService();
-      directionsService.route({
-        origin: this.state.markersArray[0].getPosition(),
-        destination: this.state.markersArray[1].getPosition(),
-        travelMode: maps.DirectionsTravelMode.WALKING
-      }, function(result) {
-        self.directionsRenderer = new maps.DirectionsRenderer({
-          polylineOptions: {
-              strokeColor: '#8aa4d0',
-              strokeOpacity: 1.0,
-              strokeWeight: 8
-          },
-          suppressMarkers: true, //don't show default directions markers
-          preserveViewport: true //don't move the map window to center on the route
-        });
-        self.directionsRenderer.setMap(self.map);
-        self.directionsRenderer.setDirections(result);
+    directionsService.route({
+      origin: this.state.markersArray[0].getPosition(),
+      destination: this.state.markersArray[1].getPosition(),
+      travelMode: maps.DirectionsTravelMode.WALKING
+    }, function(result) {
+      self.directionsRenderer = new maps.DirectionsRenderer({
+        polylineOptions: {
+          strokeColor: '#8aa4d0',
+          strokeOpacity: 1.0,
+          strokeWeight: 8
+        },
+        suppressMarkers: true,
+        preserveViewport: true
       });
+      self.directionsRenderer.setMap(self.map);
+      self.directionsRenderer.setDirections(result);
+    });
   }
 
   placeMarker(pos) {
-     if ((this.state.markersArray.length < 2)){
+    if ((this.state.markersArray.length < 2)){
       const marker = new this.props.google.maps.Marker({
         position: {
           lat: pos.lat(),
@@ -181,7 +179,7 @@ class MapContainer extends Component {
       var places = searchBox.getPlaces();
 
       if (places.length == 0) {
-          return;
+        return;
       }
 
       var bounds = new google.maps.LatLngBounds();
@@ -250,12 +248,6 @@ class MapContainer extends Component {
         </div>
       </div>
     );
-  }
-}
-
-function triggerEvent(el, type) {
-  if ((el[type] || false) && typeof el[type] == 'function') {
-    el[type](el);
   }
 }
 
