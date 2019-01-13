@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
+import Api from './../utils/Api.js';
 import Menu from './../components/Menu.js';
-
-import axios from 'axios';
 
 import '../styles/common.scss';
 import '../styles/report.scss';
@@ -48,18 +47,17 @@ class Report extends Component {
     let start = {lat: fromPos.lat(), lon: fromPos.lng()},
         end = {lat: toPos.lat(), lon: toPos.lng()};
 
-    //TODO create some API module
-    axios.post('http://localhost:4000/incident', {
-      truckType: this.truckKey,
+    let postData = {
+      truckType: this.state.truckKey,
+      reporterId: 'a578bf68-ef1b-4cbf-9a48-bf5a47980598',
       start: start,
       end: end,
-      reportedAt: timeSeen,
+      reportedAt: timeSeen.getTime() / 1000, // unix epoch
+      truckSeenAt: timeSeen.getTime()/ 1000, // unix epoch
       idlingDuration: timeIdling
-    }).then(function (response) {
-      console.log(response);
-    }).catch(function (error) {
-      console.log(error);
-    });
+    }
+
+    Api.post('reports', postData);
   }
 
   selectTruck(truck) {

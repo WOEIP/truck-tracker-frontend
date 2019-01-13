@@ -2,13 +2,10 @@
 //  also change checkbox triggerEvent
 
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import flatpickr from 'flatpickr';
 import Flatpickr from 'react-flatpickr';
 
 import { GoogleApiWrapper } from 'google-maps-react';
 
-import {getImgOfTruck} from '../components/TruckSelection';
 import truck from '../img/truck.png';
 
 const GOOGLE_MAPS_API_KEY = 'AIzaSyB-D3Z23ZfyOZnCh2RVv5QLaWj214DsO-Q';
@@ -133,7 +130,7 @@ class MapContainer extends Component {
 
     this.props.sendData(e, timeLastSeen, fromPos, toPos, wasIdling, timeIdling);
 
-    this.props.returnToTruckSelection();
+    //this.props.returnToTruckSelection();
   }
 
   loadMap() {
