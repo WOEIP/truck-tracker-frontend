@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import LoginPage from './../components/LoginPage';
 import MainPage from './../components/MainPage';
 import Report from './../containers/Report';
 import ViewData from './../containers/ViewData';
@@ -9,15 +10,17 @@ class App extends Component {
 
   componentDidMount() {
     var self = this;
-    window.addEventListener('hashchange', (e) => {self.forceUpdate();});
+    window.addEventListener('hashchange', () => {self.forceUpdate();});
   }
 
   componentWillUnmount(){
-    window.removeEventListener('hashchange', (e) => {self.forceUpdate();});
+    window.removeEventListener('hashchange', () => {self.forceUpdate();});
   }
 
   getActiveContent(){
     switch(window.location.hash) {
+    case '#login':
+      return LoginPage;
     case '#report':
       return Report;
     case '#mission':

@@ -17,6 +17,9 @@ const HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
 const NamedModulesPlugin = new webpack.NamedModulesPlugin();
 
 module.exports = {
+  devServer: {
+    port: 8083
+  },
   devtool: 'source-map',
   entry: {
     main: ['babel-polyfill', 'react-hot-loader/patch', './src/index']

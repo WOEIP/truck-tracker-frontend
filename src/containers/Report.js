@@ -18,25 +18,14 @@ class Report extends Component {
 
     this.selectTruck = this.selectTruck.bind(this);
     this.setMotion = this.setMotion.bind(this);
-    this.goBack = this.goBack.bind(this);
-    this.goForward = this.goForward.bind(this);
     this.sendData = this.sendData.bind(this);
 
     this.state = {
-      pageIndex: 2, //login page...awkward hack?
+      currentPage: 'truckSelection',
       truckKey: null,
       truckWasMoving: false,
       engineWasRunning: false
     };
-
-    this.subPages = ["registrationSent",
-                     "registration",
-                     "login",
-                     "selectTruck",
-                     "idlingOrMoving",
-                     "giveLocation"
-                    ];
-
   }
 
   sendData(e, timeSeen, fromPos, toPos, wasIdling, timeIdling) {
@@ -62,28 +51,16 @@ class Report extends Component {
 
   selectTruck(truck) {
     this.setState({
-      pageIndex: this.state.pageIndex + 1,
+      currentPage: 'idlingOrMoving',
       truckKey: truck.key
     });
   }
 
   setMotion(movingP, engineRunningP) {
     this.setState({
-      pageIndex: this.state.pageIndex + 1,
+      currentPage: 'giveLocation',
       truckWasMoving: movingP,
       engineWasRunning: engineRunningP
-    });
-  }
-
-  goBack() {
-    this.setState({
-      pageIndex: this.state.pageIndex - 1
-    });
-  }
-
-  goForward() {
-    this.setState({
-      pageIndex: this.state.pageIndex + 1
     });
   }
 
@@ -100,36 +77,35 @@ class Report extends Component {
   getActiveContent(){
     //TODO that is ugly
     var that = this;
-    switch(this.subPages[this.state.pageIndex]){
-    case "registrationSent":
-       return {component: RegistrationSent,
-               props: {}};
-    case "registration":
-      return {component: RegistrationPage,
-              props :{goBack: that.goBack,
-                      registerUser: that.registerUser}};
-    case "login":
-       return {component: LoginPage,
-               props: {goForward: that.goForward,
-                       goBack: that.goBack}};
-    case "giveLocation":
-      return {component: MapContainer,
-              props: {goBack: that.goBack,
-                      sendData: that.sendData,
-                      truckKey: that.truckKey,
-                      truckWasMoving: this.state.truckWasMoving}};
-    case "idlingOrMoving":
-      return {component: IdlingOrMoving,
-              props: {setMotion: that.setMotion,
-                      goBack: that.goBack}};
-    default:
-      return {component: TruckSelection,
-              props: {selectTruck: that.selectTruck}};
+    switch(this.state.currentPage) {
+      case "registrationSent":
+         return {component: RegistrationSent,
+                 props: {}};
+      case "registration":
+        return {component: RegistrationPage,
+                props :{registerUser: that.registerUser}};
+      case "giveLocation":
+        return {component: MapContainer,
+                props: {sendData: that.sendData,
+                        truckKey: that.truckKey,
+                        truckWasMoving: this.state.truckWasMoving}};
+      case "idlingOrMoving":
+        return {component: IdlingOrMoving,
+                props: {setMotion: that.setMotion}};
+      case "truckSelection":
+        return {component: TruckSelection,
+                props: {selectTruck: that.selectTruck}};
+      default:
+        return null;
     }
   };
 
   render() {
     const ActiveContent = this.getActiveContent();
+
+    if (false) { // auth here
+        window.location.hash = '#login';
+    }
 
     return (
       <article id="report">
