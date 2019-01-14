@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 
 import '../styles/login-page.scss';
 
+import Api from './../utils/Api.js';
+import Auth from './../utils/Auth.js';
+import Menu from './../components/Menu.js';
+
 class LoginPage extends Component {
   constructor(props) {
     super(props);
@@ -13,22 +17,22 @@ class LoginPage extends Component {
 
     this.handlePassChange = this.handlePassChange.bind(this);
     this.handleUserChange = this.handleUserChange.bind(this);
+    this.login = this.login.bind(this);
   }
 
-  handleSubmit(evt) {
-   // evt.preventDefault();
-
-    //auth here
-    this.props.goForward();
-    // if (!this.state.username) {
-    //   return this.setState({ error: 'Username is required' });
+  login() {
+    console.log(this.state.password);
+    console.log(Auth.createUUID(this.state.password));
+    // let postData = {
+    //   username: this.state.username,
+    //   password: Auth.createUUID(this.state.password) //SHA-1
     // }
 
-    // if (!this.state.password) {
-    //   return this.setState({ error: 'Password is required' });
-    // }
 
-    // return this.setState({ error: '' });
+    Api.get('reports').then (function (res) {
+        console.log(res);
+    });
+
   }
 
   handleUserChange(evt) {
@@ -45,7 +49,8 @@ class LoginPage extends Component {
 
   render() {
     return (
-      <div id="login-page">
+      <article id="login-page">
+        <Menu current="report"/>
         <p>
           Please log in to report an incident!
         </p>
@@ -59,7 +64,7 @@ class LoginPage extends Component {
                  value={this.state.password}
                  onChange={this.handlePassChange} />
           <div className="actions">
-            <button onClick={this.props.goForward}>
+            <button onClick={this.login}>
               Login
             </button>
             <button onClick={this.props.goBack}>
@@ -67,7 +72,7 @@ class LoginPage extends Component {
             </button>
           </div>
         </form>
-      </div>
+      </article>
     );
   }
 }

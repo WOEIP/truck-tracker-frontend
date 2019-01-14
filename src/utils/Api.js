@@ -4,7 +4,7 @@ const urlRoot = 'http://api.trucktracker.net/';
 
 let Api = {
     get: function (endPoint) {
-    axios.get(this.urlRoot + endPoint, {
+      axios.get(urlRoot + endPoint, {
     }).then(function (response) {
       console.log(response);
     }).catch(function (error) {
@@ -13,7 +13,7 @@ let Api = {
   },
 
   post: function (endPoint, postObject) {
-    axios.post(urlRoot + endPoint, postObject
+      axios.post(urlRoot + endPoint, postObject
     ).then(function (response) {
       console.log(response);
     }).catch(function (error) {

@@ -1,11 +1,9 @@
 @import "colors";
 
 #login-page {
-    // width: 60%;
-    // margin: 0 auto;
-    & form {
-        & div.actions {
-            & button {
+    form {
+        div.actions {
+            button {
                 border: 0 none;
                 border-radius: 3px;
                 background-color: $light-grey;
@@ -14,7 +12,6 @@
                 padding: .5rem;
                 margin: 0 1rem 0 0;
                 width: 45%;
-                // max-width: 8rem;
             }
         }
     }
