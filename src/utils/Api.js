@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const urlRoot = 'http://api.trucktracker.net/';
+const urlRoot = 'https://api.trucktracker.net/';
 
 let Api = {
     get: function (endPoint) {
