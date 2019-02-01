@@ -7,7 +7,7 @@ import '../styles/report.scss';
 
 import RegistrationPage from './../components/RegistrationPage';
 import RegistrationSent from './../components/RegistrationSent';
-import LoginPage from './../components/LoginPage';
+import Login from './../components/Login';
 import TruckSelection from './../components/TruckSelection';
 import IdlingOrMoving from './../components/IdlingOrMoving';
 import MapContainer from './MapContainer';
