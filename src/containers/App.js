@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import LoginPage from './../components/LoginPage';
+import Login from './../components/Login';
 import MainPage from './../components/MainPage';
 import Report from './../containers/Report';
 import ViewData from './../containers/ViewData';
@@ -21,7 +21,7 @@ class App extends Component {
   getActiveContent(){
     switch(window.location.hash) {
     case '#login':
-      return LoginPage;
+      return Login;
     case '#report':
       return Report;
     case '#mission':
