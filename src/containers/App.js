@@ -5,6 +5,7 @@ import Report from './../containers/Report';
 import ViewData from './../containers/ViewData';
 import Mission from './../components/Mission';
 import Contact from './../components/Contact';
+import Admin from './../containers/Admin';
 
 class App extends Component {
 
@@ -29,6 +30,8 @@ class App extends Component {
       return Contact;
     case '#view-data':
       return ViewData;
+    case '#admin':
+      return Admin;
     default:
       return MainPage;
     }
