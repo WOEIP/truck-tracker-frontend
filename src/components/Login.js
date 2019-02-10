@@ -21,16 +21,15 @@ class Login extends Component {
   }
 
   login() {
-    console.log(this.state.password);
-    console.log(Auth.createUUID(this.state.password));
-    // let postData = {
-    //   username: this.state.username,
-    //   password: Auth.createUUID(this.state.password) //SHA-1
-    // }
+    let postData = {
+        // username: this.state.username,
+        // password: Auth.hashPassword(this.state.password)
+        username: 'attila',
+        password: Auth.hashPassword('bacon')
+    };
 
-
-    Api.get('reports').then (function (res) {
-        console.log(res);
+    Api.post('login', postData).then (function (result) {
+        console.log(result);
     });
 
   }

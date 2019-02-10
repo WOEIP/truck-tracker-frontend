@@ -44,7 +44,7 @@ class Report extends Component {
       reportedAt: timeSeen.getTime() / 1000, // unix epoch
       truckSeenAt: timeSeen.getTime()/ 1000, // unix epoch
       idlingDuration: timeIdling
-    }
+    };
 
     Api.post('reports', postData);
   }
