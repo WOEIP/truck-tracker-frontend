@@ -28,8 +28,8 @@ class Login extends Component {
         password: Auth.hashPassword('bacon')
     };
 
-    Api.post('login', postData).then (function (result) {
-        console.log(result);
+    Api.post('login', postData).then(function (response) {
+        console.log(response);
     });
 
   }
