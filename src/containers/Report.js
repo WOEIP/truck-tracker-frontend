@@ -11,6 +11,8 @@ import TruckSelection from './../components/TruckSelection';
 import IdlingOrMoving from './../components/IdlingOrMoving';
 import MapContainer from './MapContainer';
 
+import {SessionContext} from './../utils/Session.js';
+
 class Report extends Component {
   constructor(props) {
     super(props);
@@ -25,6 +27,14 @@ class Report extends Component {
       truckWasMoving: false,
       engineWasRunning: false
     };
+  }
+
+  componentWillMount() {
+    let session = this.context;
+    console.log(session.data);
+    if (!session.data.loggedIn) {
+      window.location.hash = '#login';
+    }
   }
 
   sendData(e, timeSeen, fromPos, toPos, wasIdling, timeIdling) {
@@ -102,10 +112,6 @@ class Report extends Component {
   render() {
     const ActiveContent = this.getActiveContent();
 
-    if (false) { // auth here
-        window.location.hash = '#login';
-    }
-
     return (
       <article id="report">
         <Menu current="report"/>
@@ -114,5 +120,7 @@ class Report extends Component {
     );
   }
 }
+
+Report.contextType = SessionContext;
 
 export default Report;

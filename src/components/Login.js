@@ -6,6 +6,8 @@ import Api from './../utils/Api.js';
 import Auth from './../utils/Auth.js';
 import Menu from './../components/Menu.js';
 
+import {SessionContext} from './../utils/Session.js';
+
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -21,17 +23,22 @@ class Login extends Component {
   }
 
   login() {
+    let session = this.context;
     let postData = {
-      // username: this.state.username,
-      // password: Auth.hashPassword(this.state.password)
-      username: 'attila',
-      password: Auth.hashPassword('bacon')
+      username: this.state.username,
+      password: Auth.hashPassword(this.state.password)
+      //username: 'attila',
+      //password: Auth.hashPassword('bacon')
     };
 
-    Api.post('auth/login', postData).then(function (response) {
-      console.log(response);
+    Api.post('auth/login', postData).then(response => {
+       if (response.status === 200) {
+         session.update({loggedIn: true});
+         window.location.hash = '#report';
+       }
+    }).catch(() => {
+        console.log('unauthorized login');
     });
-
   }
 
   handleUserChange(evt) {
@@ -75,5 +82,7 @@ class Login extends Component {
     );
   }
 }
+
+Login.contextType = SessionContext;
 
 export default Login;

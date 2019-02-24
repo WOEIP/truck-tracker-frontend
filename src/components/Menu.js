@@ -7,19 +7,8 @@ import '../styles/pure-release-1.0.0/grids-responsive.css';
 import {SessionContext} from './../utils/Session.js';
 
 class Menu extends Component {
-    onItemClick () {
-      console.log('clicked');
-    }
-
-  logIn (session) {
-    session.update({loggedIn: true});
-  }
-
-  logOut (session) {
-    session.update({loggedIn: false});
-  }
-
-  getMenuItems (session) {
+  getMenuItems () {
+    let session = this.context;
     // TODO these could be components
      let menuItems = [
       {id: "report", text: "Report"},
@@ -66,31 +55,18 @@ class Menu extends Component {
 
   render() {
     return (
-      <SessionContext.Consumer>{ session =>
       <div id="top-menu-container">
          <nav id="top-menu">
-           <button onClick={ () => {
-             this.logIn(session);
-           }
-           }> Login
-           </button>
-           <button onClick={ () => {
-             this.logOut(session);
-           }
-           }> Logout
-           </button>
            <div id="top-menu-icon"></div>
            <ul>
-             {this.getMenuItems(session)}
+             {this.getMenuItems()}
            </ul>
          </nav>
-        </div>}
-      </SessionContext.Consumer>
+        </div>
     );
   }
 }
 
+Menu.contextType = SessionContext;
+
 export default Menu;
-
-
-// session.update({loggedIn: !session.data.loggedIn})}>Toggle login
