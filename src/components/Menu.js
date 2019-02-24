@@ -19,21 +19,33 @@ class Menu extends Component {
     session.update({loggedIn: false});
   }
 
-  render() {
-
+  getMenuItems (session) {
     // TODO these could be components
-    const menuItems = [
+     let menuItems = [
       {id: "report", text: "Report"},
       {id: "view-data", text: "View data"},
       {id: "mission", text: "Mission"},
       {id: "contact", text: "Contact"},
     ];
 
-    var itemsToRender = [];
-    var classToAdd="";
+    if (session.data.loggedIn) {
+        menuItems.push({
+            id: "admin", text: "Admin"
+        });
+        menuItems.push({
+            id: "logout", text: "Sign out"
+        });
+    } else {
+        menuItems.push({
+            id: "login", text: "Sign in"
+        });
+    }
+
+    let itemsToRender = [];
+    let classToAdd="";
 
     for (let i = 0; i < menuItems.length; i++) {
-      if (this.props.current == menuItems[i]["id"]){
+      if (this.props.current === menuItems[i]["id"]){
         classToAdd = "current ";
       } else {
         classToAdd = "";
@@ -49,24 +61,27 @@ class Menu extends Component {
       );
     }
 
+    return itemsToRender;
+  }
+
+  render() {
     return (
       <SessionContext.Consumer>{ session =>
       <div id="top-menu-container">
          <nav id="top-menu">
            <button onClick={ () => {
              this.logIn(session);
-             this.onItemClick }
+           }
            }> Login
            </button>
            <button onClick={ () => {
              this.logOut(session);
-             console.log(session.data);
-             this.onItemClick }
+           }
            }> Logout
            </button>
            <div id="top-menu-icon"></div>
            <ul>
-             {itemsToRender}
+             {this.getMenuItems(session)}
            </ul>
          </nav>
         </div>}

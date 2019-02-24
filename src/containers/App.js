@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Login from './../components/Login';
+import Logout from './../components/Logout';
 import MainPage from './../components/MainPage';
 import Report from './../containers/Report';
 import ViewData from './../containers/ViewData';
@@ -32,6 +33,8 @@ class App extends Component {
     switch(window.location.hash) {
     case '#login':
       return Login;
+    case '#logout':
+      return Logout;
     case '#report':
       return Report;
     case '#mission':

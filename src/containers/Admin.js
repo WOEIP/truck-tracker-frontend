@@ -5,8 +5,9 @@ class Admin extends Component {
   render() {
     return (
       <article id="mission-text">
-        <Menu current="mission"/>
+        <Menu current="admin"/>
         <h1 className="title">Admin settings</h1>
+        <p>TBD...</p>
       </article>
     );
   }

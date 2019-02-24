@@ -49,7 +49,7 @@ class Login extends Component {
   render() {
     return (
       <article id="login-page">
-        <Menu current="report"/>
+        <Menu current="login"/>
         <p>
           Please log in to report an incident!
         </p>
