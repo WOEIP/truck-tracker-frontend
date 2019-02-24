@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import Menu from './../components/Menu.js';
+
 import '../styles/registration-page.scss';
 
 class RegistrationPage extends Component {
@@ -16,6 +18,11 @@ class RegistrationPage extends Component {
     this.handleZipChange = this.handleZipChange.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handleAddressChange = this.handleAddressChange.bind(this);
+    this.registrationDone = this.registrationDone.bind(this);
+  }
+
+  registrationDone() {
+    window.location.hash = '#registerdone';
   }
 
   handleNameChange(evt) {
@@ -44,7 +51,8 @@ class RegistrationPage extends Component {
 
   render() {
     return (
-      <div id="registration-page">
+      <article id="registration-page">
+        <Menu current="login"/>
         <p>
           Please fill in your data and then send it for verification!
         </p>
@@ -66,12 +74,12 @@ class RegistrationPage extends Component {
                  value={this.state.address}
                  onChange={this.handleAddressChange} />
           <div className="actions">
-            <button onClick={this.props.goBack}>
+            <button onClick={this.registrationDone}>
               Send data
             </button>
           </div>
         </form>
-      </div>
+      </article>
     );
   }
 }

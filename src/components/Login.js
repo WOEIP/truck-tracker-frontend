@@ -19,6 +19,7 @@ class Login extends Component {
 
     this.handlePassChange = this.handlePassChange.bind(this);
     this.handleUserChange = this.handleUserChange.bind(this);
+    this.goToRegistration = this.goToRegistration.bind(this);
     this.login = this.login.bind(this);
   }
 
@@ -39,6 +40,10 @@ class Login extends Component {
     }).catch(() => {
         console.log('unauthorized login');
     });
+  }
+
+  goToRegistration() {
+    window.location.hash = '#register';
   }
 
   handleUserChange(evt) {
@@ -73,7 +78,7 @@ class Login extends Component {
             <button onClick={this.login}>
               Login
             </button>
-            <button onClick={this.props.goBack}>
+            <button onClick={this.goToRegistration}>
               Register
             </button>
           </div>

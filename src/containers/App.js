@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import RegistrationPage from './../components/RegistrationPage.js';
+import RegistrationSent from './../components/RegistrationSent.js';
 import Login from './../components/Login';
 import Logout from './../components/Logout';
 import MainPage from './../components/MainPage';
@@ -31,6 +33,10 @@ class App extends Component {
 
   getActiveContent(){
     switch(window.location.hash) {
+    case '#register':
+      return RegistrationPage;
+    case '#registerdone':
+      return RegistrationSent;
     case '#login':
       return Login;
     case '#logout':

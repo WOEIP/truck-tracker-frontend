@@ -1,8 +1,18 @@
 @import "colors";
 
+.textlink {
+    text-decoration: none;
+    color: $light-grey;
+}
+
+.textlink:hover {
+    color: $generic-blue;
+}
+
+
 *,
 .pure-g [class *= "pure-u"] {
-        font-family: Rajdhani;
+    font-family: Rajdhani;
 }
 
 p, p *, h1.title {
