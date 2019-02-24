@@ -44,8 +44,9 @@ class Report extends Component {
       timeIdling = 0;
     }
 
-    let start = {lat: fromPos.lat(), lon: fromPos.lng()},
-        end = {lat: toPos.lat(), lon: toPos.lng()};
+    // TODO lon or lng??
+    let start = {lat: fromPos.lat, lon: fromPos.lng},
+        end = {lat: toPos.lat, lon: toPos.lng};
 
     let postData = {
       truckType: this.state.truckKey,

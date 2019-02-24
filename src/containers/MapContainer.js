@@ -24,7 +24,7 @@ class MapContainer extends Component {
     this.state = {
       truckSeenTime: new Date(),
       markersArray: [],
-      location: {
+      viewLocation: {
         lat: 37.8719,
         lng: -122.2585
       }, //Berkeley
@@ -49,9 +49,10 @@ class MapContainer extends Component {
   }
 
   componentDidUpdate() {
-    if ((this.state.markersArray.length == 2)){
+   if ((!this.props.truckWasMoving && this.state.markersArray.length === 1) ||
+       this.state.markersArray.length === 2){
       this.mapOverlay.style.display = "block";
-      this.createRoute();
+      //this.createRoute();
     }
   }
 
@@ -59,28 +60,26 @@ class MapContainer extends Component {
   }
 
   placeMarker(e) {
-    console.log(e.latlng);
-
     let truckIcon = L.icon({
       iconUrl: truck,
       iconSize: [40, 50]
     });
 
-    L.marker([e.latlng.lat, e.latlng.lng], {icon: truckIcon}).addTo(this.map);
-
-    this.mapOverlay.style.display = "block";
-
-
-    // if ((this.state.markersArray.length < 2)){
-    //   this.setState({markersArray: newMarkersArray});
-    // }
+   if ((this.props.truckWasMoving && this.state.markersArray.length === 1) ||
+     this.state.markersArray.length === 0){
+       let marker = L.marker([e.latlng.lat, e.latlng.lng], {icon: truckIcon});
+       marker.addTo(this.map);
+       let newMarkersArray = this.state.markersArray //TODO some nicer method to store these
+       newMarkersArray.push(marker);
+       this.setState({
+         markersArray: newMarkersArray
+       });
+   }
   }
 
   cancel() {
-    this.state.markersArray[0].setMap(null);
-    this.state.markersArray[1].setMap(null);
-    this.directionsRenderer.setMap(null);
     this.mapOverlay.style.display = "none";
+    this.state.markersArray.map(marker => this.map.removeLayer(marker));
     this.setState({markersArray: []});
   }
 
@@ -92,8 +91,8 @@ class MapContainer extends Component {
   confirmDataSubmission(e) {
     console.log('confirming');
     let timeLastSeen = this.state.truckSeenTime;
-    let fromPos = this.state.markersArray[0].getPosition();
-    let toPos = this.state.markersArray[1].getPosition();
+    let fromPos = this.state.markersArray[0]._latlng;
+    let toPos = this.state.markersArray[1]._latlng;
     let wasIdling = !this.props.truckWasMoving && this.propsEngineWasRunning;
     let timeIdling = 0;
 
@@ -107,11 +106,13 @@ class MapContainer extends Component {
 
   loadMap() {
     let map = L.map(this.mapTarget).setView(
-      [this.state.location.lat, this.state.location.lng],
-      this.state.zoom);
+      [this.state.viewLocation.lat, this.state.viewLocation.lng],
+      this.state.zoom
+    );
+
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+    }).addTo(map);
 
     map.on('click', this.placeMarker);
     return map;
@@ -124,8 +125,6 @@ class MapContainer extends Component {
                           where you saw the truck, place a second
                           marker where truck was last seen`;
     }
-
-    const position = [this.state.location.lat, this.state.location.lng]
 
     return (
       <div id="jsx-needs-this">
