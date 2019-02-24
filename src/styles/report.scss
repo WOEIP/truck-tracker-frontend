@@ -9,8 +9,17 @@
 
 #map-wrapper {
     //needed so overlay works
-    //position: relative;
+    position: relative;
 }
+
+// #map-overlay {
+//     background-color: $white;
+//     display: block;
+//     position: absolute;
+//     top: 60px;
+//     left: 60px;
+//     z-index: 999;
+// }
 
 div#second_marker_prompt {
     margin-top: 1em;
@@ -21,7 +30,8 @@ p#idling_toggle {
     display: inline-block;
 }
 
-#over-map {
+#map-overlay {
+    z-index: 999;
     background-color: rgba(white, 0.9);
     box-sizing: border-box;
     color: $dark-grey;

@@ -27,14 +27,9 @@ class MapContainer extends Component {
       location: {
         lat: 37.8719,
         lng: -122.2585
-      } //Berkeley
+      }, //Berkeley
+      zoom: 16
     };
-
-
-    //drawing on the map
-    this.map = null;
-    this.mapTarget = null;
-    this.directionsRenderer = null;
 
     //TODO: HTTPS is needed I guess
     // if (navigator && navigator.geolocation) {
@@ -67,14 +62,14 @@ class MapContainer extends Component {
     console.log(e.latlng);
 
     let truckIcon = L.icon({
-      iconUrl: '../img/truck.png',
-
-      iconSize:     [38, 95], // size of the icon
-      iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-      popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+      iconUrl: truck,
+      iconSize: [40, 50]
     });
 
     L.marker([e.latlng.lat, e.latlng.lng], {icon: truckIcon}).addTo(this.map);
+
+    this.mapOverlay.style.display = "block";
+
 
     // if ((this.state.markersArray.length < 2)){
     //   this.setState({markersArray: newMarkersArray});
@@ -95,6 +90,7 @@ class MapContainer extends Component {
   }
 
   confirmDataSubmission(e) {
+    console.log('confirming');
     let timeLastSeen = this.state.truckSeenTime;
     let fromPos = this.state.markersArray[0].getPosition();
     let toPos = this.state.markersArray[1].getPosition();
@@ -110,7 +106,9 @@ class MapContainer extends Component {
   }
 
   loadMap() {
-    let map = L.map(this.mapTarget).setView([51.505, -0.09], 13);
+    let map = L.map(this.mapTarget).setView(
+      [this.state.location.lat, this.state.location.lng],
+      this.state.zoom);
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
@@ -138,7 +136,7 @@ class MapContainer extends Component {
           <div id="inner-map-container" ref={(el) => this.mapTarget = el}>
           </div>
 
-          <div ref={(el) => this.mapOverlay = el} id="over-map">
+          <div ref={(el) => this.mapOverlay = el} id="map-overlay">
             The vehicle was sighted at
             <Flatpickr
               options={{
