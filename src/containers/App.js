@@ -7,10 +7,20 @@ import Mission from './../components/Mission';
 import Contact from './../components/Contact';
 import Admin from './../containers/Admin';
 
+import SessionProvider from './../utils/Session.js';
+
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      session: {
+        loggedIn: false
+      }
+    };
+  }
 
   componentDidMount() {
-    var self = this;
+    let self = this;
     window.addEventListener('hashchange', () => {self.forceUpdate();});
   }
 
@@ -40,9 +50,11 @@ class App extends Component {
   render() {
     const ActiveContent = this.getActiveContent();
     return (
-      <div id="bground">
-        <ActiveContent/>
-      </div>
+      <SessionProvider>
+        <div id="bground">
+          <ActiveContent/>
+        </div>
+     </SessionProvider>
     );
   }
 }

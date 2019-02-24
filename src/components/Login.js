@@ -22,14 +22,14 @@ class Login extends Component {
 
   login() {
     let postData = {
-        // username: this.state.username,
-        // password: Auth.hashPassword(this.state.password)
-        username: 'attila',
-        password: Auth.hashPassword('bacon')
+      // username: this.state.username,
+      // password: Auth.hashPassword(this.state.password)
+      username: 'attila',
+      password: Auth.hashPassword('bacon')
     };
 
-    Api.post('login', postData).then(function (response) {
-        console.log(response);
+    Api.post('auth/login', postData).then(function (response) {
+      console.log(response);
     });
 
   }

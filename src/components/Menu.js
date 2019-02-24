@@ -4,9 +4,24 @@ import '../styles/pure-release-1.0.0/menus.css';
 import '../styles/pure-release-1.0.0/pure-min.css';
 import '../styles/pure-release-1.0.0/grids-responsive.css';
 
+import {SessionContext} from './../utils/Session.js';
+
 class Menu extends Component {
+    onItemClick () {
+      console.log('clicked');
+    }
+
+  logIn (session) {
+    session.update({loggedIn: true});
+  }
+
+  logOut (session) {
+    session.update({loggedIn: false});
+  }
+
   render() {
 
+    // TODO these could be components
     const menuItems = [
       {id: "report", text: "Report"},
       {id: "view-data", text: "View data"},
@@ -35,16 +50,32 @@ class Menu extends Component {
     }
 
     return (
+      <SessionContext.Consumer>{ session =>
       <div id="top-menu-container">
-        <nav id="top-menu">
-          <div id="top-menu-icon"></div>
-          <ul>
-            {itemsToRender}
-          </ul>
-        </nav>
-      </div>
+         <nav id="top-menu">
+           <button onClick={ () => {
+             this.logIn(session);
+             this.onItemClick }
+           }> Login
+           </button>
+           <button onClick={ () => {
+             this.logOut(session);
+             console.log(session.data);
+             this.onItemClick }
+           }> Logout
+           </button>
+           <div id="top-menu-icon"></div>
+           <ul>
+             {itemsToRender}
+           </ul>
+         </nav>
+        </div>}
+      </SessionContext.Consumer>
     );
   }
 }
 
 export default Menu;
+
+
+// session.update({loggedIn: !session.data.loggedIn})}>Toggle login

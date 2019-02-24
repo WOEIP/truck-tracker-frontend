@@ -4,9 +4,10 @@ const urlRoot = 'https://api.trucktracker.net/';
 
 let Api = {
     get: function (endPoint) {
-      axios.get(urlRoot + endPoint, {withCredentials: true})
+      return axios.get(urlRoot + endPoint, {withCredentials: true})
     .then(function (response) {
-      console.log(response);
+      // We keep this here, generic API stuff can go here
+      return response;
     }).catch(function (error) {
       console.log(error);
     });
