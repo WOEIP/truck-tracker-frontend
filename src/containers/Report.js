@@ -5,8 +5,6 @@ import Menu from './../components/Menu.js';
 import '../styles/common.scss';
 import '../styles/report.scss';
 
-import RegistrationPage from './../components/RegistrationPage';
-import RegistrationSent from './../components/RegistrationSent';
 import TruckSelection from './../components/TruckSelection';
 import IdlingOrMoving from './../components/IdlingOrMoving';
 import MapContainer from './MapContainer';
@@ -31,7 +29,6 @@ class Report extends Component {
 
   shouldComponentUpdate() {
     let session = this.context;
-    console.log(session.data);
     return session.data.loggedIn;
   }
 
@@ -84,20 +81,10 @@ class Report extends Component {
     });
   }
 
-  registerUser(){
-    console.log("registering!");
-  }
-
   getActiveContent(){
     //TODO that is ugly
     var that = this;
     switch(this.state.currentPage) {
-      case "registrationSent":
-         return {component: RegistrationSent,
-                 props: {}};
-      case "registration":
-        return {component: RegistrationPage,
-                props :{registerUser: that.registerUser}};
       case "giveLocation":
         return {component: MapContainer,
                 props: {sendData: that.sendData,
