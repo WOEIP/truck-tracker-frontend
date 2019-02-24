@@ -29,9 +29,14 @@ class Report extends Component {
     };
   }
 
-  componentWillMount() {
+  shouldComponentUpdate() {
     let session = this.context;
     console.log(session.data);
+    return session.data.loggedIn;
+  }
+
+  componentWillMount() {
+    let session = this.context;
     if (!session.data.loggedIn) {
       window.location.hash = '#login';
     }

@@ -10,24 +10,29 @@ class Menu extends Component {
   getMenuItems () {
     let session = this.context;
     // TODO these could be components
-     let menuItems = [
-      {id: "report", text: "Report"},
-      {id: "view-data", text: "View data"},
-      {id: "mission", text: "Mission"},
-      {id: "contact", text: "Contact"},
-    ];
+     let menuItems = [];
 
     if (session.data.loggedIn) {
-        menuItems.push({
-            id: "admin", text: "Admin"
-        });
-        menuItems.push({
-            id: "logout", text: "Sign out"
-        });
+      menuItems = [
+        {id: "report", text: "Report"},
+        {id: "view-data", text: "View data"},
+        {id: "mission", text: "Mission"},
+        {id: "contact", text: "Contact"},
+        {id: "logout", text: "Sign out"}
+      ];
+      // TODO implement admin flag
+      if (!session.data.isAdmin) {
+        menuItems.push (
+          {id: "admin", text: "Admin"}
+        )
+      }
     } else {
-        menuItems.push({
-            id: "login", text: "Sign in"
-        });
+      menuItems = [
+        {id: "view-data", text: "View data"},
+        {id: "mission", text: "Mission"},
+        {id: "contact", text: "Contact"},
+        {id: "login", text: "Sign in"}
+      ];
     }
 
     let itemsToRender = [];
