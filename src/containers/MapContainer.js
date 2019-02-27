@@ -89,19 +89,16 @@ class MapContainer extends Component {
   }
 
   confirmDataSubmission(e) {
-    console.log('confirming');
     let timeLastSeen = this.state.truckSeenTime;
     let fromPos = this.state.markersArray[0]._latlng;
-    let toPos = this.state.markersArray[1]._latlng;
+    let toPos = this.props.truckWasMoving ?
+      this.state.markersArray[1]._latlng :
+      {lat: 0, lng:0};
     let wasIdling = !this.props.truckWasMoving && this.propsEngineWasRunning;
     let timeIdling = 0;
 
-    //let wasParked = !this.props.truckWasMoving && this.propsEngineWasRunning;
-    //TODO: review DB schema
-
     this.props.sendData(e, timeLastSeen, fromPos, toPos, wasIdling, timeIdling);
-
-    //this.props.returnToTruckSelection();
+    this.cancel();
   }
 
   loadMap() {
