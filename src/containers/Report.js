@@ -15,12 +15,13 @@ class Report extends Component {
   constructor(props) {
     super(props);
 
-    this.selectTruck = this.selectTruck.bind(this);
-    this.setMotion = this.setMotion.bind(this);
+    this.goToTruckSelection = this.goToTruckSelection.bind(this);
+    this.goToMotionView = this.goToMotionView.bind(this);
+    this.goToMapView = this.goToMapView.bind(this);
     this.sendData = this.sendData.bind(this);
 
     this.state = {
-      currentPage: 'truckSelection',
+      currentView: 'truckSelection',
       truckKey: null,
       truckWasMoving: false,
       engineWasRunning: false
@@ -61,42 +62,44 @@ class Report extends Component {
     Api.post('reports', postData);
   }
 
-  selectTruck(truck) {
+  goToMotionView(truck) {
+    this.setState(prevState => ({
+      currentView: 'idlingOrMoving',
+      truckKey: truck.key || prevState.truckKey
+    }));
+  }
+
+  goToMapView(truckWasMoving, engineWasRunning) {
     this.setState({
-      currentPage: 'idlingOrMoving',
-      truckKey: truck.key
+      currentView: 'giveLocation',
+      truckWasMoving: truckWasMoving,
+      engineWasRunning: engineWasRunning
     });
   }
 
-  setMotion(movingP, engineRunningP) {
+  goToTruckSelection() {
     this.setState({
-      currentPage: 'giveLocation',
-      truckWasMoving: movingP,
-      engineWasRunning: engineRunningP
-    });
-  }
-
-  returnToTruckSelection() {
-    this.setState({
-      currentPage: "truckSelection"
+      currentView: "truckSelection"
     });
   }
 
   getActiveContent(){
     //TODO that is ugly
     var that = this;
-    switch(this.state.currentPage) {
+    switch(this.state.currentView) {
       case "giveLocation":
         return {component: MapContainer,
                 props: {sendData: that.sendData,
+                        goBack: that.goToMotionView,
                         truckKey: that.truckKey,
                         truckWasMoving: this.state.truckWasMoving}};
       case "idlingOrMoving":
         return {component: IdlingOrMoving,
-                props: {setMotion: that.setMotion}};
+                props: {setMotion: that.goToMapView,
+                        goBack: that.goToTruckSelection}};
       case "truckSelection":
         return {component: TruckSelection,
-                props: {selectTruck: that.selectTruck}};
+                props: {selectTruck: that.goToMotionView}};
       default:
         return null;
     }
