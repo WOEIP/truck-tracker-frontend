@@ -17,7 +17,6 @@ class RegistrationPage extends Component {
       isLocal: true,
       email: '',
       address: '',
-      city:'',
       zipCode:'',
       localResidentP: false
     };
@@ -28,20 +27,25 @@ class RegistrationPage extends Component {
 
   registerUser () {
     let postData = {
-      username: this.state.userName,
-      password: Auth.hashPassword(this.state.password),
+      username: this.state.username,
       firstName: this.state.firstName,
       lastName: this.state.lastName,
       email: this.state.email,
       address: this.state.address,
-      city: this.state.city,
-      zipCode: this.state.zipCode,
+      zipcode: this.state.zipCode,
       localResidentP: this.state.localResidentP,
-      active: false,
-      isAdmin: false
+      activeP: false,
+      pwHash: Auth.hashPassword(this.state.password),
+      adminP: false,
+      dateRegistered: Math.floor(Date.now() / 1000),
+      lastLogin: Math.floor(Date.now() / 1000),
+      createdAt: Math.floor(Date.now() / 1000),
+      updatedAt: Math.floor(Date.now() / 1000)
     };
 
-    Api.post('auth/register', postData).then(response => {
+    console.log(postData.dateRegistered);
+
+    Api.post('users', postData).then(response => {
        if (response.status === 200) {
          window.location.hash = '#registerdone';
        }
@@ -82,8 +86,8 @@ class RegistrationPage extends Component {
                  onChange={this.handleInputChange.bind(this, 'lastName')} />
           <label>Email (we won't give it to anyone)</label>
           <input type="text"
-                 value={this.state.firstName}
-                 onChange={this.handleInputChange.bind(this, 'firstName')} />
+                 value={this.state.email}
+                 onChange={this.handleInputChange.bind(this, 'email')} />
           {/*<label>Are you a West Oakland resident?</label>
           <input type="checkbox"
                  value={this.state.isLocal}
@@ -92,10 +96,6 @@ class RegistrationPage extends Component {
           <input type="text"
                  value={this.state.address}
                  onChange={this.handleInputChange.bind(this, 'address')} />
-          <label>City</label>
-          <input type="text"
-                 value={this.state.city}
-                 onChange={this.handleInputChange.bind(this, 'city')} />
           <label>Zip Code</label>
           <input type="text"
                  value={this.state.zipCode}

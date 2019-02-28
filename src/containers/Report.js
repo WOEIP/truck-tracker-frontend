@@ -52,9 +52,13 @@ class Report extends Component {
       end: end,
       reportedAt: timeSeen.getTime() / 1000, // unix epoch
       truckSeenAt: timeSeen.getTime()/ 1000, // unix epoch
+      createdAt: timeSeen.getTime()/ 1000, // unix epoch
+      updatedAt: timeSeen.getTime()/ 1000, // unix epoch
       engineWasRunningP: engineWasRunningP,
       truckWasMovingP: truckWasMovingP
     };
+
+    console.log(postData.reportedAt);
 
     Api.post('reports', postData);
   }
