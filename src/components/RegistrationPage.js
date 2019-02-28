@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import Api from './../utils/Api.js';
+import Auth from './../utils/Auth.js';
 import Menu from './../components/Menu.js';
 
 import '../styles/registration-page.scss';
@@ -8,45 +10,50 @@ class RegistrationPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fullname: '',
-      zipcode: '',
+      username: '',
+      password: '',
+      firstName: '',
+      lastName: '',
+      isLocal: true,
       email: '',
-      address: ''
+      address: '',
+      city:'',
+      zipCode:'',
+      localResidentP: false
     };
 
-    this.handleNameChange = this.handleNameChange.bind(this);
-    this.handleZipChange = this.handleZipChange.bind(this);
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.handleAddressChange = this.handleAddressChange.bind(this);
-    this.registrationDone = this.registrationDone.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.registerUser = this.registerUser.bind(this);
   }
 
-  registrationDone() {
-    window.location.hash = '#registerdone';
+  registerUser () {
+    let postData = {
+      username: this.state.userName,
+      password: Auth.hashPassword(this.state.password),
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      email: this.state.email,
+      address: this.state.address,
+      city: this.state.city,
+      zipCode: this.state.zipCode,
+      localResidentP: this.state.localResidentP,
+      active: false,
+      isAdmin: false
+    };
+
+    Api.post('auth/register', postData).then(response => {
+       if (response.status === 200) {
+         window.location.hash = '#registerdone';
+       }
+    }).catch(() => {
+        console.log('registration failed');
+    });
   }
 
-  handleNameChange(evt) {
-    this.setState({
-      fullname: evt.target.value
-    });
-  };
-
-  handleZipChange(evt) {
-    this.setState({
-      zipcode: evt.target.value
-    });
-  };
-
-  handleEmailChange(evt) {
-    this.setState({
-      email: evt.target.value
-    });
-  };
-
-  handleAddressChange(evt) {
-    this.setState({
-      address: evt.target.value
-    });
+  handleInputChange(inputField, evt) {
+    let newState = this.state;
+    newState[inputField] = evt.target.value;
+    this.setState(newState);
   };
 
   render() {
@@ -57,24 +64,44 @@ class RegistrationPage extends Component {
           Please fill in your data and then send it for verification!
         </p>
         <form>
-          <label>Full name</label>
+          <label>Username</label>
           <input type="text"
-                 value={this.state.fullname}
-                 onChange={this.handleNameChange} />
-          <label>Zip code</label>
+                 value={this.state.username}
+                 onChange={this.handleInputChange.bind(this, 'username')} />
+          <label>Password</label>
           <input type="text"
-                 value={this.state.zipcode}
-                 onChange={this.handleZipChange} />
-          <label>Email address</label>
+                 value={this.state.password}
+                 onChange={this.handleInputChange.bind(this, 'password')} />
+          <label>First name</label>
           <input type="text"
-                 value={this.state.email}
-                 onChange={this.handleEmailChange} />
-          <label>Address (if you live in West Oakland)</label>
+                 value={this.state.firstName}
+                 onChange={this.handleInputChange.bind(this, 'firstName')} />
+          <label>Last name</label>
+          <input type="text"
+                 value={this.state.lastName}
+                 onChange={this.handleInputChange.bind(this, 'lastName')} />
+          <label>Email (we won't give it to anyone)</label>
+          <input type="text"
+                 value={this.state.firstName}
+                 onChange={this.handleInputChange.bind(this, 'firstName')} />
+          {/*<label>Are you a West Oakland resident?</label>
+          <input type="checkbox"
+                 value={this.state.isLocal}
+                 onChange={this.handleInputChange.bind(this, 'isLocal')} />*/}
+          <label>Address</label>
           <input type="text"
                  value={this.state.address}
-                 onChange={this.handleAddressChange} />
+                 onChange={this.handleInputChange.bind(this, 'address')} />
+          <label>City</label>
+          <input type="text"
+                 value={this.state.city}
+                 onChange={this.handleInputChange.bind(this, 'city')} />
+          <label>Zip Code</label>
+          <input type="text"
+                 value={this.state.zipCode}
+                 onChange={this.handleInputChange.bind(this, 'zipCode')} />
           <div className="actions">
-            <button onClick={this.registrationDone}>
+            <button onClick={this.registerUser}>
               Send data
             </button>
           </div>
