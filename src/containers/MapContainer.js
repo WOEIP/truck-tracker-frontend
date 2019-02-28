@@ -2,7 +2,6 @@
 //  also change checkbox triggerEvent
 
 import React, { Component } from 'react';
-//import { Map as LeafletMap, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import Flatpickr from 'react-flatpickr';
 
@@ -94,10 +93,13 @@ class MapContainer extends Component {
     let toPos = this.props.truckWasMoving ?
       this.state.markersArray[1]._latlng :
       {lat: 0, lng:0};
-    let wasIdling = !this.props.truckWasMoving && this.propsEngineWasRunning;
-    let timeIdling = 0;
 
-    this.props.sendData(e, timeLastSeen, fromPos, toPos, wasIdling, timeIdling);
+    this.props.sendData(e,
+      timeLastSeen,
+      fromPos,
+      toPos,
+      this.props.engineWasRunningP,
+      this.props.truckWasMovingP);
     this.cancel();
   }
 

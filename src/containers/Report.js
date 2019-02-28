@@ -40,11 +40,7 @@ class Report extends Component {
     }
   }
 
-  sendData(e, timeSeen, fromPos, toPos, wasIdling, timeIdling) {
-    if (!wasIdling) {
-      timeIdling = 0;
-    }
-
+  sendData(e, timeSeen, fromPos, toPos, engineWasRunningP, truckWasMovingP) {
     // TODO lon or lng??
     let start = {lat: fromPos.lat, lon: fromPos.lng},
         end = {lat: toPos.lat, lon: toPos.lng};
@@ -56,7 +52,8 @@ class Report extends Component {
       end: end,
       reportedAt: timeSeen.getTime() / 1000, // unix epoch
       truckSeenAt: timeSeen.getTime()/ 1000, // unix epoch
-      idlingDuration: timeIdling
+      engineWasRunningP: engineWasRunningP,
+      truckWasMovingP: truckWasMovingP
     };
 
     Api.post('reports', postData);

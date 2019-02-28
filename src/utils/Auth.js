@@ -11,7 +11,6 @@ let Auth = {
     hashPassword: function (pw) {
         //TODO dynamic salt, store it in DB
 //        const salt = bcrypt.genSaltSync(10);
-  //      console.log(salt);
         const salt = '$2a$10$arjAldmQvHFfmUeL1/GCm.';
         return bcrypt.hashSync(pw, salt);
     }
