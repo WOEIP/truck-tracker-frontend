@@ -1,232 +1,107 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+//TODO: time arrays, function clean up
+//  also change checkbox triggerEvent
+
 import axios from 'axios';
+import React, { Component } from 'react';
+import L from 'leaflet';
+var polyline = require('@mapbox/polyline');
 
-import { GoogleApiWrapper } from 'google-maps-react';
-const GOOGLE_MAPS_API_KEY = 'AIzaSyAe3HlSvyEpC_je3t1UZJVB4tIrhkZwdwo';
+import Api from './../utils/Api.js';
 
-import { truckTypes } from './TruckSelection';
+import '../styles/leaflet/leaflet.css';
 
-class Route {
-  constructor(data, opacity=0.3) {
-    this.data = data;
+const OSRMRootURL = 'http://router.project-osrm.org/match/v1/driving/';
 
-    this.poly = null;
-    this.opacity = opacity;
-    this.color = "blue";
-    this.directionsService = null;
-    this.directionsRenderer = null;
-    this.rendered = false;
-  }
-
-  renderRoute(googleMaps, map) {
-    let start = {lat: this.data.start.lat, lng: this.data.start.lon},
-        end = {lat: this.data.end.lat, lng: this.data.end.lon};
-
-    var self = this;
-    console.log(this.rendered);
-    if (!this.rendered) {
-      self.directionsService = new googleMaps.DirectionsService();
-      let request = {
-        origin: start,
-        destination: end,
-        travelMode: googleMaps.DirectionsTravelMode.WALKING
-      };
-      self.directionsService.route(request, function(result, status) {
-        if (status == 'OK'){
-          if (self.directionsRenderer == null) {
-            self.directionsRenderer = new googleMaps.DirectionsRenderer({
-              polylineOptions: {
-                  strokeColor: self.color,
-                  strokeOpacity: self.opacity
-              },
-              suppressMarkers: true,
-              preserveViewport: true
-            });
-            self.directionsRenderer.setMap(map);
-            self.directionsRenderer.setDirections(result);
-          }
-          self.rendered = true;
-        }
-      });
-    }
-  }
-}
-
-class MapContainer extends Component {
+class HeatMap extends Component {
 
   constructor(props) {
     super(props);
 
+    this.getData = this.getData.bind(this);
     this.loadMap = this.loadMap.bind(this);
-    this.getDataPoints = this.getDataPoints.bind(this);
-    this.renderRoutes = this.renderRoutes.bind(this);
-
-    //default to West Oakland coordinates
-    let westOaklandCoordinates = {
-      lat: 37.806440,
-      lng: -122.298261
-    };
-    let berkeleyCoordinates = {
-      lat: 37.8719,
-      lng: -122.2585
-    };
-    var userLocation = berkeleyCoordinates;
-
-    //TODO: HTTPS is needed I guess
-    if (navigator && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(pos => {
-        userLocation = {
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude
-        };
-      }),
-      err => {console.log(`ERROR(${err.code}): ${err.message}`);};
-    };
-
-    this.state = {
-      currentLocation: userLocation
-    };
+    this.drawRoute = this.drawRoute.bind(this);
 
     this.map = null;
-    this.mapTarget = null;
-    this.routes = [];
+
+    this.state = {
+      data: [],
+      viewLocation: {
+        lat: 37.810652,
+        lng: -122.291439
+      }, //Oakland
+      zoom: 17
+    };
+
+    //TODO: HTTPS is needed I guess
+    // if (navigator && navigator.geolocation) {
+    //   navigator.geolocation.getCurrentPosition(pos => {
+    //     userLocation = {
+    //       lat: pos.coords.latitude,
+    //       lng: pos.coords.longitude
+    //     };
+    //   }),
+    //   err => {console.log(`ERROR(${err.code}): ${err.message}`);};
+    // };
+
   }
 
-  componentDidMount() {
-    this.getDataPoints();
+  componentDidMount(){
+    this.map = this.loadMap();
   }
 
-  componentDidUpdate() {
-    this.loadMap();
-  }
-
-  getDataPoints() {
-    //initialize this.routes to dummy data points
-    let data = [];
-    let self = this;
-    axios.get('http://localhost:4000/incident')
-      .then(res => {
-        data = res.data;
-        var i;
-        for (i = 0; i < data.length; i++) {
-          let d = data[i];
-
-          if (self.isNewDataPoint(d.id)) {
-            this.routes.push(new Route(d));
-          }
-        }
-
-        if (self.map != null) {
-          this.renderRoutes();
-        }
-      }).catch(function (error) {
-        console.log(error);
-      });
-    setTimeout(function() {
-      self.getDataPoints();
-    }, 3000);
-  }
-
-  isNewDataPoint(id) {
-    for (var i = 0; i < this.routes.length; i++) {
-      if (this.routes[i].data.id == id) {
-        return false;
-      }
+  componentDidUpdate(){
+    if (this.state.data.length > 0) {
+      this.drawRoute(this.state.data[0].start, this.state.data[0].end);
     }
-    return true;
   }
 
-  renderRoutes() {
-    let maps = this.props.google.maps;
+  drawRoute(start, end) {
+    let URL = OSRMRootURL + start.lon + ',' + start.lat + ';' + end.lon + ',' + end.lat;
+    axios.get(URL)
+        .then(response => {
+          response.data.matchings.map((m) => L.polyline(polyline.decode(m.geometry)).addTo(this.map));
+          return response;
+        }).catch(error => {
+          console.log(error);
+          throw error;
+        });
+  }
 
-    var i;
-    for (i = 0; i < this.routes.length; i++) {
-      let route = this.routes[i];
-      route.renderRoute(maps, this.map);
-    }
+  getData () {
+    Api.get('reports').then(response => {
+      this.setState({data: response.data});
+    });
   }
 
   loadMap() {
-    const mapConfig = {
-      center: {
-        lat: this.state.currentLocation.lat,
-        lng: this.state.currentLocation.lng
-      },
-      zoom: 16,
-      clickableIcons: false,
-      streetViewControl: false,
-      mapTypeControl: false
-    };
+    let map = L.map(this.mapTarget).setView(
+      [this.state.viewLocation.lat, this.state.viewLocation.lng],
+      this.state.zoom
+    );
 
-    this.map = new this.props.google.maps.Map(this.mapTarget, mapConfig);
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
 
-    const curr = this.state.currentLocation;
-    if (this.map) {
-      let center = new this.props.google.maps.LatLng(curr.lat, curr.lng);
-      this.map.panTo(center);
-    }
+    this.getData();
 
-    // =====================
-    // Create the search box
-    // =====================
-    let input = this._pacInput;
-    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-    var searchBox = new google.maps.places.SearchBox((input));
-    this._pacInput.style.display = "block";
-
-    // Bias the SearchBox results towards current map's viewport.
-    let self = this;
-    this.map.addListener('bounds_changed', function() {
-      searchBox.setBounds(self.map.getBounds());
-    });
-
-    // Listen for the event fired when the user selects a prediction
-    // (loc) and center map on that loc
-    searchBox.addListener('places_changed', function() {
-      var places = searchBox.getPlaces();
-
-      if (places.length == 0) {
-          return;
-      }
-
-      var bounds = new google.maps.LatLngBounds();
-      places.forEach(function(place) {
-        if (!place.geometry) {
-          console.log("Returned place contains no geometry");
-          return;
-        }
-
-        if (place.geometry.viewport) {
-          bounds.union(place.geometry.viewport);
-        } else {
-          bounds.extend(place.geometry.location);
-        }
-      });
-      self.map.fitBounds(bounds);
-      self.map.setZoom(16);
-    });
-
-    this.renderRoutes();
+    return map;
   }
 
   render() {
     return (
       <div id="jsx-needs-this">
+        <p className="map-instructions">
+          Here you can see our aggregated data from the submissions West Oakland
+          residents gave us.
+        </p>
         <div id="map-wrapper">
           <div id="inner-map-container" ref={(el) => this.mapTarget = el}>
-            loading map...
-            <input id="pac-input" ref={ (el) => this._pacInput = el }
-                   placeholder="Enter a location"
-                   style={{display: "none"}}>
-            </input>
           </div>
         </div>
-     </div>
+      </div>
     );
   }
 }
 
-export default GoogleApiWrapper({
-  apiKey: GOOGLE_MAPS_API_KEY
-})(MapContainer);
+export default HeatMap;

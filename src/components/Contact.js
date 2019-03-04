@@ -32,7 +32,7 @@ class Contact extends Component {
 
   render() {
     return (
-      <article>
+      <article id="contact-text">
         <Menu current="contact"/>
         <h1 className="title">Send a message</h1>
         <p>Use the form below, and we'll get back to you!</p>

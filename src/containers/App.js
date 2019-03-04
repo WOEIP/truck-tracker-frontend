@@ -1,31 +1,56 @@
 import React, { Component } from 'react';
+import RegistrationPage from './../components/RegistrationPage.js';
+import RegistrationSent from './../components/RegistrationSent.js';
+import Login from './../components/Login';
+import Logout from './../components/Logout';
 import MainPage from './../components/MainPage';
 import Report from './../containers/Report';
-import Data from './../containers/Data';
+import ViewData from './../containers/ViewData';
 import Mission from './../components/Mission';
 import Contact from './../components/Contact';
+import Admin from './../containers/Admin';
+
+import SessionProvider from './../utils/Session.js';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      session: {
+        loggedIn: false
+      }
+    };
+  }
 
   componentDidMount() {
-    var self = this;
-    window.addEventListener('hashchange', (e) => {self.forceUpdate();});
+    let self = this;
+    window.addEventListener('hashchange', () => {self.forceUpdate();});
   }
 
   componentWillUnmount(){
-    window.removeEventListener('hashchange', (e) => {self.forceUpdate();});
+    window.removeEventListener('hashchange', () => {self.forceUpdate();});
   }
 
   getActiveContent(){
     switch(window.location.hash) {
+    case '#register':
+      return RegistrationPage;
+    case '#registerdone':
+      return RegistrationSent;
+    case '#login':
+      return Login;
+    case '#logout':
+      return Logout;
     case '#report':
       return Report;
     case '#mission':
       return Mission;
     case '#contact':
       return Contact;
-    case '#data':
-      return Data;
+    case '#view-data':
+      return ViewData;
+    case '#admin':
+      return Admin;
     default:
       return MainPage;
     }
@@ -34,9 +59,11 @@ class App extends Component {
   render() {
     const ActiveContent = this.getActiveContent();
     return (
-      <div id="bground">
-        <ActiveContent/>
-      </div>
+      <SessionProvider>
+        <div id="bground">
+          <ActiveContent/>
+        </div>
+     </SessionProvider>
     );
   }
 }

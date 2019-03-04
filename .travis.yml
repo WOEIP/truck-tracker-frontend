@@ -13,6 +13,11 @@ before_install: dpkg --compare-versions `npm -v` ge 6.0 || npm i -g npm@latest
 install:
   - npm ci
 
+# safelist
+branches:
+  only:
+  - master
+
 jobs:
   include:
     - stage: publish

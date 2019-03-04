@@ -1,80 +1,112 @@
 import React, { Component } from 'react';
+import Api from './../utils/Api.js';
 import Menu from './../components/Menu.js';
-
-import axios from 'axios';
 
 import '../styles/common.scss';
 import '../styles/report.scss';
 
-import MapContainer from './MapContainer';
 import TruckSelection from './../components/TruckSelection';
+import IdlingOrMoving from './../components/IdlingOrMoving';
+import MapContainer from './MapContainer';
+
+import {SessionContext} from './../utils/Session.js';
 
 class Report extends Component {
   constructor(props) {
     super(props);
 
-    this.truckSelectHandler = this.truckSelectHandler.bind(this);
-    this.returnToTruckSelection = this.returnToTruckSelection.bind(this);
+    this.goToTruckSelection = this.goToTruckSelection.bind(this);
+    this.goToMotionView = this.goToMotionView.bind(this);
+    this.goToMapView = this.goToMapView.bind(this);
     this.sendData = this.sendData.bind(this);
 
     this.state = {
-      currentPage: "selectTruck"
+      currentView: 'truckSelection',
+      truckKey: null,
+      truckWasMoving: false,
+      engineWasRunning: false
     };
-
-    this.truckKey = null;
   }
-  sendData(e, timeSeen, fromPos, toPos, wasIdling, timeIdling) {
-    if (!wasIdling) {
-      timeIdling = 0;
+
+  shouldComponentUpdate() {
+    let session = this.context;
+    return session.data.loggedIn;
+  }
+
+  componentWillMount() {
+    let session = this.context;
+    if (!session.data.loggedIn) {
+      window.location.hash = '#login';
     }
+  }
 
-    let start = {lat: fromPos.lat(), lon: fromPos.lng()},
-        end = {lat: toPos.lat(), lon: toPos.lng()};
+  sendData(e, timeSeen, fromPos, toPos, engineWasRunningP, truckWasMovingP) {
+    // TODO lon or lng??
+    let start = {lat: fromPos.lat, lon: fromPos.lng},
+        end = {lat: toPos.lat, lon: toPos.lng};
 
-    //TODO create some API module
-    axios.post('http://localhost:4000/incident', {
-      truckType: this.truckKey,
+    let postData = {
+      truckType: this.state.truckKey,
+      reporterId: 'a578bf68-ef1b-4cbf-9a48-bf5a47980598',
       start: start,
       end: end,
-      reportedAt: timeSeen,
-      idlingDuration: timeIdling
-    }).then(function (response) {
-      console.log(response);
-    }).catch(function (error) {
-      console.log(error);
+      reportedAt: timeSeen.getTime() / 1000, // unix epoch
+      truckSeenAt: timeSeen.getTime()/ 1000, // unix epoch
+      createdAt: timeSeen.getTime()/ 1000, // unix epoch
+      updatedAt: timeSeen.getTime()/ 1000, // unix epoch
+      engineWasRunningP: engineWasRunningP,
+      truckWasMovingP: truckWasMovingP
+    };
+
+    Api.post('reports', postData);
+  }
+
+  goToMotionView(truck) {
+    this.setState(prevState => ({
+      currentView: 'idlingOrMoving',
+      truckKey: truck.key || prevState.truckKey
+    }));
+  }
+
+  goToMapView(truckWasMoving, engineWasRunning) {
+    this.setState({
+      currentView: 'giveLocation',
+      truckWasMoving: truckWasMoving,
+      engineWasRunning: engineWasRunning
     });
   }
 
-  truckSelectHandler(truck) {
+  goToTruckSelection() {
     this.setState({
-      currentPage: "giveLocation"
-    });
-    this.truckKey = truck.key;
-  }
-
-  returnToTruckSelection() {
-    this.setState({
-      currentPage: "truckSelection"
+      currentView: "truckSelection"
     });
   }
 
   getActiveContent(){
     //TODO that is ugly
     var that = this;
-    switch(this.state.currentPage){
-    case "giveLocation":
-      return {component: MapContainer,
-              props: {returnToTruckSelection: that.returnToTruckSelection,
-                      sendData: that.sendData,
-                      truckKey: that.truckKey}};
-    default:
-      return {component: TruckSelection,
-              props: {truckSelectHandler: that.truckSelectHandler}};
+    switch(this.state.currentView) {
+      case "giveLocation":
+        return {component: MapContainer,
+                props: {sendData: that.sendData,
+                        goBack: that.goToMotionView,
+                        truckKey: that.truckKey,
+                        truckWasMoving: this.state.truckWasMoving}};
+      case "idlingOrMoving":
+        return {component: IdlingOrMoving,
+                props: {setMotion: that.goToMapView,
+                        goBack: that.goToTruckSelection}};
+      case "truckSelection":
+        return {component: TruckSelection,
+                props: {selectTruck: that.goToMotionView}};
+      default:
+        return null;
     }
   };
 
   render() {
     const ActiveContent = this.getActiveContent();
+
     return (
       <article id="report">
         <Menu current="report"/>
@@ -83,5 +115,7 @@ class Report extends Component {
     );
   }
 }
+
+Report.contextType = SessionContext;
 
 export default Report;

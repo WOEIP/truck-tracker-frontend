@@ -1,4 +1,4 @@
-.button-grid {
+.truck-grid {
     width: 70%;
     margin: 0 auto;
     & > .button-container {
@@ -8,9 +8,4 @@
         }
         box-size: border-box;
     }
-}
-
-@media screen and (min-width : 35.5em) {
-
-
 }

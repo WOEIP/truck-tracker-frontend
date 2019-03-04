@@ -1,4 +1,5 @@
 @import "colors";
+@import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 #inner-map-container {
     //MUST specify dimensions of the Google map or it will not display.
@@ -11,6 +12,15 @@
     position: relative;
 }
 
+// #map-overlay {
+//     background-color: $white;
+//     display: block;
+//     position: absolute;
+//     top: 60px;
+//     left: 60px;
+//     z-index: 999;
+// }
+
 div#second_marker_prompt {
     margin-top: 1em;
     display: none;
@@ -20,7 +30,8 @@ p#idling_toggle {
     display: inline-block;
 }
 
-#over-map {
+#map-overlay {
+    z-index: 999;
     background-color: rgba(white, 0.9);
     box-sizing: border-box;
     color: $dark-grey;
@@ -56,7 +67,6 @@ input#pac-input { /*the autocomplete places search box on the map*/
     margin: 10px;
     padding: 0.3em 0.5em;
     width: 50%;
-    
     color: black;
     text-overflow: ellipsis;
     font-size: 1.5em;
@@ -107,7 +117,7 @@ input[type=number] {
         transition: background-color 0.1s ease;
         border: 0 none;
         border-radius: 3px;
-        background-color: $item-bg-color;
+        background-color: $dark-blue;
         color: $light-grey;
         letter-spacing: .2rem;
         padding: .5rem;
@@ -116,7 +126,7 @@ input[type=number] {
         &.cancel-button {
             margin-left: 1rem;
             background-color: $light-grey;
-            color: $item-bg-color;
+            color: $dark-blue;
         }
         &:hover {
             background-color: $generic-blue;

@@ -8,25 +8,14 @@ import HeatMap from './../components/HeatMap';
 class Data extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       currentPage: "heatMap"
     };
   }
 
-  returnToTruckSelection() {
-    this.setState({
-      currentPage: "heatMap"
-    });
-  }
-
   getActiveContent(){
     //TODO that is ugly
-    var that = this;
     switch(this.state.currentPage){
-    case "timeChart":
-      return {component: null,
-              props: {}};
     default:
       return {component: HeatMap,
               props: {}};
