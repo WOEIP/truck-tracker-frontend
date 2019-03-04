@@ -23,6 +23,7 @@ jobs:
     - stage: publish
       script:
         # TODO use webpack config to manage this
+        # this first line might not be needed
         - find src -name '*.js' | xargs grep 'localhost' --files-with-matches | xargs sed --in-place 's|http://localhost:[0-9]*|http://api.trucktracker.net|'
         - npm run build
         - mkdir -p ~/.ssh

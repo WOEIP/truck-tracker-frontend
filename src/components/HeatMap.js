@@ -51,7 +51,9 @@ class HeatMap extends Component {
 
   componentDidUpdate(){
     if (this.state.data.length > 0) {
-      this.drawRoute(this.state.data[0].start, this.state.data[0].end);
+      this.state.data.map( route => {
+        this.drawRoute(route.start, route.end);
+      });
     }
   }
 
