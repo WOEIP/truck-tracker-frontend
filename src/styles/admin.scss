@@ -1,0 +1,25 @@
+@import "colors";
+
+//TODO generic button component
+.admin-button {
+  float: right;
+  transition: background-color 0.1s ease;
+  border: 0 none;
+  border-radius: 3px;
+  background-color: $dark-blue;
+  color: $light-grey;
+  letter-spacing: .2rem;
+  padding: .5rem;
+  width: 10rem;
+  &:hover {
+      background-color: $generic-blue;
+      color: white;
+  }
+}
+
+.admin-row {
+    & > span {
+        padding-top: 10px; // TODO put something less ugly here
+    }
+  height: 2rem;
+}

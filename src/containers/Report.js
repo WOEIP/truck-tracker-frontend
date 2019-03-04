@@ -58,8 +58,6 @@ class Report extends Component {
       truckWasMovingP: truckWasMovingP
     };
 
-    console.log(postData.reportedAt);
-
     Api.post('reports', postData);
   }
 

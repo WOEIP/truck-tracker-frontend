@@ -29,7 +29,7 @@ class HeatMap extends Component {
         lat: 37.810652,
         lng: -122.291439
       }, //Oakland
-      zoom: 16
+      zoom: 17
     };
 
     //TODO: HTTPS is needed I guess
@@ -57,7 +57,6 @@ class HeatMap extends Component {
 
   drawRoute(start, end) {
     let URL = OSRMRootURL + start.lon + ',' + start.lat + ';' + end.lon + ',' + end.lat;
-    console.log(URL);
     axios.get(URL)
         .then(response => {
           response.data.matchings.map((m) => L.polyline(polyline.decode(m.geometry)).addTo(this.map));
