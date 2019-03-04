@@ -15,7 +15,6 @@ class Data extends Component {
 
   getActiveContent(){
     //TODO that is ugly
-    var that = this;
     switch(this.state.currentPage){
     default:
       return {component: HeatMap,

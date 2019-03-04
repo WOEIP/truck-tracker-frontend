@@ -1,13 +1,19 @@
 //TODO: time arrays, function clean up
 //  also change checkbox triggerEvent
 
+//Todo this could be the same component as HeatMap.js
+
 import React, { Component } from 'react';
 import L from 'leaflet';
 import Flatpickr from 'react-flatpickr';
+import axios from 'axios';
+var polyline = require('@mapbox/polyline');
 
 import '../styles/leaflet/leaflet.css';
 
 import truck from '../img/truck.png';
+
+const OSRMRootURL = 'http://router.project-osrm.org/match/v1/driving/';
 
 class MapContainer extends Component {
 
@@ -19,15 +25,16 @@ class MapContainer extends Component {
     this.placeMarker = this.placeMarker.bind(this);
     this.updateTimeTruckSeen = this.updateTimeTruckSeen.bind(this);
     this.confirmDataSubmission = this.confirmDataSubmission.bind(this);
+    this.drawRoute = this.drawRoute.bind(this);
 
     this.state = {
       truckSeenTime: new Date(),
       markersArray: [],
       viewLocation: {
         lat: 37.8719,
-        lng: -122.2585
-      }, //Berkeley
-      zoom: 16
+        lng: -122.291439
+      }, //Oakland
+      zoom: 17
     };
 
     //TODO: HTTPS is needed I guess
@@ -51,11 +58,25 @@ class MapContainer extends Component {
    if ((!this.props.truckWasMoving && this.state.markersArray.length === 1) ||
        this.state.markersArray.length === 2){
       this.mapOverlay.style.display = "block";
-      //this.createRoute();
+      if (this.state.markersArray.length === 2){
+        this.drawRoute(this.state.markersArray[0]._latlng, this.state.markersArray[1]._latlng);
+      }
     }
   }
 
-  createRoute() {
+  drawRoute(start, end) {
+    // TODO lat or lng, put drawRoute to utils or something
+    let URL = OSRMRootURL + start.lng + ',' + start.lat + ';' + end.lng + ',' + end.lat;
+    console.log(URL);
+    axios.get(URL)
+        .then(response => {
+          console.log(response.data);
+          response.data.matchings.map((r) => L.polyline(polyline.decode(r.geometry)).addTo(this.map));
+          return response;
+        }).catch(error => {
+          console.log(error);
+          throw error;
+        });
   }
 
   placeMarker(e) {
@@ -80,6 +101,13 @@ class MapContainer extends Component {
     this.mapOverlay.style.display = "none";
     this.state.markersArray.map(marker => this.map.removeLayer(marker));
     this.setState({markersArray: []});
+
+    //Clear the map. TODO: find a mor elegant way
+    for(let i in this.map._layers) {
+        if(this.map._layers[i]._path != undefined) {
+          this.map.removeLayer(this.map._layers[i]);
+        }
+    }
   }
 
   updateTimeTruckSeen(time) {
