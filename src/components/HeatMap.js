@@ -26,7 +26,7 @@ class HeatMap extends Component {
     this.state = {
       data: [],
       viewLocation: {
-        lat: 37.8719,
+        lat: 37.810652,
         lng: -122.291439
       }, //Oakland
       zoom: 16

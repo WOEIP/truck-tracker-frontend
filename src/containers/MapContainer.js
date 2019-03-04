@@ -31,7 +31,7 @@ class MapContainer extends Component {
       truckSeenTime: new Date(),
       markersArray: [],
       viewLocation: {
-        lat: 37.8719,
+        lat: 37.810652,
         lng: -122.291439
       }, //Oakland
       zoom: 17
