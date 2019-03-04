@@ -60,6 +60,7 @@ class MapContainer extends Component {
        this.state.markersArray.length === 2){
       this.mapOverlay.style.display = "block";
       if (this.state.markersArray.length === 2){
+        console.log('drawing');
         this.drawRoute(this.state.markersArray[0]._latlng, this.state.markersArray[1]._latlng);
       }
     }
@@ -68,8 +69,10 @@ class MapContainer extends Component {
   drawRoute(start, end) {
     // TODO lat or lng, put drawRoute to utils or something
     let URL = OSRMRootURL + start.lng + ',' + start.lat + ';' + end.lng + ',' + end.lat;
+    console.log(URL);
     axios.get(URL)
         .then(response => {
+          console.log(response);
           response.data.matchings.map((r) => L.polyline(polyline.decode(r.geometry)).addTo(this.map));
           return response;
         }).catch(error => {
