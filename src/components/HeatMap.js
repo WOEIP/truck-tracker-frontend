@@ -60,7 +60,6 @@ class HeatMap extends Component {
     console.log(URL);
     axios.get(URL)
         .then(response => {
-          console.log(response);
           response.data.matchings.map((m) => L.polyline(polyline.decode(m.geometry)).addTo(this.map));
           return response;
         }).catch(error => {

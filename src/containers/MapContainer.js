@@ -10,6 +10,7 @@ import axios from 'axios';
 var polyline = require('@mapbox/polyline');
 
 import '../styles/leaflet/leaflet.css';
+import '../styles/report.scss';
 
 import truck from '../img/truck.png';
 
@@ -67,10 +68,8 @@ class MapContainer extends Component {
   drawRoute(start, end) {
     // TODO lat or lng, put drawRoute to utils or something
     let URL = OSRMRootURL + start.lng + ',' + start.lat + ';' + end.lng + ',' + end.lat;
-    console.log(URL);
     axios.get(URL)
         .then(response => {
-          console.log(response.data);
           response.data.matchings.map((r) => L.polyline(polyline.decode(r.geometry)).addTo(this.map));
           return response;
         }).catch(error => {
@@ -166,6 +165,7 @@ class MapContainer extends Component {
             The vehicle was sighted at
             <Flatpickr
               options={{
+                defaultDate: this.state.truckSeenTime,
                 enableTime: true,
                 noCalendar: true,
               dateFormat: "H:i"}}

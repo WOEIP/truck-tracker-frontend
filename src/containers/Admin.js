@@ -10,6 +10,10 @@ class Admin extends Component {
     };
   }
 
+  componentDidMount() {
+    this.getUsers();
+  }
+
   getUsers() {
     Api.get('users').then(response => {
       this.setState({users: response.data});
@@ -29,13 +33,11 @@ class Admin extends Component {
 
 
   render() {
-    this.getUsers();
-
     return (
       <article id="mission-text">
         <Menu current="admin"/>
         <h1 className="title">Admin settings</h1>
-        <p>{this.userHtml()}</p>
+        <div>{this.userHtml()}</div>
       </article>
     );
   }
