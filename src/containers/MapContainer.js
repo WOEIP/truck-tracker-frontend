@@ -14,7 +14,7 @@ import '../styles/report.scss';
 
 import truck from '../img/truck.png';
 
-const OSRMRootURL = 'http://router.project-osrm.org/match/v1/driving/';
+const OSRMRootURL = 'https://router.project-osrm.org/match/v1/driving/';
 
 class MapContainer extends Component {
 

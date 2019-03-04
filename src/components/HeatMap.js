@@ -10,7 +10,7 @@ import Api from './../utils/Api.js';
 
 import '../styles/leaflet/leaflet.css';
 
-const OSRMRootURL = 'http://router.project-osrm.org/match/v1/driving/';
+const OSRMRootURL = 'https://router.project-osrm.org/match/v1/driving/';
 
 class HeatMap extends Component {
 
